@@ -1,31 +1,23 @@
 require("dotenv").config();
 const mqtt = require("mqtt"); 
 const { Client } = require("pg");
+const pool = require('../config/db.js')
 
 var mqttClient;
-var mqttHost = process.env.mqttHost;
-var mqttPort = process.env.mqttPort;
+var mqttHost = process.env.MQTT_HOST;
+var mqttPort = process.env.MQTT_PORT;
 const protocol = "mqtt";
 
-  // Create a PostgreSQL client
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "postgres",
-    password: "1",
-    port: 5432,
+// Connect to the PostgreSQL database
+pool
+  .connect()
+  .then(() => {
+    console.log("Database Connected!");
+    // console.log(Date());
+  })
+  .catch((err) => {
+    console.error("Error connecting to the database:", err);
   });
-
-  // Connect to the PostgreSQL database
-  client
-    .connect()
-    .then(() => {
-      console.log("Database Connected!");
-      // console.log(Date());
-    })
-    .catch((err) => {
-      console.error("Error connecting to the database:", err);
-    });
 
 // const username = "phucle";
 // const password = "aio_ypjm65RZyBGwvGMygJoWFeaYVOlx";
@@ -72,12 +64,12 @@ function connectToBroker() {
   // Received Message
   mqttClient.on("message", async (topic, message, packet) => {
     try {
-      message = JSON.parse(message);
+      message = JSON.parse(message.toString());
       console.log("Received Message on topic: " + topic);
 
       // Insert sensor data into the PostgreSQL table
       const sensorQuery = `
-      INSERT INTO sensors(id, name, value, unit, time)
+      INSERT INTO sensors(sensor_id, sensor_name, value, unit, time)
       VALUES($1, $2, $3, $4, $5);
     `;
 
@@ -89,7 +81,7 @@ function connectToBroker() {
           sensor.sensor_unit,
           date = new Date(),
         ];
-        await client.query(sensorQuery, sensorValues);
+        await pool.query(sensorQuery, sensorValues);
       }
       console.log("Data inserted into PostgreSQL successfully!");
     } catch (error) {
@@ -107,4 +99,4 @@ function subscribeToTopic(topic) {
 
 connectToBroker();
 // subscribeToTopic(`${username}/feeds/Temp`);
-subscribeToTopic(`#`);
+subscribeToTopic(`feeds/Temp`);
