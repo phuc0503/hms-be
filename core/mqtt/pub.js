@@ -2,8 +2,8 @@ require("dotenv").config();
 const mqtt = require("mqtt");
 
 var mqttClient;
-var mqttHost = process.env.mqttHost;
-var mqttPort = process.env.mqttPort;
+var mqttHost = process.env.MQTT_HOST;
+var mqttPort = process.env.MQTT_PORT;
 const protocol = "mqtt";
 
 // Change this to point to your MQTT broker or DNS name
@@ -72,19 +72,19 @@ const data = {
   sensors: [
     {
       sensor_id: "temp_0001",
-      sensor_name: "Nhiệt Độ",
+      sensor_name: "Nhiet do",
       sensor_value: 112.3,
       sensor_unit: "ms/cm",
     },
     {
       sensor_id: "humi_0001",
-      sensor_name: "Độ Ẩm",
+      sensor_name: "Do am",
       sensor_value: 73.5,
       sensor_unit: "%",
     },
     {
       sensor_id: "illuminance_0001",
-      sensor_name: "Độ Sáng",
+      sensor_name: "Do sang",
       sensor_value: 112.3,
       sensor_unit: "lux",
     },
@@ -105,4 +105,4 @@ setInterval(() => {
   const topic = `feeds/Temp`;
   // const message = Math.floor(Math.random() * 100).toString();
   publishMessage(topic, jsondata);
-}, 4000);
+}, 10000);

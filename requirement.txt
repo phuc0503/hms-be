@@ -1,3 +1,7 @@
 dotenv
 mqtt
 pg
+express
+ejs
+cors
+sequelize
