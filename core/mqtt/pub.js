@@ -74,7 +74,7 @@ const data = {
       sensor_id: "temp_0001",
       sensor_name: "Nhiet do",
       sensor_value: 112.3,
-      sensor_unit: "ms/cm",
+      sensor_unit: "oC",
     },
     {
       sensor_id: "humi_0001",
