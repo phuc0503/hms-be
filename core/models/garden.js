@@ -12,14 +12,19 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Garden.belongsToMany(models.User, { through: 'UserGardens' });
-      Garden.hasMany(models.Sensor);
-      Garden.hasMany(models.Device);
+      Garden.hasMany(models.Sensor, { foreignKey: 'gardenId' });
+      Garden.hasMany(models.Device, { foreignKey: 'gardenId' });
     }
   };
   Garden.init({
-    gardenName:    DataTypes.STRING,
-    deviceNum:     DataTypes.INTEGER,
-    sensorNum:     DataTypes.INTEGER
+    gardenId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      autoIncrement: false
+    },
+    gardenName: DataTypes.STRING,
+    deviceNum: DataTypes.INTEGER,
+    sensorNum: DataTypes.INTEGER
   }, {
     sequelize,
     timestamps: false,

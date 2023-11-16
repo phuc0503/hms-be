@@ -1,0 +1,159 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Data Tables</title>
+</head>
+
+<body>
+    <div class="table-block">
+        <h1>
+            Temperature Table
+        </h1>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sensor Id</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Measure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% tempData.forEach( function(tempData) { %>
+                        <tr>
+                            <td data-title='Sensor Id'>
+                                <%= tempData.sensorId %>
+                            </td>
+                            <td data-title='Value'>
+                                <%= tempData.value %>
+                            </td>
+                            <td data-title='Unit'>
+                                <%= tempData.unit %>
+                            </td>
+                            <td data-title='Measure Time'>
+                                <%= tempData.measureAt %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div class="table-block">
+        <h1>
+            Humidity Table
+        </h1>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sensor Id</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Measure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% humiData.forEach( function(humiData) { %>
+                    <tr>
+                        <td data-title='Sensor Id'>
+                            <%= humiData.sensorId %>
+                        </td>
+                        <td data-title='Value'>
+                            <%= humiData.value %>
+                        </td>
+                        <td data-title='Unit'>
+                            <%= humiData.unit %>
+                        </td>
+                        <td data-title='Measure Time'>
+                            <%= humiData.measureAt %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                        </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div class="table-block">
+        <h1>
+            Soil Table
+        </h1>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sensor Id</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Measure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% soilData.forEach( function(soilData) { %>
+                    <tr>
+                        <td data-title='Sensor Id'>
+                            <%= soilData.sensorId %>
+                        </td>
+                        <td data-title='Value'>
+                            <%= soilData.value %>
+                        </td>
+                        <td data-title='Unit'>
+                            <%= soilData.unit %>
+                        </td>
+                        <td data-title='Measure Time'>
+                            <%= soilData.measureAt %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                        </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div class="table-block">
+        <h1>
+            Light Table
+        </h1>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sensor Id</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Measure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% lightData.forEach( function(lightData) { %>
+                    <tr>
+                        <td data-title='Sensor Id'>
+                            <%= lightData.sensorId %>
+                        </td>
+                        <td data-title='Value'>
+                            <%= lightData.value %>
+                        </td>
+                        <td data-title='Unit'>
+                            <%= lightData.unit %>
+                        </td>
+                        <td data-title='Measure Time'>
+                            <%= lightData.measureAt %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                        </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+</body>
+
+</html>

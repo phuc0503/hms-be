@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class SoilData extends Model {
+  class MoisData extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,25 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      SoilData.belongsTo(models.Sensor, { foreignKey: 'sensorId' });
+      MoisData.belongsTo(models.Sensor, { foreignKey: 'sensorId' });
     }
   };
-  SoilData.init({
+  MoisData.init({
     measureAt: {
       type: DataTypes.DATE,
       primaryKey: true,
       autoIncrement: false
     },
-    sensorId:  DataTypes.STRING,
-    value:     DataTypes.FLOAT,
-    unit:      DataTypes.STRING,
-    
+    sensorId: DataTypes.STRING,
+    value: DataTypes.FLOAT,
+    unit: DataTypes.STRING,
+
   }, {
     sequelize,
     timestamps: true,
     createdAt: 'measureAt',
     updatedAt: false,
-    modelName: 'SoilData',
+    modelName: 'MoisData',
   });
-  return SoilData;
+  return MoisData;
 };
