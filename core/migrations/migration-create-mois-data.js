@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('SoilData', {
+    await queryInterface.createTable('MoisData', {
       measureAt: {
         allowNull: false,
         primaryKey: true,
@@ -20,6 +20,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('SoilData');
+    await queryInterface.dropTable('MoisData');
   }
 };

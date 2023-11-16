@@ -71,28 +71,28 @@ const data = {
   gps_latitude: 10.5,
   sensors: [
     {
-      sensor_id: "temp_0001",
-      sensor_name: "Nhiet do",
-      sensor_value: 112.3,
-      sensor_unit: "oC",
-    },
-    {
       sensor_id: "humi_0001",
-      sensor_name: "Do am",
+      sensor_name: "HUMI sensors",
       sensor_value: 73.5,
       sensor_unit: "%",
     },
     {
-      sensor_id: "illuminance_0001",
-      sensor_name: "Do sang",
+      sensor_id: "temp_0001",
+      sensor_name: "TEMP sensors",
       sensor_value: 112.3,
-      sensor_unit: "lux",
+      sensor_unit: "oC",
     },
     {
-      sensor_id: "CO2_0001",
-      sensor_name: "CO2",
+      sensor_id: "mois_0001",
+      sensor_name: "MOIS sensors",
       sensor_value: 400.3,
-      sensor_unit: "ppm",
+      sensor_unit: "%",
+    },
+    {
+      sensor_id: "light_0001",
+      sensor_name: "LIGHT sensors",
+      sensor_value: 112.3,
+      sensor_unit: "lux",
     },
   ],
 };
