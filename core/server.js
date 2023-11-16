@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const configViewEngine = require('./config/viewEngine');
+require('./config/connectDB');
+require('./mqtt/sub');
 
 const app = express();
 const port = process.env.PORT || 8081;
