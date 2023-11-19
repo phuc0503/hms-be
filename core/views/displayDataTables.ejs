@@ -38,7 +38,7 @@
                                 <%= tempData.measureAt %>
                             </td>
                         </tr>
-                    <% }); %>
+                        <% }); %>
                 </tbody>
             </table>
         </main>
@@ -82,7 +82,7 @@
     </div>
     <div class="table-block">
         <h1>
-            Soil Table
+            Mois Table
         </h1>
         <main>
             <table>
@@ -96,19 +96,19 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <% soilData.forEach( function(soilData) { %>
+                        <% moisData.forEach( function(moisData) { %>
                     <tr>
                         <td data-title='Sensor Id'>
-                            <%= soilData.sensorId %>
+                            <%= moisData.sensorId %>
                         </td>
                         <td data-title='Value'>
-                            <%= soilData.value %>
+                            <%= moisData.value %>
                         </td>
                         <td data-title='Unit'>
-                            <%= soilData.unit %>
+                            <%= moisData.unit %>
                         </td>
                         <td data-title='Measure Time'>
-                            <%= soilData.measureAt %>
+                            <%= moisData.measureAt %>
                         </td>
                     </tr>
                     <% }); %>

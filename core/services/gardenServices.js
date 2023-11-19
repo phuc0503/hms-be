@@ -96,5 +96,6 @@ const getDataByGardenId = (gardenId) => {
 module.exports = {
     getAllGarden,
     getGardenById,
-    getDataByGardenId
+    getDataByGardenId,
+    getSensorByGardenId
 }

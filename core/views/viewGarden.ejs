@@ -17,7 +17,7 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <h2>Smart Garden</h2>
+                    <h2><a class="button" href="/api/v1/garden">Garden</a></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-symbols-sharp"> close </span>
@@ -41,7 +41,7 @@
                         <div class="left">
                             <h3>Temperature</h3>
                             <h1 id="temperature">
-                                50
+                                <%= data.temp.value %>
                             </h1>
                         </div>
                         <div class="icon">
@@ -54,7 +54,9 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Humidity</h3>
-                            <h1 id="humidity">50</h1>
+                            <h1 id="humidity">
+                                <%= data.humi.value %>
+                            </h1>
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp">
@@ -67,8 +69,10 @@
                 <div class="pressure">
                     <div class="middle">
                         <div class="left">
-                            <h3>Soil</h3>
-                            <h1 id="pressure">50</h1>
+                            <h3>Mois</h3>
+                            <h1 id="pressure">
+                                <%= data.mois.value %>
+                            </h1>
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp"> humidity_percentage </span>
@@ -80,7 +84,9 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Illuminance</h3>
-                            <h1 id="altitude">50</h1>
+                            <h1 id="altitude">
+                                <%= data.light.value %>
+                            </h1>
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp"> light_mode </span>

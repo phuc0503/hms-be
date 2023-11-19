@@ -1,5 +1,5 @@
 const { getTempData, getHumiData, getMoisData, getLightData } = require('../services/sensorDataServices');
-const { getAllGarden, getGardenById, getDataByGardenId } = require('../services/gardenServices');
+const { getAllGarden, getGardenById, getDataByGardenId, getSensorByGardenId } = require('../services/gardenServices');
 
 const displayAllGardens = async (req, res) => {
     const listGarden = await getAllGarden();
@@ -14,11 +14,16 @@ const viewGarden = async (req, res) => {
     const gardenId = req.params.gardenId;
     const garden = await getGardenById(gardenId);
     const data = await getDataByGardenId(gardenId);
+    // const sensorId = await getSensorByGardenId(gardenId);
+    // console.log(sensorId);
     return res.status(200).json({
         garden: garden,
         data: data
     });
-    // return res.render('viewGarden.ejs', { garden: garden });
+    // return res.render('viewGarden.ejs', {
+    //     garden: garden,
+    //     data: data
+    // });
 }
 
 const displayDataTable = async (req, res) => {
@@ -32,7 +37,7 @@ const displayDataTable = async (req, res) => {
     // return res.render('displayDataTables.ejs', {
     //     tempData: tempData,
     //     humiData: humiData,
-    //     soilData: soilData,
+    //     moisData: moisData,
     //     lightData: lightData
     // });
     return res.status(200).json({
