@@ -4,7 +4,14 @@
 git clone git@gitlab.com:lethkhai/smart-home-be.git
 cd .\smart-home-be\
 ```
+
 Install all the package in the requitement.txt file
+
+## Install dbs
+
+```
+npx sequelize-cli db:migrate
+```
 
 ## Run
 
