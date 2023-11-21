@@ -5,10 +5,13 @@ git clone git@gitlab.com:lethkhai/smart-home-be.git
 cd .\smart-home-be\
 ```
 Install all the package in the requitement.txt file
-
+*To install*
+npm install
 ## Run
 
 ```
-node .\core\mqtt\pub.js
-node .\core\mqtt\sub.js
+
+npm run start
+
+npm run pub
 ```

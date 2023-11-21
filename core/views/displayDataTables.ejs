@@ -26,7 +26,7 @@
                     <% tempData.forEach( function(tempData) { %>
                         <tr>
                             <td data-title='Sensor Id'>
-                                <%= tempData.sensorId %>
+                                <%= tempData.sensor_id %>
                             </td>
                             <td data-title='Value'>
                                 <%= tempData.value %>
@@ -35,7 +35,7 @@
                                 <%= tempData.unit %>
                             </td>
                             <td data-title='Measure Time'>
-                                <%= tempData.measureAt %>
+                                <%= tempData.measure_at %>
                             </td>
                         </tr>
                         <% }); %>
@@ -62,7 +62,7 @@
                         <% humiData.forEach( function(humiData) { %>
                     <tr>
                         <td data-title='Sensor Id'>
-                            <%= humiData.sensorId %>
+                            <%= humiData.sensor_id %>
                         </td>
                         <td data-title='Value'>
                             <%= humiData.value %>
@@ -71,7 +71,7 @@
                             <%= humiData.unit %>
                         </td>
                         <td data-title='Measure Time'>
-                            <%= humiData.measureAt %>
+                            <%= humiData.measure_at %>
                         </td>
                     </tr>
                     <% }); %>
@@ -99,7 +99,7 @@
                         <% moisData.forEach( function(moisData) { %>
                     <tr>
                         <td data-title='Sensor Id'>
-                            <%= moisData.sensorId %>
+                            <%= moisData.sensor_id %>
                         </td>
                         <td data-title='Value'>
                             <%= moisData.value %>
@@ -108,7 +108,7 @@
                             <%= moisData.unit %>
                         </td>
                         <td data-title='Measure Time'>
-                            <%= moisData.measureAt %>
+                            <%= moisData.measure_at %>
                         </td>
                     </tr>
                     <% }); %>
@@ -136,7 +136,7 @@
                         <% lightData.forEach( function(lightData) { %>
                     <tr>
                         <td data-title='Sensor Id'>
-                            <%= lightData.sensorId %>
+                            <%= lightData.sensor_id %>
                         </td>
                         <td data-title='Value'>
                             <%= lightData.value %>
@@ -145,7 +145,7 @@
                             <%= lightData.unit %>
                         </td>
                         <td data-title='Measure Time'>
-                            <%= lightData.measureAt %>
+                            <%= lightData.measure_at %>
                         </td>
                     </tr>
                     <% }); %>
