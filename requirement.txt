@@ -5,3 +5,4 @@ express
 ejs
 cors
 sequelize
+sequelize-cli
