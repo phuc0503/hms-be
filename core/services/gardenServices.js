@@ -1,101 +1,87 @@
-const db = require('../models/index');
+const supabase = require('../config/supabaseClient');
 
-const getAllGarden = () => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const listGarden = db.Garden.findAll({
-                raw: true
-            });
-            resolve(listGarden);
-        } catch (e) {
-            reject(e);
-        }
-    });
+const getAllGarden = async () => {
+    const { data, error } = await supabase
+        .from('gardens')
+        .select()
+    if (error) {
+        return error;
+    }
+    return data;
 };
 
-const getGardenById = (gardenId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const garden = db.Garden.findOne({
-                where: { gardenId: gardenId },
-                raw: true
-            });
-            resolve(garden);
-        } catch (e) {
-            reject(e);
-        }
-    });
+const getGardenById = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('gardens')
+        .select()
+        .eq('garden_id', garden_id)
+    if (error) {
+        return error;
+    }
+    return data;
 };
 
-const getSensorByGardenId = (gardenId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const sensor = db.Sensor.findAll({
-                attributes: ['sensorId'],
-                where: {
-                    gardenId: gardenId
-                },
-                raw: true
-            });
-            resolve(sensor);
-        } catch (e) {
-            reject(e);
-        }
-    });
+const getLastTemperature = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('temperature_data')
+        .select('measure_at, sensor_id, value, unit, sensors()')
+        .limit(1)
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%temp%')
+        .order('measure_at', { ascending: false })
+    if (error) {
+        return error;
+    }
+    return data;
 }
 
-const getDataByGardenId = (gardenId) => {
-    // const id = [sensor[0].sensorId, sensor[1].sensorId, sensor[2].sensorId, sensor[3].sensorId];
-    return new Promise(async (resolve, reject) => {
-        try {
-            const sensor = await getSensorByGardenId(gardenId);
+const getLastHumidity = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('humidity_data')
+        .select('measure_at, sensor_id, value, unit, sensors()')
+        .limit(1)
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%humi%')
+        .order('measure_at', { ascending: false })
+    if (error) {
+        return error;
+    }
+    return data;
+}
 
-            const humi = await db.HumiData.findOne({
-                where: {
-                    sensorId: sensor[0].sensorId,
-                },
-                order: [['measureAt', 'DESC']],
-                raw: true
-            });
+const getLastMoisture = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('moisture_data')
+        .select('measure_at, sensor_id, value, unit, sensors()')
+        .limit(1)
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%mois%')
+        .order('measure_at', { ascending: false })
+    if (error) {
+        return error;
+    }
+    return data;
+}
 
-            const temp = await db.TempData.findOne({
-                where: {
-                    sensorId: sensor[3].sensorId,
-                },
-                order: [['measureAt', 'DESC']],
-                raw: true
-            });
-
-            const mois = await db.MoisData.findOne({
-                where: {
-                    sensorId: sensor[2].sensorId,
-                },
-                order: [['measureAt', 'DESC']],
-                raw: true
-            });
-
-            const light = await db.LightData.findOne({
-                where: {
-                    sensorId: sensor[1].sensorId,
-                },
-                order: [['measureAt', 'DESC']],
-                raw: true
-            });
-            resolve({
-                humi: humi,
-                temp: temp,
-                mois: mois,
-                light: light
-            })
-        } catch (e) {
-            reject(e);
-        }
-    });
+const getLastLight = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('light_data')
+        .select('measure_at, sensor_id, value, unit, sensors()')
+        .limit(1)
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%light%')
+        .order('measure_at', { ascending: false })
+    if (error) {
+        return error;
+    }
+    return data;
 }
 
 module.exports = {
     getAllGarden,
     getGardenById,
-    getDataByGardenId,
-    getSensorByGardenId
+    getLastTemperature,
+    getLastHumidity,
+    getLastMoisture,
+    getLastLight,
 }

@@ -6,6 +6,10 @@ cd .\smart-home-be\
 ```
 
 Install all the package in the requitement.txt file
+```
+npm install
+```
+## Install dbs
 
 ## Install dbs
 
@@ -14,8 +18,11 @@ npx sequelize-cli db:migrate
 ```
 
 ## Run
-
+# Start the server
 ```
-node .\core\mqtt\pub.js
-node .\core\mqtt\sub.js
+npm run start
+```
+# To publish data
+```
+npm run pub
 ```

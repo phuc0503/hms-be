@@ -1,10 +1,10 @@
 const express = require('express');
 require('dotenv').config();
 const configViewEngine = require('./config/viewEngine');
-require('./config/connectDB');
 require('./mqtt/sub');
 const cors = require('cors');
 const initWebRoutes = require('./routes/web');
+const supabase = require('./config/supabaseClient')
 
 const corsOptions = {
     origin: true,
@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true })) // for form data
 configViewEngine(app);
 
 initWebRoutes(app);
+// console.log(supabase)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
