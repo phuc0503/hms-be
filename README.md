@@ -15,7 +15,7 @@ npm install
 ```
 npm run start
 ```
-# To publish data
+## To publish data
 ```
 npm run pub
 ```

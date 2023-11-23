@@ -21,6 +21,18 @@ const getGardenById = async (garden_id) => {
     return data;
 };
 
+const getAllDeviceByGardenId = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('devices')
+        .select()
+    // .eq('garden_id', garden_id)
+    // console.log(data);
+    if (error) {
+        return error;
+    }
+    return data;
+}
+
 const getLastTemperature = async (garden_id) => {
     const { data, error } = await supabase
         .from('temperature_data')
@@ -80,6 +92,7 @@ const getLastLight = async (garden_id) => {
 module.exports = {
     getAllGarden,
     getGardenById,
+    getAllDeviceByGardenId,
     getLastTemperature,
     getLastHumidity,
     getLastMoisture,
