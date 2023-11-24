@@ -64,45 +64,69 @@ function publishMessage(topic, message) {
   });
 }
 
-const data = {
-  station_id: "air_0001",
-  station_name: "AIR 0001",
-  gps_longitude: 106.89,
-  gps_latitude: 10.5,
-  sensors: [
-    {
-      sensor_id: "humi_0002",
-      sensor_name: "Humidity",
-      sensor_value: 78.8,
-      sensor_unit: "%",
-    },
-    {
-      sensor_id: "temp_0002",
-      sensor_name: "Temperature",
-      sensor_value: 40.7,
-      sensor_unit: "oC",
-    },
-    {
-      sensor_id: "mois_0002",
-      sensor_name: "Moisture",
-      sensor_value: 638.0,
-      sensor_unit: "%",
-    },
-    {
-      sensor_id: "light_0002",
-      sensor_name: "Light",
-      sensor_value: 6400.0,
-      sensor_unit: "lux",
-    },
-  ],
+const tempData = {
+  "station_id": "garden_0001",
+  "station_name": "Garden 0001",
+  "gps_longitude": 106.89,
+  "gps_latitude": 10.5,
+  "sensors":
+  {
+    "sensor_id": "temp_0001",
+    "sensor_name": "Temperature",
+    "sensor_value": 112.3,
+    "sensor_unit": "oC"
+  }
 };
-const jsondata = JSON.stringify(data);
+
+const humiData = {
+  "station_id": "garden_0001",
+  "station_name": "Garden 0001",
+  "gps_longitude": 106.89,
+  "gps_latitude": 10.5,
+  "sensors":
+  {
+    "sensor_id": "humi_0001",
+    "sensor_name": "Humidity",
+    "sensor_value": 73.5,
+    "sensor_unit": "%"
+  }
+};
+
+const moisData = {
+  "station_id": "garden_0001",
+  "station_name": "Garden 0001",
+  "gps_longitude": 106.89,
+  "gps_latitude": 10.5,
+  "sensors":
+  {
+    "sensor_id": "mois_0001",
+    "sensor_name": "Moisture",
+    "sensor_value": 30,
+    "sensor_unit": "%"
+  }
+};
+
+const lightData = {
+  "station_id": "garden_0001",
+  "station_name": "Garden 0001",
+  "gps_longitude": 106.89,
+  "gps_latitude": 10.5,
+  "sensors":
+  {
+    "sensor_id": "light_0001",
+    "sensor_name": "Light",
+    "sensor_value": 112.3,
+    "sensor_unit": "lux"
+  }
+};
+
+const jsondata = [JSON.stringify(tempData), JSON.stringify(humiData), JSON.stringify(moisData), JSON.stringify(lightData)];
 
 connectToBroker();
-// setInterval(publishMessage(`${username}/feeds/Temp`, "32"), 5000);
+
 setInterval(() => {
-  // const topic = `${username}/feeds/Temp`;
-  const topic = `feeds/Temp`;
-  // const message = Math.floor(Math.random() * 100).toString();
-  publishMessage(topic, jsondata);
+  const topic = ['feeds/Temp', 'feeds/Humi', 'feeds/Mois', 'feeds/Light'];
+  for (let i = 0; i < topic.length; i++) {
+    publishMessage(topic[i], jsondata[i]);
+  }
 }, 10000);
