@@ -52,8 +52,22 @@ function connectToBroker() {
     try {
       message = JSON.parse(message.toString());
       console.log("Received Message on topic: " + topic);
-      if (insertToTemperatureTable(message) && insertToHumidityTable(message) && insertToMoistureTable(message) && insertToLightTable(message)) {
-        console.log("Data inserted into PostgreSQL successfully!");
+      if (topic === 'feeds/Temp') {
+        if (await insertToTemperatureTable(message)) {
+          console.log('Inserted to temperature table');
+        }
+      } else if (topic === 'feeds/Humi') {
+        if (await insertToHumidityTable(message)) {
+          console.log('Inserted to humidity table');
+        }
+      } else if (topic === 'feeds/Mois') {
+        if (await insertToMoistureTable(message)) {
+          console.log('Inserted to moisture table');
+        }
+      } else if (topic === 'feeds/Light') {
+        if (await insertToLightTable(message)) {
+          console.log('Inserted to light table');
+        }
       }
     } catch (error) {
       console.error("Error processing and storing data:", error);
@@ -69,3 +83,6 @@ function subscribeToTopic(topic) {
 
 connectToBroker();
 subscribeToTopic(`feeds/Temp`);
+subscribeToTopic(`feeds/Humi`);
+subscribeToTopic(`feeds/Mois`);
+subscribeToTopic(`feeds/Light`);
