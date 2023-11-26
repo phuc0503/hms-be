@@ -13,17 +13,7 @@ const viewGarden = async (req, res) => {
     const lastHumi = await getLastHumidity(garden_id);
     const lastMois = await getLastMoisture(garden_id);
     const lastLight = await getLastLight(garden_id);
-    // return res.status(200).json({
-    //     garden: garden,
-    //     data: {
-    //         lastTemp: lastTemp,
-    //         lastHumi: lastHumi,
-    //         lastMois: lastMois,
-    //         lastLight: lastLight
-    //     }
-
-    // });
-    return res.render('viewGarden.ejs', {
+    return res.status(200).json({
         garden: garden,
         data: {
             lastTemp: lastTemp,
@@ -31,7 +21,17 @@ const viewGarden = async (req, res) => {
             lastMois: lastMois,
             lastLight: lastLight
         }
+
     });
+    // return res.render('viewGarden.ejs', {
+    //     garden: garden,
+    //     data: {
+    //         lastTemp: lastTemp,
+    //         lastHumi: lastHumi,
+    //         lastMois: lastMois,
+    //         lastLight: lastLight
+    //     }
+    // });
 }
 
 
