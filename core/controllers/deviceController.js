@@ -4,7 +4,7 @@ const viewDevice = async (req, res) => {
     const garden_id = req.params.garden_id;
     const listDevice = await getAllDeviceByGardenId(garden_id);
     return res.status(200).json({
-        device: device
+        device: listDevice
     })
     // return res.render('viewDevice.ejs', { listDevice: listDevice });
 }
