@@ -1,5 +1,17 @@
 const supabase = require('../config/supabaseClient');
 
+const getAllDeviceByGardenId = async (garden_id) => {
+    const { data, error } = await supabase
+        .from('devices')
+        .select()
+    // .eq('garden_id', garden_id)
+    // console.log(data);
+    if (error) {
+        return error;
+    }
+    return data;
+}
+
 const updateDeviceStatus = async (device_id, status) => {
     const { error } = await supabase
         .from('devices')
@@ -9,4 +21,5 @@ const updateDeviceStatus = async (device_id, status) => {
 
 module.exports = {
     updateDeviceStatus,
+    getAllDeviceByGardenId,
 }
