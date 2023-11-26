@@ -45,9 +45,9 @@ const insertToHumidityTable = async (data) => {
         .from('humidity_data')
         .insert({
             measure_at: new Date().toLocaleString(),
-            sensor_id: data.sensors.sensor_id,
-            value: data.sensors.sensor_value,
-            unit: data.sensors.sensor_unit
+            sensor_id: data.sensors[0].sensor_id,
+            value: data.sensors[0].sensor_value,
+            unit: data.sensors[0].sensor_unit
         })
     if (error) {
         return error;
@@ -60,9 +60,9 @@ const insertToTemperatureTable = async (data) => {
         .from('temperature_data')
         .insert({
             measure_at: new Date().toLocaleString(),
-            sensor_id: data.sensors.sensor_id,
-            value: data.sensors.sensor_value,
-            unit: data.sensors.sensor_unit
+            sensor_id: data.sensors[0].sensor_id,
+            value: data.sensors[0].sensor_value,
+            unit: data.sensors[0].sensor_unit
         })
     if (error) {
         return error;
@@ -75,9 +75,9 @@ const insertToMoistureTable = async (data) => {
         .from('moisture_data')
         .insert({
             measure_at: new Date().toLocaleString(),
-            sensor_id: data.sensors.sensor_id,
-            value: data.sensors.sensor_value,
-            unit: data.sensors.sensor_unit
+            sensor_id: data.sensors[0].sensor_id,
+            value: data.sensors[0].sensor_value,
+            unit: data.sensors[0].sensor_unit
         })
     if (error) {
         return error;
@@ -90,9 +90,9 @@ const insertToLightTable = async (data) => {
         .from('light_data')
         .insert({
             measure_at: new Date().toLocaleString(),
-            sensor_id: data.sensors.sensor_id,
-            value: data.sensors.sensor_value,
-            unit: data.sensors.sensor_unit
+            sensor_id: data.sensors[0].sensor_id,
+            value: data.sensors[0].sensor_value,
+            unit: data.sensors[0].sensor_unit
         })
     if (error) {
         return error;

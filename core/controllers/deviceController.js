@@ -1,4 +1,13 @@
-const { updateDeviceStatus } = require('../services/deviceService');
+const { updateDeviceStatus, getAllDeviceByGardenId } = require('../services/deviceService');
+
+const viewDevice = async (req, res) => {
+    const garden_id = req.params.garden_id;
+    const listDevice = await getAllDeviceByGardenId(garden_id);
+    // return res.status(200).json({
+    //     device: device
+    // })
+    return res.render('viewDevice.ejs', { listDevice: listDevice });
+}
 
 const changeDeviceStatus = async (req, res) => {
     let device_id = req.body.id;
@@ -7,6 +16,13 @@ const changeDeviceStatus = async (req, res) => {
     return res.send("Update status succeed!").status(200)
 }
 
+const getDeviceSchedule = async (req, res) => {
+    // const listDevice = await getAllDeviceByGardenId(garden_id);
+    return res.render('deviceSchedule.ejs');
+}
+
 module.exports = {
+    viewDevice,
     changeDeviceStatus,
+    getDeviceSchedule,
 }

@@ -40,9 +40,19 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Temperature</h3>
-                            <h1 id="temperature">
-                                <%= data.temp.value %>
-                            </h1>
+                            <div class="info">
+                                <div class="value">
+                                    <h1 id="temperature">
+                                        <%= data.lastTemp[0].value %>
+                                    </h1>
+                                </div>
+                                <div class="unit">
+                                    <h2 id="temperature_unit">
+                                        <%= data.lastTemp[0].unit %>
+                                    </h2>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp"> device_thermostat </span>
@@ -54,9 +64,19 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Humidity</h3>
-                            <h1 id="humidity">
-                                <%= data.humi.value %>
-                            </h1>
+                            <div class="info">
+                                <div class="value">
+                                    <h1 id="humidity">
+                                        <%= data.lastHumi[0].value %>
+                                    </h1>
+                                </div>
+                                <div class="unit">
+                                    <h2 id="humidity_unit">
+                                        <%= data.lastHumi[0].unit %>
+                                    </h2>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp">
@@ -70,9 +90,18 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Mois</h3>
-                            <h1 id="pressure">
-                                <%= data.mois.value %>
-                            </h1>
+                            <div class="info">
+                                <div class="value">
+                                    <h1 id="pressure">
+                                        <%= data.lastMois[0].value %>
+                                    </h1>
+                                </div>
+                                <div class="unit">
+                                    <h2 id="mois_unit">
+                                        <%= data.lastMois[0].unit %>
+                                    </h2>
+                                </div>
+                            </div>
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp"> humidity_percentage </span>
@@ -84,9 +113,18 @@
                     <div class="middle">
                         <div class="left">
                             <h3>Illuminance</h3>
-                            <h1 id="altitude">
-                                <%= data.light.value %>
-                            </h1>
+                            <div class="info">
+                                <div class="value">
+                                    <h1 id="altitude">
+                                        <%= data.lastLight[0].value %>
+                                    </h1>
+                                </div>
+                                <div class="unit">
+                                    <h2 id="light_unit">
+                                        <%= data.lastLight[0].unit %>
+                                    </h2>
+                                </div>
+                            </div>
                         </div>
                         <div class="icon">
                             <span class="material-symbols-sharp"> light_mode </span>

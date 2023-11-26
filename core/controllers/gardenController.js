@@ -1,4 +1,4 @@
-const { getAllGarden, getGardenById, getAllDeviceByGardenId, getLastTemperature, getLastHumidity, getLastMoisture, getLastLight } = require('../services/gardenServices');
+const { getAllGarden, getGardenById, getLastTemperature, getLastHumidity, getLastMoisture, getLastLight } = require('../services/gardenServices');
 
 const displayAllGardens = async (req, res) => {
     const listGarden = await getAllGarden();
@@ -13,17 +13,7 @@ const viewGarden = async (req, res) => {
     const lastHumi = await getLastHumidity(garden_id);
     const lastMois = await getLastMoisture(garden_id);
     const lastLight = await getLastLight(garden_id);
-    return res.status(200).json({
-        garden: garden,
-        data: {
-            lastTemp: lastTemp,
-            lastHumi: lastHumi,
-            lastMois: lastMois,
-            lastLight: lastLight
-        }
-
-    });
-    // return res.render('viewGarden.ejs', {
+    // return res.status(200).json({
     //     garden: garden,
     //     data: {
     //         lastTemp: lastTemp,
@@ -31,16 +21,20 @@ const viewGarden = async (req, res) => {
     //         lastMois: lastMois,
     //         lastLight: lastLight
     //     }
+
     // });
+    return res.render('viewGarden.ejs', {
+        garden: garden,
+        data: {
+            lastTemp: lastTemp,
+            lastHumi: lastHumi,
+            lastMois: lastMois,
+            lastLight: lastLight
+        }
+    });
 }
 
-const viewDevice = async (req, res) => {
-    const garden_id = req.params.garden_id;
-    const device = await getAllDeviceByGardenId(garden_id);
-    return res.status(200).json({
-        device: device
-    })
-}
+
 
 const getDeviceStatus = async () => {
 
@@ -49,6 +43,5 @@ const getDeviceStatus = async () => {
 module.exports = {
     displayAllGardens,
     viewGarden,
-    viewDevice,
     getDeviceStatus,
 }

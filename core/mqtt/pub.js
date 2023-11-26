@@ -70,12 +70,12 @@ const tempData = {
   "gps_longitude": 106.89,
   "gps_latitude": 10.5,
   "sensors":
-  {
-    "sensor_id": "temp_0001",
-    "sensor_name": "Temperature",
-    "sensor_value": 112.3,
-    "sensor_unit": "oC"
-  }
+    [{
+      "sensor_id": "temp_0001",
+      "sensor_name": "Temperature",
+      "sensor_value": 112.3,
+      "sensor_unit": "oC"
+    }]
 };
 
 const humiData = {
@@ -84,12 +84,12 @@ const humiData = {
   "gps_longitude": 106.89,
   "gps_latitude": 10.5,
   "sensors":
-  {
-    "sensor_id": "humi_0001",
-    "sensor_name": "Humidity",
-    "sensor_value": 73.5,
-    "sensor_unit": "%"
-  }
+    [{
+      "sensor_id": "humi_0001",
+      "sensor_name": "Humidity",
+      "sensor_value": 73.5,
+      "sensor_unit": "%"
+    }]
 };
 
 const moisData = {
@@ -98,12 +98,12 @@ const moisData = {
   "gps_longitude": 106.89,
   "gps_latitude": 10.5,
   "sensors":
-  {
-    "sensor_id": "mois_0001",
-    "sensor_name": "Moisture",
-    "sensor_value": 30,
-    "sensor_unit": "%"
-  }
+    [{
+      "sensor_id": "mois_0001",
+      "sensor_name": "Moisture",
+      "sensor_value": 30,
+      "sensor_unit": "%"
+    }]
 };
 
 const lightData = {
@@ -112,12 +112,12 @@ const lightData = {
   "gps_longitude": 106.89,
   "gps_latitude": 10.5,
   "sensors":
-  {
-    "sensor_id": "light_0001",
-    "sensor_name": "Light",
-    "sensor_value": 112.3,
-    "sensor_unit": "lux"
-  }
+    [{
+      "sensor_id": "light_0001",
+      "sensor_name": "Light",
+      "sensor_value": 112.3,
+      "sensor_unit": "lux"
+    }]
 };
 
 const jsondata = [JSON.stringify(tempData), JSON.stringify(humiData), JSON.stringify(moisData), JSON.stringify(lightData)];
