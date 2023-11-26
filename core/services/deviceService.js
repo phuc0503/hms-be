@@ -4,6 +4,7 @@ const getAllDeviceByGardenId = async (garden_id) => {
     const { data, error } = await supabase
         .from('devices')
         .select()
+        .eq('garden_id', garden_id)
     // .eq('garden_id', garden_id)
     // console.log(data);
     if (error) {
