@@ -1,10 +1,12 @@
 const { getTempData, getHumiData, getMoisData, getLightData } = require('../services/sensorDataServices');
 
 const displayDataTable = async (req, res) => {
-    const humiData = await getHumiData();
-    const tempData = await getTempData();
-    const moisData = await getMoisData();
-    const lightData = await getLightData();
+    const garden_id = req.params.garden_id;
+
+    const humiData = await getHumiData(garden_id);
+    const tempData = await getTempData(garden_id);
+    const moisData = await getMoisData(garden_id);
+    const lightData = await getLightData(garden_id);
     // return res.render('displayDataTables.ejs', {
     //     tempData: tempData,
     //     humiData: humiData,

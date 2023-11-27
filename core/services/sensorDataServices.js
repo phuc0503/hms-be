@@ -1,39 +1,47 @@
 const supabase = require('../config/supabaseClient');
 
-const getHumiData = async () => {
+const getHumiData = async (garden_id) => {
     const { data, error } = await supabase
         .from('humidity_data')
-        .select()
+        .select('measure_at, sensor_id, value, unit, sensors!inner()')
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%humi%')
     if (error) {
         return error;
     }
     return data;
 };
 
-const getTempData = async () => {
+const getTempData = async (garden_id) => {
     const { data, error } = await supabase
         .from('temperature_data')
-        .select()
+        .select('measure_at, sensor_id, value, unit, sensors!inner()')
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%temp%')
     if (error) {
         return error;
     }
     return data;
 };
 
-const getMoisData = async () => {
+const getMoisData = async (garden_id) => {
     const { data, error } = await supabase
         .from('moisture_data')
-        .select()
+        .select('measure_at, sensor_id, value, unit, sensors!inner()')
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%mois%')
     if (error) {
         return error;
     }
     return data;
 };
 
-const getLightData = async () => {
+const getLightData = async (garden_id) => {
     const { data, error } = await supabase
         .from('light_data')
-        .select()
+        .select('measure_at, sensor_id, value, unit, sensors!inner()')
+        .eq('sensors.garden_id', garden_id)
+        .like('sensor_id', '%light%')
     if (error) {
         return error;
     }
