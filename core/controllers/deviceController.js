@@ -1,4 +1,5 @@
 const { updateDeviceStatus, getAllDeviceByGardenId } = require('../services/deviceService');
+const { pubDeviceStatus } = require('../mqtt/pub');
 
 const viewDevice = async (req, res) => {
     const garden_id = req.params.garden_id;
@@ -10,8 +11,10 @@ const viewDevice = async (req, res) => {
 }
 
 const changeDeviceStatus = async (req, res) => {
+    let garden_id = req.body.garden_id;
     let device_id = req.body.id;
     let status = req.body.status;
+    pubDeviceStatus(garden_id, device_id, status);
     updateDeviceStatus(device_id, status);
     return res.send("Update status succeed!").status(200)
 }

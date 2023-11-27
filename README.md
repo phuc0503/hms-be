@@ -16,6 +16,7 @@ npm install
 npm run start
 ```
 ## To publish data
+Run the pub.py in order to publish fake data to mqtt broker. Make sure you have installed paho-mqtt package
 ```
-npm run pub
+python pub.py
 ```

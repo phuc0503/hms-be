@@ -64,69 +64,25 @@ function publishMessage(topic, message) {
   });
 }
 
-const tempData = {
-  "station_id": "garden_0001",
-  "station_name": "Garden 0001",
-  "gps_longitude": 106.89,
-  "gps_latitude": 10.5,
-  "sensors":
-    [{
-      "sensor_id": "temp_0001",
-      "sensor_name": "Temperature",
-      "sensor_value": 112.3,
-      "sensor_unit": "oC"
-    }]
-};
-
-const humiData = {
-  "station_id": "garden_0001",
-  "station_name": "Garden 0001",
-  "gps_longitude": 106.89,
-  "gps_latitude": 10.5,
-  "sensors":
-    [{
-      "sensor_id": "humi_0001",
-      "sensor_name": "Humidity",
-      "sensor_value": 73.5,
-      "sensor_unit": "%"
-    }]
-};
-
-const moisData = {
-  "station_id": "garden_0001",
-  "station_name": "Garden 0001",
-  "gps_longitude": 106.89,
-  "gps_latitude": 10.5,
-  "sensors":
-    [{
-      "sensor_id": "mois_0001",
-      "sensor_name": "Moisture",
-      "sensor_value": 30,
-      "sensor_unit": "%"
-    }]
-};
-
-const lightData = {
-  "station_id": "garden_0001",
-  "station_name": "Garden 0001",
-  "gps_longitude": 106.89,
-  "gps_latitude": 10.5,
-  "sensors":
-    [{
-      "sensor_id": "light_0001",
-      "sensor_name": "Light",
-      "sensor_value": 112.3,
-      "sensor_unit": "lux"
-    }]
-};
-
-const jsondata = [JSON.stringify(tempData), JSON.stringify(humiData), JSON.stringify(moisData), JSON.stringify(lightData)];
-
 connectToBroker();
 
-setInterval(() => {
-  const topic = ['feeds/Temp', 'feeds/Humi', 'feeds/Mois', 'feeds/Light'];
-  for (let i = 0; i < topic.length; i++) {
-    publishMessage(topic[i], jsondata[i]);
-  }
-}, 10000);
+const deviceTopic = ['feeds/DeviceGarden1', 'feeds/DeviceGarden2'];
+const pubDeviceStatus = (garden_id, device_id, status) => {
+
+  let numeric = garden_id.match(/\d+/)[0];
+  let numericValue = parseInt(numeric, 10);
+
+  topic = deviceTopic[numericValue - 1]
+  message = JSON.stringify({
+    "station_id": garden_id,
+    "Device id": device_id,
+    "Device_value": status ? 1 : 0
+  })
+
+  publishMessage(topic, message);
+};
+
+
+module.exports = {
+  pubDeviceStatus
+}
