@@ -8,6 +8,7 @@ const displayAllGardens = async (req, res) => {
 
 const viewGarden = async (req, res) => {
     const garden_id = req.params.garden_id;
+    console.log(garden_id);
     const garden = await getGardenById(garden_id);
     const lastTemp = await getLastTemperature(garden_id);
     const lastHumi = await getLastHumidity(garden_id);
