@@ -5,7 +5,7 @@ const getAllDeviceByGardenId = async (garden_id) => {
         .from('devices')
         .select()
         .eq('garden_id', garden_id)
-    // .eq('garden_id', garden_id)
+        .order('device_id')
     // console.log(data);
     if (error) {
         return error;
