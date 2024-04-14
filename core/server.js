@@ -1,10 +1,10 @@
 const express = require('express');
 require('dotenv').config();
 const configViewEngine = require('./config/viewEngine');
-require('./mqtt/sub');
+// require('./mqtt/sub');
 const cors = require('cors');
 const initWebRoutes = require('./routes/web');
-const supabase = require('./config/supabaseClient')
+// const supabase = require('./config/supabaseClient')
 
 const corsOptions = {
     origin: true,

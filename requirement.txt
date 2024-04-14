@@ -1,8 +1,6 @@
 dotenv
-mqtt
-pg
 express
 ejs
 cors
-sequelize
-sequelize-cli
+firebase
+firebase-admin
