@@ -10,7 +10,7 @@ class Doctor extends Staff {
         this.#specialty = specialty;
     }
 
-    getAllStaff = async () => {
+    getAllDoctor = async () => {
         try {
             const doctorsArray = [];
             const doctorsRef = db.collection('staff');
