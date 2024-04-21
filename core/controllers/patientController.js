@@ -11,6 +11,17 @@ const getAllPatient = async (req, res) => {
   }
 };
 
+const getPatientById = async (req, res) => {
+  try {
+    const patient_id = req.params.patient_id;
+    const patient = await patientInstance.getPatientById(patient_id);
+    return res.status(200).json(patient);
+  } catch (error) {
+    return res.send("Cannot get patient!").status(400);
+  }
+};
+
 module.exports = {
   getAllPatient,
+  getPatientById,
 };
