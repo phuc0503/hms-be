@@ -1,5 +1,7 @@
 const db = require("../config/firebase");
-const Appointment = require("../models/appointment");
+
+const Doctor = require("../models/doctor");
+const doctorInstance = new Doctor();
 
 class Patient {
   #medicalRecord;
@@ -101,17 +103,23 @@ class Patient {
 
       const appointmentsArray = [];
 
-      medicalRecordSnapshot.forEach((doc) => {
-        appointmentsArray.push({
-          appointmentId: doc.id,
-          appointmentTime: doc.data().appointmentTime,
-          doctorID: doc.data().doctorID,
-          patientID: doc.data().patientID,
-          result: doc.data().result,
-          roomID: doc.data().roomID,
-        });
-      });
+      await Promise.all(
+        medicalRecordSnapshot.docs.map(async (doc) => {
+          const doctorData = await doctorInstance.getDoctorById(
+            doc.data().doctorID
+          );
 
+          appointmentsArray.push({
+            appointmentId: doc.id,
+            appointmentTime: doc.data().appointmentTime,
+            doctor: doctorData.lastName + " " + doctorData.firstName,
+            result: doc.data().result,
+            roomID: doc.data().roomID,
+          });
+        })
+      );
+
+      console.log(appointmentsArray);
       return appointmentsArray;
     } catch (error) {
       return error.message;
