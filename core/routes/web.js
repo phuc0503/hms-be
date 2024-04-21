@@ -24,7 +24,7 @@ const initWebRoutes = (app) => {
     router.post("/api/v1/staff/doctor/create", createDoctor);
 
     //nurse
-    router.get("api/v1/staff/nurse", getAllNurse);
+    router.get("/api/v1/staff/nurse", getAllNurse);
     // router.get("api/v1/staff/nurse/:nurse_id", getNurseById);
     // router.post("/api/v1/staff/nurse/create", createNurse);
 
