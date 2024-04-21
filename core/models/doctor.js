@@ -13,8 +13,8 @@ class Doctor extends Staff {
     getAllStaff = async () => {
         try {
             const doctorsArray = [];
-            const doctorsRef = db.collection('doctor');
-            const snapshot = await doctorsRef.get();
+            const doctorsRef = db.collection('staff');
+            const snapshot = await doctorsRef.where('role', '==', 'doctor').get();
             snapshot.forEach(doc => {
                 doctorsArray.push({
                     id: doc.id,
