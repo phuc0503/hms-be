@@ -1,7 +1,8 @@
 const db = require("../config/firebase");
+const Appointment = require("../models/appointment");
 
 class Patient {
-  #medical_record = [];
+  #medicalRecord;
   #id;
   #lastName;
   #age;
@@ -13,6 +14,7 @@ class Patient {
   #firstName;
 
   constructor(
+    medicalRecord,
     id,
     firstName,
     lastName,
@@ -23,8 +25,8 @@ class Patient {
     dateOfBirth,
     phoneNumber
   ) {
+    this.#medicalRecord = medicalRecord;
     this.#id = id;
-    // this.#medical_record = medical_record;
     this.#firstName = firstName;
     this.#lastName = lastName;
     this.#age = age;
@@ -80,6 +82,37 @@ class Patient {
         doctorResponbility: patientData.doctorResponbility,
         dateOfBirth: patientData.dateOfBirth,
       };
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  getMedicalRecord = async (patientId) => {
+    try {
+      const patientRef = db.collection("patients").doc(patientId);
+      const patientSnapshot = await patientRef.get();
+
+      if (!patientSnapshot.exists) {
+        return "Patient not found";
+      }
+
+      const medicalRecordRef = patientRef.collection("medicalRecord");
+      const medicalRecordSnapshot = await medicalRecordRef.get();
+
+      const appointmentsArray = [];
+
+      medicalRecordSnapshot.forEach((doc) => {
+        appointmentsArray.push({
+          appointmentId: doc.id,
+          appointmentTime: doc.data().appointmentTime,
+          doctorID: doc.data().doctorID,
+          patientID: doc.data().patientID,
+          result: doc.data().result,
+          roomID: doc.data().roomID,
+        });
+      });
+
+      return appointmentsArray;
     } catch (error) {
       return error.message;
     }
