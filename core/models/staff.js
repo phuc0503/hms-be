@@ -8,8 +8,9 @@ class Staff {
     _gender;
     _phoneNumber;
     _salary;
+    _age;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary) {
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age) {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
@@ -17,6 +18,7 @@ class Staff {
         this._gender = gender;
         this._phoneNumber = phoneNumber;
         this._salary = salary;
+        this._age = age;
     }
 
     getAllStaff = async () => {
@@ -33,7 +35,8 @@ class Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     role: doc.data().role,
-                    salary: doc.data().salary
+                    salary: doc.data().salary,
+                    age: doc.data().age
                 })
             })
             return staffsArray
