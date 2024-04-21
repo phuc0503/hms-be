@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { getAllStaff } = require("../controllers/staffController");
-const { getAllPatient } = require("../controllers/patientController");
+const {
+  getAllPatient,
+  getPatientById,
+} = require("../controllers/patientController");
 const { getAllDoctor } = require("../controllers/doctorController");
 const initWebRoutes = (app) => {
     //staf
@@ -15,8 +18,8 @@ const initWebRoutes = (app) => {
     //support staff
 
     //patient
-    router.get("/api/v1/get-all-patients", getAllPatient);
+    router.get("/api/v1/patient", getAllPatient);
+    router.get("/api/v1/patient/:patient_id", getPatientById);
     return app.use("/", router);
 };
-
 module.exports = initWebRoutes;

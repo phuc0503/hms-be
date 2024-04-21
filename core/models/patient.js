@@ -1,5 +1,4 @@
 const db = require("../config/firebase");
-const Staff = require("./staff");
 
 class Patient {
   #medical_record = [];
@@ -55,6 +54,32 @@ class Patient {
         });
       });
       return patientsArray;
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  getPatientById = async (patientId) => {
+    try {
+      const patientRef = db.collection("patients").doc(patientId);
+      const doc = await patientRef.get();
+
+      if (!doc.exists) {
+        return "Patient not found";
+      }
+
+      const patientData = doc.data();
+      return {
+        id: doc.id,
+        firstName: patientData.firstName,
+        lastName: patientData.lastName,
+        age: patientData.age,
+        gender: patientData.gender,
+        phoneNumber: patientData.phoneNumber,
+        healthInsurance: patientData.healthInsurance,
+        doctorResponbility: patientData.doctorResponbility,
+        dateOfBirth: patientData.dateOfBirth,
+      };
     } catch (error) {
       return error.message;
     }
