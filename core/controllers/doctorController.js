@@ -31,7 +31,6 @@ const createDoctor = async (req, res) => {
     const salary = req.body.salary;
     const specialty = req.body.specialty;
     const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty);
-
     if (result) {
         return res.send("Doctor created!").status(200);
     } else {
