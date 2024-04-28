@@ -3,20 +3,22 @@ const Nurse = require('../models/nurse');
 const nurseInstance = new Nurse();
 
 const getAllNurse = async (req, res) => {
-    try {
-        const nurseArray = await nurseInstance.getAllNurse();
+    const nurseArray = await nurseInstance.getAllNurse();
+
+    if (nurseArray) {
         return res.status(200).json(nurseArray);
-    } catch (error) {
+    } else {
         return res.send("Cannot get nurse!").status(400);
     }
 }
 
 const getNurseById = async (req, res) => {
-    try {
-        const nurse_id = req.params.nurse_id;
-        const nurseData = await nurseInstance.getNurseById(nurse_id);
+    const nurse_id = req.params.nurse_id;
+    const nurseData = await nurseInstance.getNurseById(nurse_id);
+
+    if (nurseData) {
         return res.status(200).json(nurseData);
-    } catch (error) {
+    } else {
         return res.send("Cannot get nurse!").status(400);
     }
 }
@@ -32,7 +34,6 @@ const createNurse = async (req, res) => {
     const specialty = req.body.specialty;
     const result = await nurseInstance.createNurse(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty);
     if (result) {
-        console.log(result);
         return res.send("Nurse created!").status(200);
     } else {
         return res.send("Cannot create nurse!").status(400);
