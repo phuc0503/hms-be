@@ -1,6 +1,7 @@
 const { json } = require('express');
 const db = require('../config/firebase');
 const Staff = require('./staff');
+const { doc } = require('firebase/firestore');
 
 class Doctor extends Staff {
     #specialty;
@@ -70,6 +71,49 @@ class Doctor extends Staff {
                 role: 'doctor',
                 specialty: specialty,
             });
+            return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    getDoctorPatients = async (doctor_id) => {
+        try {
+            const patientsArray = [];
+            const patientsRef = db.collection('patients');
+            const snapshot = await patientsRef.where('doctorResponbility', '==', doctor_id).get();
+            snapshot.forEach(doc => {
+                patientsArray.push({
+                    id: doc.id,
+                    firstName: doc.data().firstName,
+                    lastName: doc.data().lastName,
+                    age: doc.data().age,
+                    gender: doc.data().gender,
+                    phoneNumber: doc.data().phoneNumber,
+                    dateOfBirth: doc.data().dateOfBirth,
+                    healthInsurance: doc.data().healthInsurance
+                })
+            })
+            return patientsArray;
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
+        try {
+            const doctorRef = db.collection('staff').doc(doctor_id);
+            const res = await doctorRef.update({
+                firstName: firstName,
+                lastName: lastName,
+                age: age,
+                gender: gender,
+                phoneNumber: phoneNumber,
+                dateOfBirth: dateOfBirth,
+                role: 'doctor',
+                specialty: specialty,
+                salary: salary
+            })
             return res;
         } catch (error) {
             return error.message;
