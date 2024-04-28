@@ -12,24 +12,31 @@ const {
   getDoctorById,
   createDoctor,
 } = require("../controllers/doctorController");
+
+const { getAllNurse, getNurseById, createNurse } = require("../controllers/nurseController");
+
 const initWebRoutes = (app) => {
-  //staf
-  router.get("/api/v1/staff", getAllStaff);
+    //staff
+    router.get("/api/v1/staff", getAllStaff);
 
-  //doctor
-  router.get("/api/v1/staff/doctor", getAllDoctor);
-  router.get("/api/v1/staff/doctor/:doctor_id", getDoctorById);
-  router.post("/api/v1/staff/doctor/create", createDoctor);
+    //doctor
+    router.get("/api/v1/staff/doctor", getAllDoctor);
+    router.get("/api/v1/staff/doctor/:doctor_id", getDoctorById);
+    router.post("/api/v1/staff/doctor/create", createDoctor);
 
-  //nurse
+    //nurse
+    router.get("/api/v1/staff/nurse", getAllNurse);
+    // router.get("api/v1/staff/nurse/:nurse_id", getNurseById);
+    // router.post("/api/v1/staff/nurse/create", createNurse);
 
-  //support staff
+    //support staff
 
-  //patient
-  router.get("/api/v1/patient", getAllPatient);
-  router.get("/api/v1/patient/:patient_id", getPatientById);
-  router.get("/api/v1/patient/:patient_id/medicalRecord", getMedicalRecord);
-  router.post("/api/v1/patient/create", createPatient);
-  return app.use("/", router);
+    //patient
+    router.get("/api/v1/patient", getAllPatient);
+    router.get("/api/v1/patient/:patient_id", getPatientById);
+    router.get("/api/v1/patient/:patient_id/medicalRecord", getMedicalRecord);
+    router.post("/api/v1/patient/create", createPatient);
+  
+    return app.use("/", router);
 };
 module.exports = initWebRoutes;
