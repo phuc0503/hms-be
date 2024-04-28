@@ -4,7 +4,6 @@ const Staff = require('./staff');
 
 class Doctor extends Staff {
     #specialty;
-    #patientsUnder = [];
 
     constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, specialty) {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary);
@@ -69,9 +68,8 @@ class Doctor extends Staff {
                 phoneNumber: phoneNumber,
                 salary: salary,
                 role: 'doctor',
-                specialty: specialty
+                specialty: specialty,
             });
-
             return res;
         } catch (error) {
             return error.message;
