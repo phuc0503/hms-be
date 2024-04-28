@@ -3,9 +3,10 @@ const router = express.Router();
 const { getAllStaff } = require("../controllers/staffController");
 
 const {
-    getAllPatient,
-    getPatientById,
-    getMedicalRecord,
+  getAllPatient,
+  getPatientById,
+  getMedicalRecord,
+  createPatient,
 } = require("../controllers/patientController");
 
 const {
@@ -33,6 +34,7 @@ const initWebRoutes = (app) => {
     router.post("/api/v1/staff/doctor/create", createDoctor);
     router.put("/api/v1/staff/doctor/:doctor_id/update", updateDoctor);
 
+
     //nurse
     router.get("/api/v1/staff/nurse", getAllNurse);
     // router.get("api/v1/staff/nurse/:nurse_id", getNurseById);
@@ -44,6 +46,8 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/patient", getAllPatient);
     router.get("/api/v1/patient/:patient_id", getPatientById);
     router.get("/api/v1/patient/:patient_id/medicalRecord", getMedicalRecord);
+    router.post("/api/v1/patient/create", createPatient);
+  
     return app.use("/", router);
 };
 module.exports = initWebRoutes;
