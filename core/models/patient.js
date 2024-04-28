@@ -3,8 +3,17 @@ const db = require("../config/firebase");
 const Doctor = require("../models/doctor");
 const doctorInstance = new Doctor();
 
+const formatDate = (timestamp) => {
+  const date = timestamp.toDate();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${day < 10 ? "0" + day : day}/${
+    month < 10 ? "0" + month : month
+  }/${year}`;
+};
+
 class Patient {
-  #medicalRecord;
   #id;
   #lastName;
   #age;
@@ -16,7 +25,6 @@ class Patient {
   #firstName;
 
   constructor(
-    medicalRecord,
     id,
     firstName,
     lastName,
@@ -27,7 +35,6 @@ class Patient {
     dateOfBirth,
     phoneNumber
   ) {
-    this.#medicalRecord = medicalRecord;
     this.#id = id;
     this.#firstName = firstName;
     this.#lastName = lastName;
@@ -54,7 +61,7 @@ class Patient {
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
           doctorResponbility: doc.data().doctorResponbility,
-          dateOfBirth: doc.data().dateOfBirth,
+          dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
       });
       return patientsArray;
@@ -82,7 +89,7 @@ class Patient {
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
         doctorResponbility: patientData.doctorResponbility,
-        dateOfBirth: patientData.dateOfBirth,
+        dateOfBirth: formatDate(patientData.dateOfBirth),
       };
     } catch (error) {
       return error.message;
@@ -91,36 +98,56 @@ class Patient {
 
   getMedicalRecord = async (patientId) => {
     try {
-      const patientRef = db.collection("patients").doc(patientId);
-      const patientSnapshot = await patientRef.get();
-
-      if (!patientSnapshot.exists) {
-        return "Patient not found";
-      }
-
-      const medicalRecordRef = patientRef.collection("medicalRecord");
-      const medicalRecordSnapshot = await medicalRecordRef.get();
-
       const appointmentsArray = [];
+      const snapshot = await db
+        .collection("appointments")
+        .where("patientID", "==", patientId)
+        .get();
 
-      await Promise.all(
-        medicalRecordSnapshot.docs.map(async (doc) => {
-          const doctorData = await doctorInstance.getDoctorById(
-            doc.data().doctorID
-          );
+      const promises = snapshot.docs.map(async (doc) => {
+        const doctorData = await doctorInstance.getDoctorById(
+          doc.data().doctorID
+        );
 
-          appointmentsArray.push({
-            appointmentId: doc.id,
-            appointmentTime: doc.data().appointmentTime,
-            doctor: doctorData.lastName + " " + doctorData.firstName,
-            result: doc.data().result,
-            roomID: doc.data().roomID,
-          });
-        })
-      );
+        appointmentsArray.push({
+          appointmentId: doc.id,
+          appointmentTime: formatDate(doc.data().appointmentTime),
+          doctor: doctorData.lastName + " " + doctorData.firstName,
+          result: doc.data().result,
+          roomID: doc.data().roomID,
+        });
+      });
 
-      console.log(appointmentsArray);
+      await Promise.all(promises);
+
       return appointmentsArray;
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  createPatient = async (
+    firstName,
+    lastName,
+    age,
+    dateOfBirth,
+    gender,
+    phoneNumber,
+    healthInsurance,
+    doctorResponbility
+  ) => {
+    try {
+      const res = await db.collection("patients").add({
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        dateOfBirth: dateOfBirth,
+        gender: gender,
+        phoneNumber: phoneNumber,
+        healthInsurance: healthInsurance,
+        doctorResponbility: doctorResponbility,
+      });
+      return res;
     } catch (error) {
       return error.message;
     }
