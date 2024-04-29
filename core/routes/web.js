@@ -14,7 +14,8 @@ const {
     getDoctorById,
     getDoctorPatients,
     createDoctor,
-    updateDoctor
+    updateDoctor,
+    deleteDoctor
 } = require("../controllers/doctorController");
 
 const {
@@ -29,6 +30,8 @@ const {
     getSupportStaffById,
     createSupportStaff
 } = require("../controllers/supportStaffController");
+const { deleteToken } = require("firebase/messaging");
+const { deleteDoc } = require("firebase/firestore");
 
 const initWebRoutes = (app) => {
     //staff
@@ -40,7 +43,7 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/staff/doctors/:doctor_id/patients", getDoctorPatients);
     router.post("/api/v1/staff/doctors", createDoctor);
     router.put("/api/v1/staff/doctors/:doctor_id", updateDoctor);
-
+    router.delete("/api/v1/staff/doctors/:doctor_id", deleteDoctor);
 
     //nurse
     router.get("/api/v1/staff/nurses", getAllNurse);

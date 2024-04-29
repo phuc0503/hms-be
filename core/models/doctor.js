@@ -119,6 +119,15 @@ class Doctor extends Staff {
             return error.message;
         }
     }
+
+    deleteDoctor = async (doctor_id) => {
+        try {
+            const res = await db.collection('staff').doc(doctor_id).delete();
+            return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
 }
 
 module.exports = Doctor;

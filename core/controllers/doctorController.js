@@ -77,8 +77,6 @@ const updateDoctor = async (req, res) => {
         salary: salary
     }
 
-    console.log(json);
-
     const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary);
 
     if (result) {
@@ -88,10 +86,22 @@ const updateDoctor = async (req, res) => {
     }
 }
 
+const deleteDoctor = async (req, res) => {
+    const doctor_id = req.params.doctor_id;
+    const result = await doctorInstance.deleteDoctor(doctor_id);
+
+    if (result) {
+        return res.send("Delete successfully").status(200);
+    } else {
+        return res.send("Cannot delete doctor!").status(400);
+    }
+}
+
 module.exports = {
     getAllDoctor,
     getDoctorById,
     createDoctor,
     getDoctorPatients,
-    updateDoctor
+    updateDoctor,
+    deleteDoctor
 }
