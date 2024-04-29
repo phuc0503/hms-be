@@ -1,6 +1,7 @@
 const { json } = require('express');
 const db = require('../config/firebase');
 const Staff = require('./staff');
+const { doc } = require('firebase/firestore');
 
 class Nurse extends Staff {
     // #specialty; // private
@@ -24,9 +25,7 @@ class Nurse extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
-                    // specialty: doc.data().specialty,
-                    age: doc.data().age
-                })
+                    specialty: doc.data().specialty                })
             })
             return nursesArray
         } catch (error) {
@@ -77,6 +76,26 @@ class Nurse extends Staff {
             return error.message;
         }
     }
+
+//     updateNurse = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
+//         try {
+//             const nurseRef = db.collection('staff').doc(nurse_id);
+//             const res = await nurseRef.update({
+//                 firstName: firstName,
+//                 lastName: lastName,
+//                 age: age,
+//                 gender: gender,
+//                 phoneNumber: phoneNumber,
+//                 dateOfBirth: dateOfBirth,
+//                 role: 'nurse',
+//                 specialty: specialty,
+//                 salary: salary
+//             })
+//             return res;
+//         } catch (error) {
+//             return error.message;
+//         }
+//     }
 }
 
 module.exports = Nurse;

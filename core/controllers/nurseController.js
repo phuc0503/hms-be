@@ -40,9 +40,42 @@ const createNurse = async (req, res) => {
     }
 }
 
-// nho sua ten doctor -> nurse
+// const updateNurse = async (req, res) => {
+//     const nurse_id = req.params.nurse_id;
+//     const firstName = req.body.firstName;
+//     const lastName = req.body.lastName;
+//     const age = req.body.age;
+//     const gender = req.body.gender;
+//     const phoneNumber = req.body.phoneNumber;
+//     const dateOfBirth = req.body.dateOfBirth;
+//     const specialty = req.body.specialty;
+//     const salary = req.body.salary;
+
+//     const json = {
+//         firstName: firstName,
+//         lastName: lastName,
+//         age: age,
+//         gender: gender,
+//         phoneNumber: phoneNumber,
+//         dateOfBirth: dateOfBirth,
+//         specialty: specialty,
+//         salary: salary
+//     }
+
+//     console.log(json);
+
+//     const result = await nurseInstance.updateDoctor(nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary);
+
+//     if (result) {
+//         return res.send("Update successfully").status(200);
+//     } else {
+//         return res.send("Cannot update nurse!").status(400);
+//     }
+// }
+
 module.exports = {
     getAllNurse,
     getNurseById,
     createNurse
+    // updateNurse
 }

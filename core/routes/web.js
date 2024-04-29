@@ -20,8 +20,15 @@ const {
 const {
     getAllNurse,
     getNurseById,
-    createNurse
+    createNurse,
+    updateNurse
 } = require("../controllers/nurseController");
+
+const {
+    getAllSupportStaff,
+    getSupportStaffById,
+    createSupportStaff
+} = require("../controllers/supportStaffController");
 
 const initWebRoutes = (app) => {
     //staff
@@ -37,10 +44,14 @@ const initWebRoutes = (app) => {
 
     //nurse
     router.get("/api/v1/staff/nurse", getAllNurse);
-    // router.get("api/v1/staff/nurse/:nurse_id", getNurseById);
-    // router.post("/api/v1/staff/nurse/create", createNurse);
+    router.get("/api/v1/staff/nurse/:nurse_id", getNurseById);
+    router.post("/api/v1/staff/nurse/create", createNurse);
+    // router.put("api/v1/staff/nurse/update/:nurse_id", updateNurse);
 
     //support staff
+    router.get("/api/v1/staff/supportStaff", getAllSupportStaff);
+    router.get("/api/v1/staff/supportStaff/:supportStaff_id", getSupportStaffById);
+    router.post("/api/v1/staff/supportStaff/create", createSupportStaff);
 
     //patient
     router.get("/api/v1/patient", getAllPatient);
