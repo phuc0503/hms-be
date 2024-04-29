@@ -3,10 +3,10 @@ const router = express.Router();
 const { getAllStaff } = require("../controllers/staffController");
 
 const {
-  getAllPatient,
-  getPatientById,
-  getMedicalRecord,
-  createPatient,
+    getAllPatient,
+    getPatientById,
+    getMedicalRecord,
+    createPatient,
 } = require("../controllers/patientController");
 
 const {
@@ -35,30 +35,30 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/staff", getAllStaff);
 
     //doctor
-    router.get("/api/v1/staff/doctor", getAllDoctor);
-    router.get("/api/v1/staff/doctor/:doctor_id", getDoctorById);
-    router.get("/api/v1/staff/doctor/:doctor_id/patients", getDoctorPatients);
-    router.post("/api/v1/staff/doctor/create", createDoctor);
-    router.put("/api/v1/staff/doctor/:doctor_id/update", updateDoctor);
+    router.get("/api/v1/staff/doctors", getAllDoctor);
+    router.get("/api/v1/staff/doctors/:doctor_id", getDoctorById);
+    router.get("/api/v1/staff/doctors/:doctor_id/patients", getDoctorPatients);
+    router.post("/api/v1/staff/doctors", createDoctor);
+    router.put("/api/v1/staff/doctors/:doctor_id", updateDoctor);
 
 
     //nurse
-    router.get("/api/v1/staff/nurse", getAllNurse);
-    router.get("/api/v1/staff/nurse/:nurse_id", getNurseById);
-    router.post("/api/v1/staff/nurse/create", createNurse);
-    // router.put("api/v1/staff/nurse/update/:nurse_id", updateNurse);
+    router.get("/api/v1/staff/nurses", getAllNurse);
+    router.get("/api/v1/staff/nurses/:nurse_id", getNurseById);
+    router.post("/api/v1/staff/nurses", createNurse);
+    // router.put("api/v1/staff/nurses/:nurse_id", updateNurse);
 
     //support staff
     router.get("/api/v1/staff/supportStaff", getAllSupportStaff);
     router.get("/api/v1/staff/supportStaff/:supportStaff_id", getSupportStaffById);
-    router.post("/api/v1/staff/supportStaff/create", createSupportStaff);
+    router.post("/api/v1/staff/supportStaff", createSupportStaff);
 
     //patient
-    router.get("/api/v1/patient", getAllPatient);
-    router.get("/api/v1/patient/:patient_id", getPatientById);
-    router.get("/api/v1/patient/:patient_id/medicalRecord", getMedicalRecord);
-    router.post("/api/v1/patient/create", createPatient);
-  
+    router.get("/api/v1/patients", getAllPatient);
+    router.get("/api/v1/patients/:patient_id", getPatientById);
+    router.get("/api/v1/patients/:patient_id/medicalRecords", getMedicalRecord);
+    router.post("/api/v1/patients", createPatient);
+
     return app.use("/", router);
 };
 module.exports = initWebRoutes;
