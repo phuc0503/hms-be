@@ -4,11 +4,11 @@ const Staff = require('./staff');
 const { doc } = require('firebase/firestore');
 
 class SupportStaff extends Staff {
-    #specialty;
+    // #specialty;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, specialty) {
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary) {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary);
-        this.#specialty = specialty;
+        // this.#specialty = specialty;
     }
 
     getAllSupportStaff = async () => {
@@ -24,8 +24,8 @@ class SupportStaff extends Staff {
                     age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
-                    salary: doc.data().salary,
-                    specialty: doc.data().specialty
+                    salary: doc.data().salary
+                    // specialty: doc.data().specialty
                 })
             })
             return supportStaffArray
@@ -50,15 +50,15 @@ class SupportStaff extends Staff {
                 age: doc.data().age,
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
-                salary: doc.data().salary,
-                specialty: doc.data().specialty
+                salary: doc.data().salary
+                // specialty: doc.data().specialty
             };
         } catch (error) {
             return error.message;
         }
     }
 
-    createSupportStaff = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty) => {
+    createSupportStaff = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -68,8 +68,8 @@ class SupportStaff extends Staff {
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: salary,
-                role: 'doctor',
-                specialty: specialty,
+                role: 'supportstaff'
+                // specialty: specialty,
             });
             return res;
         } catch (error) {
@@ -100,25 +100,25 @@ class SupportStaff extends Staff {
     //     }
     // }
 
-    // updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
-    //     try {
-    //         const doctorRef = db.collection('staff').doc(doctor_id);
-    //         const res = await doctorRef.update({
-    //             firstName: firstName,
-    //             lastName: lastName,
-    //             age: age,
-    //             gender: gender,
-    //             phoneNumber: phoneNumber,
-    //             dateOfBirth: dateOfBirth,
-    //             role: 'doctor',
-    //             specialty: specialty,
-    //             salary: salary
-    //         })
-    //         return res;
-    //     } catch (error) {
-    //         return error.message;
-    //     }
-    // }
+    updateSupportStaff = async (supportstaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary) => {
+        try {
+            const supportStaffRef = db.collection('staff').doc(supportstaff_id);
+            const res = await supportStaffRef.update({
+                firstName: firstName,
+                lastName: lastName,
+                age: age,
+                gender: gender,
+                phoneNumber: phoneNumber,
+                dateOfBirth: dateOfBirth,
+                role: 'supportstaff',
+                // specialty: specialty,
+                salary: salary
+            })
+            return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
 }
 
 module.exports = SupportStaff;

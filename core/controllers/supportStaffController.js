@@ -55,43 +55,43 @@ const createSupportStaff = async (req, res) => {
 //     }
 // }
 
-// const updateDoctor = async (req, res) => {
-//     const doctor_id = req.params.doctor_id;
-//     const firstName = req.body.firstName;
-//     const lastName = req.body.lastName;
-//     const age = req.body.age;
-//     const gender = req.body.gender;
-//     const phoneNumber = req.body.phoneNumber;
-//     const dateOfBirth = req.body.dateOfBirth;
-//     const specialty = req.body.specialty;
-//     const salary = req.body.salary;
+const updateSupportStaff = async (req, res) => {
+    const supportstaff_id = req.params.supportstaff_id;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const age = req.body.age;
+    const gender = req.body.gender;
+    const phoneNumber = req.body.phoneNumber;
+    const dateOfBirth = req.body.dateOfBirth;
+    // const specialty = req.body.specialty;
+    const salary = req.body.salary;
 
-//     const json = {
-//         firstName: firstName,
-//         lastName: lastName,
-//         age: age,
-//         gender: gender,
-//         phoneNumber: phoneNumber,
-//         dateOfBirth: dateOfBirth,
-//         specialty: specialty,
-//         salary: salary
-//     }
+    const json = {
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        gender: gender,
+        phoneNumber: phoneNumber,
+        dateOfBirth: dateOfBirth,
+        // specialty: specialty,
+        salary: salary
+    }
 
-//     console.log(json);
+    console.log(json);
 
-//     const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary);
+    const result = await supportStaffInstanceInstance.updateSupportStaff(supportstaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary);
 
-//     if (result) {
-//         return res.send("Update successfully").status(200);
-//     } else {
-//         return res.send("Cannot update doctor!").status(400);
-//     }
-// }
+    if (result) {
+        return res.send("Update successfully").status(200);
+    } else {
+        return res.send("Cannot update support staff!").status(400);
+    }
+}
 
 module.exports = {
     getAllSupportStaff,
     getSupportStaffById,
-    createSupportStaff
+    createSupportStaff,
     // getDoctorPatients,
-    // updateDoctor
+    updateSupportStaff
 }

@@ -8,9 +8,8 @@ const formatDate = (timestamp) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  return `${day < 10 ? "0" + day : day}/${
-    month < 10 ? "0" + month : month
-  }/${year}`;
+  return `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
+    }/${year}`;
 };
 
 class Patient {
@@ -145,13 +144,32 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
-        doctorResponbility: doctorResponbility,
+        doctorResponbility: doctorResponbility
       });
       return res;
     } catch (error) {
       return error.message;
     }
   };
+
+  updatePatient = async (patient_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, healthInsurance, doctorResponbility) => {
+    try {
+      const patientRef = db.collection('patients').doc(patient_id);
+      const res = await patientRef.update({
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        dateOfBirth: dateOfBirth,
+        gender: gender,
+        phoneNumber: phoneNumber,
+        healthInsurance: healthInsurance,
+        doctorResponbility: doctorResponbility
+      })
+      return res;
+    } catch (error) {
+      return error.message;
+    }
+  }
 }
 
 module.exports = Patient;

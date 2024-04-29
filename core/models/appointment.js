@@ -8,6 +8,27 @@ class Appointment {
   #result;
   #roomID;
 
+  getAllAppointment = async () => {
+    try {
+      const appointmentsRef = db.collection("appointments");
+      const appointmentsSnapshot = await appointmentsRef.get();
+
+      if (!appointmentsSnapshot.exists) {
+        return "Appointments not found";
+      }
+      const appointmentData = doc.data();
+      return {
+        appointmentTime: doc.appointmentTime,
+        doctorID: doc.doctorID,
+        patientID: doc.patientID,
+        result: doc.result,
+        roomID: doc.roomID,
+      };
+    } catch (err) {
+      return err.message;
+    }
+  };
+
   getAppointmentById = async (appointmentId) => {
     try {
       const appointmentRef = db.collection("appointments").doc(appointmentId);

@@ -57,9 +57,41 @@ const createPatient = async (req, res) => {
   }
 };
 
+const updatePatient = async (req, res) => {
+  const patient_id = req.params.patient_id;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const age = req.body.age;
+  const dateOfBirth = req.body.dateOfBirth;
+  const gender = req.body.gender;
+  const phoneNumber = req.body.phoneNumber;
+  const healthInsurance = req.body.healthInsurance;
+  const doctorResponbility = req.body.doctorResponbility;
+
+  const json = {
+    firstName: firstName,
+    lastName: lastName,
+    age: age,
+    gender: gender,
+    phoneNumber: phoneNumber,
+    dateOfBirth: dateOfBirth,
+    healthInsurance: healthInsurance,
+    doctorResponbility: doctorResponbility
+  }
+
+  const result = await patientInstance.updatePatient(patient_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, healthInsurance, doctorResponbility);
+
+  if (result) {
+    return res.send("Update successfully").status(200);
+  } else {
+    return res.send("Cannot update patient!").status(400);
+  }
+}
+
 module.exports = {
   getAllPatient,
   getPatientById,
   getMedicalRecord,
   createPatient,
+  updatePatient
 };
