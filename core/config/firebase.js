@@ -1,7 +1,7 @@
 'use strict';
 const dotenv = require('dotenv');
 const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 dotenv.config();
 
 const {

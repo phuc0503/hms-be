@@ -32,6 +32,15 @@ const {
     createSupportStaff,
     updateSupportStaff
 } = require("../controllers/supportStaffController");
+
+const {
+    getAllAppointment,
+    getAppointmentById,
+    createAppointment,
+    updateAppointment,
+    deleteAppointment
+} = require("../controllers/appointmentController");
+
 const { deleteToken } = require("firebase/messaging");
 const { deleteDoc } = require("firebase/firestore");
 
@@ -65,6 +74,13 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/patients/:patient_id/medicalRecords", getMedicalRecord);
     router.post("/api/v1/patients", createPatient);
     router.put("/api/v1/patients/:patient_id", updatePatient);
+
+    //appointment
+    router.get("/api/v1/appointments", getAllAppointment);
+    router.get("/api/v1/appointments/:appointment_id", getAppointmentById);
+    router.post("/api/v1/appointments", createAppointment);
+    router.put("/api/v1/appointments/:appointment_id", updateAppointment);
+    router.delete("/api/v1/appointments/:appointment_id", deleteAppointment);
 
     return app.use("/", router);
 };

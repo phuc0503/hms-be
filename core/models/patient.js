@@ -1,16 +1,8 @@
 const db = require("../config/firebase");
-
+const { formatDate } = require('../public/formatDate');
 const Doctor = require("../models/doctor");
+const { Timestamp } = require("firebase-admin/firestore");
 const doctorInstance = new Doctor();
-
-const formatDate = (timestamp) => {
-  const date = timestamp.toDate();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
-    }/${year}`;
-};
 
 class Patient {
   #id;
@@ -140,7 +132,7 @@ class Patient {
         firstName: firstName,
         lastName: lastName,
         age: age,
-        dateOfBirth: dateOfBirth,
+        dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
@@ -159,7 +151,7 @@ class Patient {
         firstName: firstName,
         lastName: lastName,
         age: age,
-        dateOfBirth: dateOfBirth,
+        dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
