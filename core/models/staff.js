@@ -1,4 +1,5 @@
 const db = require('../config/firebase');
+const { formatDate } = require('../public/formatDate');
 
 class Staff {
     _id;
@@ -31,12 +32,12 @@ class Staff {
                     id: doc.id,
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
+                    dateOfBirth: formatDate(doc.data().dateOfBirth),
                     age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     role: doc.data().role,
                     salary: doc.data().salary,
-                    age: doc.data().age
                 })
             })
             return staffsArray

@@ -2,6 +2,8 @@ const { json } = require('express');
 const db = require('../config/firebase');
 const Staff = require('./staff');
 const { doc } = require('firebase/firestore');
+const { formatDate } = require('../public/formatDate');
+const { Timestamp } = require('firebase-admin/firestore');
 
 class Nurse extends Staff {
     // #specialty; // private
@@ -21,6 +23,7 @@ class Nurse extends Staff {
                     id: doc.id,
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
+                    dateOfBirth: formatDate(doc.data().dateOfBirth),
                     age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
@@ -47,6 +50,7 @@ class Nurse extends Staff {
                 id: nur.id,
                 firstName: nur.data().firstName,
                 lastName: nur.data().lastName,
+                dateOfBirth: formatDate(doc.data().dateOfBirth),
                 age: nur.data().age,
                 gender: nur.data().gender,
                 phoneNumber: nur.data().phoneNumber,
@@ -64,7 +68,7 @@ class Nurse extends Staff {
                 firstName: firstName,
                 lastName: lastName,
                 age: age,
-                dateOfBirth: dateOfBirth,
+                dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: salary,
@@ -87,7 +91,7 @@ class Nurse extends Staff {
                 age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
-                dateOfBirth: dateOfBirth,
+                dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 role: 'nurse',
                 salary: salary
             })

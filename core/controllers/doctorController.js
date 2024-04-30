@@ -66,17 +66,6 @@ const updateDoctor = async (req, res) => {
     const specialty = req.body.specialty;
     const salary = req.body.salary;
 
-    const json = {
-        firstName: firstName,
-        lastName: lastName,
-        age: age,
-        gender: gender,
-        phoneNumber: phoneNumber,
-        dateOfBirth: dateOfBirth,
-        specialty: specialty,
-        salary: salary
-    }
-
     const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary);
 
     if (result) {
