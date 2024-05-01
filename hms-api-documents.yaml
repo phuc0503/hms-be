@@ -302,7 +302,7 @@ paths:
           description: Successful operation
         "400":
           description: Invalid patient_id
-  /patients/{patient_id}/medicalRecord:
+  /patients/{patient_id}/medicalRecords:
     get:
       tags:
         - patients

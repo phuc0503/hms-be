@@ -73,6 +73,9 @@ class Appointment {
         result: result,
         roomID: roomID
       });
+      await db.collection('patients').doc(patientID).update({
+        doctorResponbility: doctorID
+      });
       return res;
     } catch (error) {
       return error.message;
