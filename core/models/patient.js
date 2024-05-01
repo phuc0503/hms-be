@@ -1,4 +1,4 @@
-const db = require("../config/firebase");
+const { db } = require("../config/firebase");
 const { formatDate } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
 const { Timestamp } = require("firebase-admin/firestore");
