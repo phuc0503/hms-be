@@ -76,28 +76,38 @@ const updatePatient = async (req, res) => {
     phoneNumber: phoneNumber,
     dateOfBirth: dateOfBirth,
     healthInsurance: healthInsurance,
-    doctorResponbility: doctorResponbility
-  }
+    doctorResponbility: doctorResponbility,
+  };
 
-  const result = await patientInstance.updatePatient(patient_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, healthInsurance, doctorResponbility);
+  const result = await patientInstance.updatePatient(
+    patient_id,
+    firstName,
+    lastName,
+    age,
+    gender,
+    phoneNumber,
+    dateOfBirth,
+    healthInsurance,
+    doctorResponbility
+  );
 
   if (result) {
     return res.send("Update successfully").status(200);
   } else {
     return res.send("Cannot update patient!").status(400);
   }
-}
+};
 
 const deletePatient = async (req, res) => {
   const patient_id = req.params.patient_id;
-  const result = await patientInstance.deleteDoctor(patient_id);
+  const result = await patientInstance.deletePatient(patient_id);
 
   if (result) {
     return res.send("Delete successfully").status(200);
   } else {
     return res.send("Cannot delete patient!").status(400);
   }
-}
+};
 
 module.exports = {
   getAllPatient,
@@ -105,5 +115,5 @@ module.exports = {
   getMedicalRecord,
   createPatient,
   updatePatient,
-  deletePatient
+  deletePatient,
 };

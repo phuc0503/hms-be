@@ -1,5 +1,5 @@
 const db = require("../config/firebase");
-const { formatDate } = require('../public/formatDate');
+const { formatDate } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
 const { Timestamp } = require("firebase-admin/firestore");
 const doctorInstance = new Doctor();
@@ -136,7 +136,7 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
-        doctorResponbility: doctorResponbility
+        doctorResponbility: doctorResponbility,
       });
       return res;
     } catch (error) {
@@ -144,9 +144,19 @@ class Patient {
     }
   };
 
-  updatePatient = async (patient_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, healthInsurance, doctorResponbility) => {
+  updatePatient = async (
+    patient_id,
+    firstName,
+    lastName,
+    age,
+    gender,
+    phoneNumber,
+    dateOfBirth,
+    healthInsurance,
+    doctorResponbility
+  ) => {
     try {
-      const patientRef = db.collection('patients').doc(patient_id);
+      const patientRef = db.collection("patients").doc(patient_id);
       const res = await patientRef.update({
         firstName: firstName,
         lastName: lastName,
@@ -155,22 +165,22 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
-        doctorResponbility: doctorResponbility
-      })
+        doctorResponbility: doctorResponbility,
+      });
       return res;
     } catch (error) {
       return error.message;
     }
-  }
+  };
 
   deletePatient = async (patient_id) => {
     try {
-      const res = await db.collection('patients').doc(patient_id).delete();
+      const res = await db.collection("patients").doc(patient_id).delete();
       return res;
     } catch (error) {
       return error.message;
     }
-  }
+  };
 }
 
 module.exports = Patient;
