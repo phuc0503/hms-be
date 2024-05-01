@@ -15,7 +15,7 @@ const {
 
 const serviceAccount = require('./cred.json');
 
-const firebaseapp = initializeApp({
+const firebaseConfig = {
     credential: cert(serviceAccount),
     apiKey: API_KEY,
     authDomain: AUTH_DOMAIN,
@@ -23,8 +23,10 @@ const firebaseapp = initializeApp({
     storageBucket: STORAGE_BUCKET,
     messagingSenderId: MESSAGING_SENDER_ID,
     appId: APP_ID
-});
+};
+
+const app = initializeApp(firebaseConfig);
 
 const db = getFirestore();
 
-module.exports = db 
+module.exports = db
