@@ -4,7 +4,6 @@ const configViewEngine = require('./config/viewEngine');
 const cors = require('cors');
 const initWebRoutes = require('./routes/web');
 
-
 const corsOptions = {
     origin: true,
     credentials: true, //access-control-allow-credentials:true
