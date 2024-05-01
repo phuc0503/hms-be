@@ -122,6 +122,15 @@ class SupportStaff extends Staff {
             return error.message;
         }
     }
+
+    deleteSupportStaff = async (supportstaff_id) => {
+        try {
+            const res = await db.collection('staff').doc(supportstaff_id).delete();
+            return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
 }
 
 module.exports = SupportStaff;

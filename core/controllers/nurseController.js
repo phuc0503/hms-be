@@ -72,9 +72,21 @@ const updateNurse = async (req, res) => {
     }
 }
 
+const deleteNurse = async (req, res) => {
+    const nurse_id = req.params.nurse_id;
+    const result = await nurseInstance.deleteDoctor(nurse_id);
+
+    if (result) {
+        return res.send("Delete successfully").status(200);
+    } else {
+        return res.send("Cannot delete nurse!").status(400);
+    }
+}
+
 module.exports = {
     getAllNurse,
     getNurseById,
     createNurse,
-    updateNurse
+    updateNurse,
+    deleteNurse
 }

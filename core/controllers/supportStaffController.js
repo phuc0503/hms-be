@@ -88,10 +88,22 @@ const updateSupportStaff = async (req, res) => {
     }
 }
 
+const deleteSupportStaff = async (req, res) => {
+    const supportstaff_id = req.params.supportstaff_id;
+    const result = await supportStaffInstance.deleteDoctor(supportstaff_id);
+
+    if (result) {
+        return res.send("Delete successfully").status(200);
+    } else {
+        return res.send("Cannot delete support staff!").status(400);
+    }
+}
+
 module.exports = {
     getAllSupportStaff,
     getSupportStaffById,
     createSupportStaff,
     // getDoctorPatients,
-    updateSupportStaff
+    updateSupportStaff,
+    deleteSupportStaff
 }

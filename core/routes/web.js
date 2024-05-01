@@ -7,7 +7,8 @@ const {
     getPatientById,
     getMedicalRecord,
     createPatient,
-    updatePatient
+    updatePatient,
+    deletePatient
 } = require("../controllers/patientController");
 
 const {
@@ -23,14 +24,16 @@ const {
     getAllNurse,
     getNurseById,
     createNurse,
-    updateNurse
+    updateNurse,
+    deleteNurse
 } = require("../controllers/nurseController");
 
 const {
     getAllSupportStaff,
     getSupportStaffById,
     createSupportStaff,
-    updateSupportStaff
+    updateSupportStaff,
+    deleteSupportStaff
 } = require("../controllers/supportStaffController");
 
 const {
@@ -61,12 +64,14 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/staff/nurses/:nurse_id", getNurseById);
     router.post("/api/v1/staff/nurses", createNurse);
     router.put("api/v1/staff/nurses/:nurse_id", updateNurse);
+    router.delete("/api/v1/staff/nurses/:nurse_id", deleteNurse);
 
     //support staff
     router.get("/api/v1/staff/supportStaff", getAllSupportStaff);
     router.get("/api/v1/staff/supportStaff/:supportStaff_id", getSupportStaffById);
     router.post("/api/v1/staff/supportStaff", createSupportStaff);
     router.put("/api/v1/staff/supportStaff/:supportStaff_id", updateSupportStaff);
+    router.delete("/api/v1/staff/supportStaff/:supportStaff_id", deleteSupportStaff);
 
     //patient
     router.get("/api/v1/patients", getAllPatient);
@@ -74,6 +79,7 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/patients/:patient_id/medicalRecords", getMedicalRecord);
     router.post("/api/v1/patients", createPatient);
     router.put("/api/v1/patients/:patient_id", updatePatient);
+    router.delete("/api/v1/patients/:patient_id", deletePatient);
 
     //appointment
     router.get("/api/v1/appointments", getAllAppointment);

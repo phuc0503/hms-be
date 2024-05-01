@@ -162,6 +162,15 @@ class Patient {
       return error.message;
     }
   }
+
+  deletePatient = async (patient_id) => {
+    try {
+      const res = await db.collection('patients').doc(patient_id).delete();
+      return res;
+    } catch (error) {
+      return error.message;
+    }
+  }
 }
 
 module.exports = Patient;

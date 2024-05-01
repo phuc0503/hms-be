@@ -88,10 +88,22 @@ const updatePatient = async (req, res) => {
   }
 }
 
+const deletePatient = async (req, res) => {
+  const patient_id = req.params.patient_id;
+  const result = await patientInstance.deleteDoctor(patient_id);
+
+  if (result) {
+    return res.send("Delete successfully").status(200);
+  } else {
+    return res.send("Cannot delete patient!").status(400);
+  }
+}
+
 module.exports = {
   getAllPatient,
   getPatientById,
   getMedicalRecord,
   createPatient,
-  updatePatient
+  updatePatient,
+  deletePatient
 };

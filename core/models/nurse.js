@@ -100,6 +100,15 @@ class Nurse extends Staff {
             return error.message;
         }
     }
+
+    deleteNurse = async (nurse_id) => {
+        try {
+            const res = await db.collection('staff').doc(nurse_id).delete();
+            return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
 }
 
 module.exports = Nurse;
