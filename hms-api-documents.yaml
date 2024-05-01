@@ -68,7 +68,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Doctor"
         "404":
-          description: Doctor not found
+          description: Doctors not found
     post:
       tags:
         - doctors
@@ -137,7 +137,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Thêm bác sĩ mới vào cơ sở dữ liệu
+        description: Cập nhật thông tin của bác sĩ
         content:
           application/json:
             schema:
@@ -161,11 +161,11 @@ paths:
         - doctors
       summary: Xoá bác sĩ
       description: Xoá bác sĩ khỏi cơ sở dữ liệu
-      operationId: deleteDoctor
+      operationId: deleteDoctorById
       parameters:
         - name: doctor_id
           in: path
-          description: Id của bác sĩ cần xoá
+          description: Id của bác sĩ cần xoá. **Tạo 1 bác sĩ mới rồi lên firebase lấy id để xoá.**
           required: true
           schema:
             type: string
@@ -185,6 +185,120 @@ paths:
         - name: doctor_id
           in: path
           description: "Id của bác sĩ cần cập nhật thông tin. Dùng cgRXxtrmo545vI5YbAZH để test"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid doctor_id
+  /appointments:
+    get:
+      tags:
+        - appointments
+      summary: Xem danh sách các đơn bệnh
+      description: Xem danh sách tất cả các đơn bệnh trong bệnh viện
+      operationId: getAppointments
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+        "404":
+          description: Appointments not found
+    post:
+      tags:
+        - appointments
+      summary: Tạo đơn bệnh mới
+      description: Tạo đơn bệnh mới
+      operationId: addAppointment
+      requestBody:
+        description: Thêm đơn bệnh mới vào cơ sở dữ liệu
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /appointments/{appointment_id}:
+    get:
+      tags:
+        - appointments
+      summary: Xem đơn bệnh theo id
+      description: Xem chi tiết đơn bệnh theo id
+      operationId: getAppointmentsById
+      parameters:
+        - name: appointment_id
+          in: path
+          description: "Id của đơn bệnh cần xem chi tiết. Dùng E9GsO1NBqpYw0LC0o1gM để test"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+        "404":
+          description: Appointments not found
+    put:
+      tags:
+        - appointments
+      summary: Cập nhật đơn bệnh
+      description: Cập nhật đơn bệnh
+      operationId: updateAppointment
+      parameters:
+        - name: appointment_id
+          in: path
+          description: "Id của đơn bệnh cần cập nhật. Dùng E9GsO1NBqpYw0LC0o1gM để test"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cập nhật thông tin của đơn bệnh
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddAppointment"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Appointments not found
+    delete:
+      tags:
+        - appointments
+      summary: Xoá đơn bệnh
+      description: Xoá đơn bệnh khỏi cơ sở dữ liệu
+      operationId: deleteAppointmentById
+      parameters:
+        - name: appointment_id
+          in: path
+          description: Id của đơn bệnh cần xoá. **Tạo 1 đơn bệnh mới rồi lên firebase lấy id của nó để xoá**
           required: true
           schema:
             type: string
@@ -854,6 +968,53 @@ components:
         specialty:
           type: string
           example: Tim mạch
+    Appointment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 4LfDAQ91Cw86uB0s92ko
+        appointmentTime:
+          type: string
+          format: date-time
+          example: June 12, 2024 at 11:51:32 AM
+        doctorID:
+          type: string
+          example: JidK3G5TMD9sANQdnnIW
+        patientID:
+          type: string
+          example: OqY0WecTEX0ti2TxNIGF
+        result:
+          type: string
+          example: Đau dạy dày
+        roomID:
+          type: string
+          example: 301
+    AddAppointment:
+      required:
+        - appointmentTime
+        - doctorID
+        - patientID
+        - result
+        - roomID
+      type: object
+      properties:
+        appointmentTime:
+          type: string
+          format: date-time
+          example: June 20, 2024 11:51:32
+        doctorID:
+          type: string
+          example: JidK3G5TMD9sANQdnnIW
+        patientID:
+          type: string
+          example: OqY0WecTEX0ti2TxNIGF
+        result:
+          type: string
+          example: Sốt, nhức đầu
+        roomID:
+          type: string
+          example: 401
     Order:
       type: object
       properties:

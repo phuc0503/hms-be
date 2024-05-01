@@ -1,7 +1,7 @@
 const { app } = require("firebase-admin");
 const db = require("../config/firebase");
 // require("../public/formatDate");
-const { formatDate } = require('../public/formatDate');
+const { formatDate, formatDateTime } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 class Appointment {
   #id;
@@ -29,7 +29,7 @@ class Appointment {
       appointmentsSnapshot.forEach(doc => {
         appointmentsArray.push({
           id: doc.id,
-          appointmentTime: formatDate(doc.data().appointmentTime),
+          appointmentTime: formatDateTime(doc.data().appointmentTime),
           doctorID: doc.data().doctorID,
           patientID: doc.data().patientID,
           result: doc.data().result,
@@ -53,7 +53,7 @@ class Appointment {
 
       return {
         id: doc.id,
-        appointmentTime: doc.data().appointmentTime,
+        appointmentTime: formatDateTime(doc.data().appointmentTime),
         doctorID: doc.data().doctorID,
         patientID: doc.data().patientID,
         result: doc.data().result,
