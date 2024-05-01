@@ -45,9 +45,6 @@ const {
     deleteAppointment
 } = require("../controllers/appointmentController");
 
-const { deleteToken } = require("firebase/messaging");
-const { deleteDoc } = require("firebase/firestore");
-
 const initWebRoutes = (app) => {
     //staff
     router.get("/api/v1/staff", getAllStaff);

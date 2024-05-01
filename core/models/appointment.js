@@ -1,6 +1,4 @@
-const { app } = require("firebase-admin");
-const db = require("../config/firebase");
-// require("../public/formatDate");
+const { db } = require("../config/firebase");
 const { formatDate, formatDateTime } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 class Appointment {

@@ -1,5 +1,5 @@
 const { json } = require('express');
-const db = require('../config/firebase');
+const { db } = require('../config/firebase');
 const Staff = require('./staff');
 const { doc } = require('firebase/firestore');
 const { formatDate } = require('../public/formatDate');

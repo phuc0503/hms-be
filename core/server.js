@@ -3,7 +3,7 @@ require('dotenv').config();
 const configViewEngine = require('./config/viewEngine');
 const cors = require('cors');
 const initWebRoutes = require('./routes/web');
-
+const middleware = require('./middleware/authentication');
 const corsOptions = {
     origin: true,
     credentials: true, //access-control-allow-credentials:true
@@ -16,6 +16,8 @@ const hostname = process.env.HOST_NAME;
 
 app.use(cors(corsOptions));
 
+// app.use(middleware.decodeToken);
+
 //config req.body to get data from client
 app.use(express.json()) // for json
 app.use(express.urlencoded({ extended: true })) // for form data
@@ -24,7 +26,6 @@ app.use(express.urlencoded({ extended: true })) // for form data
 configViewEngine(app);
 
 initWebRoutes(app);
-// console.log(supabase)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

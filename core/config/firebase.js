@@ -1,6 +1,5 @@
-'use strict';
 const dotenv = require('dotenv');
-const { initializeApp, cert } = require('firebase-admin/app');
+const admin = require('firebase-admin');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 dotenv.config();
 
@@ -16,7 +15,7 @@ const {
 const serviceAccount = require('./cred.json');
 
 const firebaseConfig = {
-    credential: cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount),
     apiKey: API_KEY,
     authDomain: AUTH_DOMAIN,
     projectId: PROJECT_ID,
@@ -25,8 +24,11 @@ const firebaseConfig = {
     appId: APP_ID
 };
 
-const app = initializeApp(firebaseConfig);
+admin.initializeApp(firebaseConfig);
 
 const db = getFirestore();
 
-module.exports = db
+module.exports = {
+    db,
+    admin
+}
