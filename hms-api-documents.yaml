@@ -193,6 +193,155 @@ paths:
           description: Successful operation
         "400":
           description: Invalid doctor_id
+  /patients:
+    get:
+      tags:
+        - patients
+      summary: Xem thông tin của bệnh nhân
+      description: Xem thông tin tất cả các bệnh nhân
+      operationId: getPatients
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "404":
+          description: Patients not found
+    post:
+      tags:
+        - patients
+      summary: Thêm bệnh nhân mới
+      description: Thêm bệnh nhân mới
+      operationId: addPatient
+      requestBody:
+        description: Thêm bệnh nhân mới vào cơ sở dữ liệu
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /patients/{patient_id}:
+    get:
+      tags:
+        - patients
+      summary: Xem thông tin bệnh nhân
+      description: Xem thông tin của 1 bệnh nhân
+      operationId: getPatientById
+      parameters:
+        - name: patient_id
+          in: path
+          description: "Id của bệnh nhân cần xem chi tiết. Dùng 0n1HhIX3QI8GmJi8qfwK để test"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "400":
+          description: Invalid patient_id supplied
+        "404":
+          description: Patient not found
+    put:
+      tags:
+        - patients
+      summary: Cập nhật thông tin của bệnh nhân
+      description: Cập nhật thông tin của bệnh nhân
+      operationId: updatePatientById
+      parameters:
+        - name: patient_id
+          in: path
+          description: "Id của bệnh nhân cần cập nhật thông tin. Dùng 0n1HhIX3QI8GmJi8qfwK để test"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cập nhật thông tin của bệnh nhân
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddPatient"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid patient_id supplied
+        "404":
+          description: Patient not found
+    delete:
+      tags:
+        - patients
+      summary: Xoá bệnh nhân
+      description: Xoá bệnh nhân khỏi cơ sở dữ liệu
+      operationId: deletePatientById
+      parameters:
+        - name: patient_id
+          in: path
+          description: Id của bệnh nhân cần xoá. **Tạo 1 bệnh nhân mới rồi lên firebase lấy id để xoá.**
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid patient_id
+  /patients/{patient_id}/medicalRecord:
+    get:
+      tags:
+        - patients
+      summary: Xem bệnh án của bệnh nhân
+      description: Xem bệnh án của 1 bệnh nhân
+      operationId: getPatientMedicalRecord
+      parameters:
+        - name: patient_id
+          in: path
+          description: "Id của bệnh nhân cần xem bệnh án. Dùng 0n1HhIX3QI8GmJi8qfwK để test"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicalRecord"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/MedicalRecord"
+        "400":
+          description: Invalid patient_id supplied
+        "404":
+          description: Patient not found
   /appointments:
     get:
       tags:
@@ -897,6 +1046,92 @@ components:
         specialty:
           type: string
           example: Tim mạch
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 0n1HhIX3QI8GmJi8qfwK
+        firstName:
+          type: string
+          example: Thinh
+        lastName:
+          type: string
+          example: Nguyen Thi
+        age:
+          type: integer
+          example: 25
+        gender:
+          type: string
+          example: male
+        phoneNumber:
+          type: string
+          example: "6410983572"
+        healthInsurance:
+          type: string
+          example: "true"
+        doctorResponbility:
+          type: string
+          example: "cgRXxtrmo545vI5YbAZH"
+        dateOfBirth:
+          type: string
+          format: date
+          example: 18/04/2008
+    AddPatient:
+      required:
+        - firstName
+        - lastName
+        - dateOfBirth
+        - age
+        - gender
+        - phoneNumber
+        - healthInsurance
+        - doctorResponbility
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: A
+        lastName:
+          type: string
+          example: Nguyen
+        dateOfBirth:
+          type: string
+          format: date
+          example: 17/5/2002
+        age:
+          type: integer
+          example: 22
+        gender:
+          type: string
+          example: male
+        phoneNumber:
+          type: string
+          example: "0949777565"
+        healthInsurance:
+          type: integer
+          example: 20000000
+        doctorResponbility:
+          type: string
+          example: HNC4vvn6DLES09emJQBl
+    MedicalRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          example: E9GsO1NBqpYw0LC0o1gM
+        appointmentTime:
+          type: string
+          example: 20/06/2024
+        doctor:
+          type: string
+          example: Chung Thinh
+        result:
+          type: string
+          example: Sốt, nhức đầu
+        roomID:
+          type: string
+          example: 401
     Appointment:
       type: object
       properties:
