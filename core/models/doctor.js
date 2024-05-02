@@ -6,11 +6,11 @@ const { formatDate } = require('../public/formatDate');
 const { Timestamp } = require('firebase-admin/firestore');
 
 class Doctor extends Staff {
-    #specialty;
+    #department;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, specialty) {
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, department) {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary);
-        this.#specialty = specialty;
+        this.#department = department;
     }
 
     getAllDoctor = async () => {
@@ -28,7 +28,7 @@ class Doctor extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
-                    specialty: doc.data().specialty
+                    department: doc.data().department
                 })
             })
             return doctorsArray
@@ -55,14 +55,38 @@ class Doctor extends Staff {
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
                 salary: doc.data().salary,
-                specialty: doc.data().specialty
+                department: doc.data().department
             };
         } catch (error) {
             return error.message;
         }
     }
 
-    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty) => {
+    getDoctorByDepartment = async (department) => {
+        try {
+            const doctorsArray = [];
+            const doctorsRef = db.collection('staff');
+            const snapshot = await doctorsRef.where('department', '==', department).get();
+            snapshot.forEach(doc => {
+                doctorsArray.push({
+                    id: doc.id,
+                    firstName: doc.data().firstName,
+                    lastName: doc.data().lastName,
+                    dateOfBirth: formatDate(doc.data().dateOfBirth),
+                    age: doc.data().age,
+                    gender: doc.data().gender,
+                    phoneNumber: doc.data().phoneNumber,
+                    salary: doc.data().salary,
+                    department: doc.data().department
+                })
+            })
+            return doctorsArray
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -73,7 +97,7 @@ class Doctor extends Staff {
                 phoneNumber: phoneNumber,
                 salary: salary,
                 role: 'doctor',
-                specialty: specialty,
+                department: department,
             });
             return res;
         } catch (error) {
@@ -104,7 +128,7 @@ class Doctor extends Staff {
         }
     }
 
-    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
+    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary) => {
         try {
             const doctorRef = db.collection('staff').doc(doctor_id);
             const res = await doctorRef.update({
@@ -115,7 +139,7 @@ class Doctor extends Staff {
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 role: 'doctor',
-                specialty: specialty,
+                department: department,
                 salary: salary
             });
             return res;

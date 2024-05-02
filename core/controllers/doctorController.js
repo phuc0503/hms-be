@@ -1,11 +1,10 @@
 const Doctor = require('../models/doctor');
-
+const toDepartment = require('../public/department');
 const doctorInstance = new Doctor();
 
 const getAllDoctor = async (req, res) => {
 
     const doctorArray = await doctorInstance.getAllDoctor();
-
     if (doctorArray) {
         return res.status(200).json(doctorArray);
     } else {
@@ -14,12 +13,22 @@ const getAllDoctor = async (req, res) => {
 }
 
 const getDoctorById = async (req, res) => {
-
     const doctor_id = req.params.doctor_id;
     const doctorData = await doctorInstance.getDoctorById(doctor_id);
 
     if (doctorData) {
         return res.status(200).json(doctorData);
+    } else {
+        return res.send("Cannot get doctor!").status(400);
+    }
+}
+
+const getDoctorByDepartment = async (req, res) => {
+    let department = parseInt(req.params.department);
+    department = toDepartment(department);
+    const doctorArray = await doctorInstance.getDoctorByDepartment(department);
+    if (doctorArray) {
+        return res.status(200).json(doctorArray);
     } else {
         return res.send("Cannot get doctor!").status(400);
     }
@@ -33,8 +42,8 @@ const createDoctor = async (req, res) => {
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
-    const specialty = req.body.specialty;
-    const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty);
+    const department = req.body.department;
+    const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department);
 
     if (result) {
         return res.send("Doctor created!").status(200);
@@ -63,10 +72,10 @@ const updateDoctor = async (req, res) => {
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const dateOfBirth = req.body.dateOfBirth;
-    const specialty = req.body.specialty;
+    const department = req.body.department;
     const salary = req.body.salary;
 
-    const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary);
+    const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary);
 
     if (result) {
         return res.send("Update successfully").status(200);
@@ -89,6 +98,7 @@ const deleteDoctor = async (req, res) => {
 module.exports = {
     getAllDoctor,
     getDoctorById,
+    getDoctorByDepartment,
     createDoctor,
     getDoctorPatients,
     updateDoctor,
