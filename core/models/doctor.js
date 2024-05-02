@@ -4,7 +4,7 @@ const Staff = require('./staff');
 const { doc } = require('firebase/firestore');
 const { formatDate } = require('../public/formatDate');
 const { Timestamp } = require('firebase-admin/firestore');
-
+const { toNum } = require('../public/department');
 class Doctor extends Staff {
     #department;
 
@@ -152,6 +152,46 @@ class Doctor extends Staff {
         try {
             const res = await db.collection('staff').doc(doctor_id).delete();
             return res;
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    countDoctorByDepartment = async () => {
+        try {
+            const departmentArray = [0, 0, 0, 0, 0];
+            const doctorsArray = [];
+            const doctorsRef = db.collection('staff');
+            const snapshot = await doctorsRef.where('role', '==', 'doctor').get();
+            snapshot.forEach(doc => {
+                let department = toNum(doc.data().department);
+                departmentArray[department]++;
+            })
+            const data = {
+                "departments": [
+                    {
+                        "department": "Khoa nội",
+                        "total": departmentArray[0]
+                    },
+                    {
+                        "department": "Khoa ngoại",
+                        "total": departmentArray[1]
+                    },
+                    {
+                        "department": "Khoa nhi",
+                        "total": departmentArray[2]
+                    },
+                    {
+                        "department": "Khoa sản",
+                        "total": departmentArray[3]
+                    },
+                    {
+                        "department": "Khoa mắt",
+                        "total": departmentArray[4]
+                    }
+                ]
+            };
+            return data;
         } catch (error) {
             return error.message;
         }

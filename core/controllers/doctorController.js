@@ -1,5 +1,5 @@
 const Doctor = require('../models/doctor');
-const toDepartment = require('../public/department');
+const { toDepartment } = require('../public/department');
 const doctorInstance = new Doctor();
 
 const getAllDoctor = async (req, res) => {
@@ -95,6 +95,16 @@ const deleteDoctor = async (req, res) => {
     }
 }
 
+const countDoctorByDepartment = async (req, res) => {
+    const result = await doctorInstance.countDoctorByDepartment();
+
+    if (result) {
+        return res.status(200).json(result);
+    } else {
+        return res.send("Cannot count doctor").status(400);
+    }
+}
+
 module.exports = {
     getAllDoctor,
     getDoctorById,
@@ -102,5 +112,6 @@ module.exports = {
     createDoctor,
     getDoctorPatients,
     updateDoctor,
-    deleteDoctor
+    deleteDoctor,
+    countDoctorByDepartment
 }

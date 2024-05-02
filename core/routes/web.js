@@ -19,7 +19,8 @@ const {
     getDoctorPatients,
     createDoctor,
     updateDoctor,
-    deleteDoctor
+    deleteDoctor,
+    countDoctorByDepartment
 } = require("../controllers/doctorController");
 
 const {
@@ -58,6 +59,7 @@ const initWebRoutes = (app) => {
     router.put("/api/v1/staff/doctors/:doctor_id", updateDoctor);
     router.delete("/api/v1/staff/doctors/:doctor_id", deleteDoctor);
     router.get("/api/v1/staff/doctors/department/:department", getDoctorByDepartment);
+    router.get("/api/v1/staff/doctors/departments/statistics", countDoctorByDepartment);
 
     //nurse
     router.get("/api/v1/staff/nurses", getAllNurse);

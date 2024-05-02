@@ -30,4 +30,31 @@ const toDepartment = (department) => {
     return department;
 }
 
-module.exports = toDepartment
+const toNum = (department) => {
+    switch (department) {
+        case 'Khoa nội':
+            department = dept.INTERNAL_MEDICINE;
+            break;
+        case 'Khoa ngoại':
+            department = dept.SURGERY;
+            break;
+        case 'Khoa nhi':
+            department = dept.PEDIATRICS;
+            break;
+        case 'Khoa sản':
+            department = dept.OBSTETRICS;
+            break;
+        case 'Khoa mắt':
+            department = dept.OPHTHALMOLOGY;
+            break;
+        default:
+            break;
+    }
+
+    return department;
+}
+
+module.exports = {
+    toDepartment,
+    toNum
+}
