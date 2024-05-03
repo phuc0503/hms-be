@@ -1,7 +1,7 @@
 const { json } = require('express');
-const { db } = require('../config/firebase');
+const { db, admin } = require('../config/firebase');
 const Staff = require('./staff');
-const { doc } = require('firebase/firestore');
+const { doc, orderBy } = require('firebase/firestore');
 const { formatDate } = require('../public/formatDate');
 const { Timestamp } = require('firebase-admin/firestore');
 const { toNum } = require('../public/department');
@@ -13,11 +13,13 @@ class Doctor extends Staff {
         this.#department = department;
     }
 
-    getAllDoctor = async () => {
+    getAllDoctor = async (limit, page) => {
         try {
+            const offset = (page - 1) * limit;
             const doctorsArray = [];
-            const doctorsRef = db.collection('staff');
-            const snapshot = await doctorsRef.where('role', '==', 'doctor').get();
+            const doctorsRef = admin.firestore().collection('staff').where('role', '==', 'doctor').orderBy('lastName', 'asc');
+            const countAll = await doctorsRef.count().get();
+            const snapshot = await doctorsRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
                 doctorsArray.push({
                     id: doc.id,
@@ -31,7 +33,13 @@ class Doctor extends Staff {
                     department: doc.data().department
                 })
             })
-            return doctorsArray
+            const data = {
+                'doctors': doctorsArray,
+                'current_doctor': offset + doctorsArray.length,
+                'total_doctor': countAll.data().count,
+                'total_page': Math.ceil(countAll.data().count / limit)
+            }
+            return data;
         } catch (error) {
             return error.message;
         }
@@ -62,11 +70,13 @@ class Doctor extends Staff {
         }
     }
 
-    getDoctorByDepartment = async (department) => {
+    getDoctorByDepartment = async (department, limit, page) => {
         try {
+            const offset = (page - 1) * limit;
             const doctorsArray = [];
-            const doctorsRef = db.collection('staff');
-            const snapshot = await doctorsRef.where('department', '==', department).get();
+            const doctorsRef = admin.firestore().collection('staff').where('department', '==', department).orderBy('lastName', 'asc');
+            const countAll = await doctorsRef.count().get();
+            const snapshot = await doctorsRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
                 doctorsArray.push({
                     id: doc.id,
@@ -80,7 +90,13 @@ class Doctor extends Staff {
                     department: doc.data().department
                 })
             })
-            return doctorsArray
+            const data = {
+                'doctors': doctorsArray,
+                'current_doctor': offset + doctorsArray.length,
+                'total_doctor': countAll.data().count,
+                'total_page': Math.ceil(countAll.data().count / limit)
+            }
+            return data;
         } catch (error) {
             return error.message;
         }
@@ -105,11 +121,13 @@ class Doctor extends Staff {
         }
     }
 
-    getDoctorPatients = async (doctor_id) => {
+    getDoctorPatients = async (doctor_id, limit, page) => {
         try {
+            const offset = (page - 1) * limit;
             const patientsArray = [];
-            const patientsRef = db.collection('patients');
-            const snapshot = await patientsRef.where('doctorResponbility', '==', doctor_id).get();
+            const patientsRef = admin.firestore().collection('patients').where('doctorResponbility', '==', doctor_id).orderBy('firstName', 'asc');
+            const countAll = await patientsRef.count().get();
+            const snapshot = await patientsRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
                 patientsArray.push({
                     id: doc.id,
@@ -122,7 +140,13 @@ class Doctor extends Staff {
                     healthInsurance: doc.data().healthInsurance
                 })
             })
-            return patientsArray;
+            const data = {
+                'patients': patientsArray,
+                'current_patient': offset + patientsArray.length,
+                'total_patient': countAll.data().count,
+                'total_page': Math.ceil(countAll.data().count / limit)
+            }
+            return data;
         } catch (error) {
             return error.message;
         }
@@ -170,23 +194,23 @@ class Doctor extends Staff {
             const data = {
                 "departments": [
                     {
-                        "department": "Khoa nội",
+                        "name": "Khoa nội",
                         "total": departmentArray[0]
                     },
                     {
-                        "department": "Khoa ngoại",
+                        "name": "Khoa ngoại",
                         "total": departmentArray[1]
                     },
                     {
-                        "department": "Khoa nhi",
+                        "name": "Khoa nhi",
                         "total": departmentArray[2]
                     },
                     {
-                        "department": "Khoa sản",
+                        "name": "Khoa sản",
                         "total": departmentArray[3]
                     },
                     {
-                        "department": "Khoa mắt",
+                        "name": "Khoa mắt",
                         "total": departmentArray[4]
                     }
                 ]

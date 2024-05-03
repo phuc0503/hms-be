@@ -3,8 +3,15 @@ const { toDepartment } = require('../public/department');
 const doctorInstance = new Doctor();
 
 const getAllDoctor = async (req, res) => {
-
-    const doctorArray = await doctorInstance.getAllDoctor();
+    let doctorArray;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    if (req.query.department) {
+        const department = toDepartment(parseInt(req.query.department));
+        doctorArray = await doctorInstance.getDoctorByDepartment(department, limit, page);
+    } else {
+        doctorArray = await doctorInstance.getAllDoctor(limit, page);
+    }
     if (doctorArray) {
         return res.status(200).json(doctorArray);
     } else {
@@ -18,17 +25,6 @@ const getDoctorById = async (req, res) => {
 
     if (doctorData) {
         return res.status(200).json(doctorData);
-    } else {
-        return res.send("Cannot get doctor!").status(400);
-    }
-}
-
-const getDoctorByDepartment = async (req, res) => {
-    let department = parseInt(req.params.department);
-    department = toDepartment(department);
-    const doctorArray = await doctorInstance.getDoctorByDepartment(department);
-    if (doctorArray) {
-        return res.status(200).json(doctorArray);
     } else {
         return res.send("Cannot get doctor!").status(400);
     }
@@ -53,9 +49,10 @@ const createDoctor = async (req, res) => {
 }
 
 const getDoctorPatients = async (req, res) => {
-
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
     const doctor_id = req.params.doctor_id;
-    const patientArray = await doctorInstance.getDoctorPatients(doctor_id);
+    const patientArray = await doctorInstance.getDoctorPatients(doctor_id, limit, page);
 
     if (patientArray) {
         return res.status(200).json(patientArray);
@@ -108,7 +105,6 @@ const countDoctorByDepartment = async (req, res) => {
 module.exports = {
     getAllDoctor,
     getDoctorById,
-    getDoctorByDepartment,
     createDoctor,
     getDoctorPatients,
     updateDoctor,
