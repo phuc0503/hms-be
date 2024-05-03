@@ -1,4 +1,4 @@
-const { db } = require("../config/firebase");
+const { db, admin } = require("../config/firebase");
 const { formatDate, formatDateTime } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 class Appointment {
@@ -18,11 +18,13 @@ class Appointment {
     this.#roomID = roomID;
   }
 
-  getAllAppointment = async () => {
+  getAllAppointment = async (limit, page) => {
     try {
+      const offset = (page - 1) * limit;
       const appointmentsArray = [];
-      const appointmentsRef = db.collection('appointments');
-      const appointmentsSnapshot = await appointmentsRef.get();
+      const appointmentsRef = admin.firestore().collection('appointments').orderBy("appointmentTime", "asc");
+      const countAll = await appointmentsRef.count().get();
+      const appointmentsSnapshot = await appointmentsRef.limit(limit).offset(offset).get();
 
       appointmentsSnapshot.forEach(doc => {
         appointmentsArray.push({
@@ -34,7 +36,13 @@ class Appointment {
           roomID: doc.data().roomID
         })
       })
-      return appointmentsArray;
+      const data = {
+        'appointment': appointmentsArray,
+        'current_appointment': offset + appointmentsArray.length,
+        'total_appointment': countAll.data().count,
+        'total_page': Math.ceil(countAll.data().count / limit)
+      }
+      return data;
     } catch (err) {
       return err.message;
     }

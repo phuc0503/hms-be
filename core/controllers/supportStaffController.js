@@ -3,8 +3,9 @@ const SupportStaff = require('../models/supportStaff');
 const supportStaffInstance = new SupportStaff();
 
 const getAllSupportStaff = async (req, res) => {
-
-    const supportStaffArray = await supportStaffInstance.getAllSupportStaff();
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const supportStaffArray = await supportStaffInstance.getAllSupportStaff(limit, page);
 
     if (supportStaffArray) {
         return res.status(200).json(supportStaffArray);
@@ -15,8 +16,8 @@ const getAllSupportStaff = async (req, res) => {
 
 const getSupportStaffById = async (req, res) => {
 
-    const supportstaff_id = req.params.supportstaff_id;
-    const supportStaffData = await supportStaffInstance.getSupportStaffById(supportstaff_id);
+    const supportStaff_id = req.params.supportStaff_id;
+    const supportStaffData = await supportStaffInstance.getSupportStaffById(supportStaff_id);
 
     if (supportStaffData) {
         return res.status(200).json(supportStaffData);
@@ -57,30 +58,31 @@ const createSupportStaff = async (req, res) => {
 // }
 
 const updateSupportStaff = async (req, res) => {
-    const supportstaff_id = req.params.supportstaff_id;
+    const supportStaff_id = req.params.supportStaff_id;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const age = req.body.age;
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const dateOfBirth = req.body.dateOfBirth;
-    // const specialty = req.body.specialty;
     const salary = req.body.salary;
+    const absence = req.body.absence;
 
     const json = {
+        id: supportStaff_id,
         firstName: firstName,
         lastName: lastName,
         age: age,
         gender: gender,
         phoneNumber: phoneNumber,
         dateOfBirth: dateOfBirth,
-        // specialty: specialty,
-        salary: salary
+        salary: salary,
+        absence: absence
     }
 
     console.log(json);
 
-    const result = await supportStaffInstanceInstance.updateSupportStaff(supportstaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary);
+    const result = await supportStaffInstance.updateSupportStaff(supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);
@@ -90,8 +92,8 @@ const updateSupportStaff = async (req, res) => {
 }
 
 const deleteSupportStaff = async (req, res) => {
-    const supportstaff_id = req.params.supportstaff_id;
-    const result = await supportStaffInstance.deleteDoctor(supportstaff_id);
+    const supportStaff_id = req.params.supportStaff_id;
+    const result = await supportStaffInstance.deleteDoctor(supportStaff_id);
 
     if (result) {
         return res.send("Delete successfully").status(200);

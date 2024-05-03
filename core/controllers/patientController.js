@@ -3,10 +3,19 @@ const { toDepartment } = require("../public/department");
 const patientInstance = new Patient();
 
 const getAllPatient = async (req, res) => {
-  try {
-    const patientArray = await patientInstance.getAllPatient();
+  let patientArray;
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  if (req.query.department) {
+    const department = toDepartment(parseInt(req.query.department));
+    patientArray = await patientInstance.getPatientByDepartment(department, limit, page);
+  } else {
+    patientArray = await patientInstance.getAllPatient(limit, page)
+  }
+
+  if (patientArray) {
     return res.status(200).json(patientArray);
-  } catch (error) {
+  } else {
     return res.send("Cannot get patient!").status(400);
   }
 };
@@ -21,10 +30,12 @@ const getPatientById = async (req, res) => {
   }
 };
 
-const getMedicalRecord = async (req, res) => {
+const getMedicalRecords = async (req, res) => {
   try {
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
     const patient_id = req.params.patient_id;
-    const patient = await patientInstance.getMedicalRecord(patient_id);
+    const patient = await patientInstance.getMedicalRecords(patient_id, limit, page);
     return res.status(200).json(patient);
   } catch (error) {
     return res.send("Cannot get patient!").status(400);
@@ -102,18 +113,7 @@ const deletePatient = async (req, res) => {
   }
 };
 
-const getPatientByDepartment = async (req, res) => {
-  let department = parseInt(req.params.department);
-  department = toDepartment(department);
-  const doctorArray = await patientInstance.getPatientByDepartment(department);
-  if (doctorArray) {
-    return res.status(200).json(doctorArray);
-  } else {
-    return res.send("Cannot get patient!").status(400);
-  }
-};
-
-const countPatientrByDepartment = async (req, res) => {
+const countPatientByDepartment = async (req, res) => {
   const result = await patientInstance.countPatientByDepartment();
 
   if (result) {
@@ -126,10 +126,9 @@ const countPatientrByDepartment = async (req, res) => {
 module.exports = {
   getAllPatient,
   getPatientById,
-  getMedicalRecord,
+  getMedicalRecords,
   createPatient,
   updatePatient,
   deletePatient,
-  getPatientByDepartment,
-  countPatientrByDepartment,
+  countPatientByDepartment,
 };

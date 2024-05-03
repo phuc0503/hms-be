@@ -1,23 +1,22 @@
-const { json } = require('express');
-const { db } = require('../config/firebase');
+const { db, admin } = require('../config/firebase');
 const Staff = require('./staff');
 const { doc } = require('firebase/firestore');
 const { formatDate } = require('../public/formatDate');
 const { Timestamp } = require('firebase-admin/firestore');
 
 class Nurse extends Staff {
-    // #specialty; // private
     #patientsUnder = [];
     constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence) {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence);
-        // this.#specialty = specialty;
     }
 
-    getAllNurse = async () => {
+    getAllNurse = async (limit, page) => {
         try {
+            const offset = (page - 1) * limit;
             const nursesArray = [];
-            const nursesRef = db.collection('staff');
-            const snapshot = await nursesRef.where('role', '==', 'nurse').get(); // c
+            const nursesRef = admin.firestore().collection('staff').where('role', '==', 'nurse').orderBy('lastName', 'asc');
+            const countAll = await nursesRef.count().get();
+            const snapshot = await nursesRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
                 nursesArray.push({
                     id: doc.id,
@@ -29,10 +28,15 @@ class Nurse extends Staff {
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
                     absence: doc.data().absence
-                    // specialty: doc.data().specialty
                 })
             })
-            return nursesArray
+            const data = {
+                'nurses': nursesArray,
+                'current_nurse': offset + nursesArray.length,
+                'total_nurse': countAll.data().count,
+                'total_page': Math.ceil(countAll.data().count / limit)
+            }
+            return data
         } catch (error) {
             return error.message;
         }
