@@ -34,7 +34,8 @@ const createSupportStaff = async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
     const specialty = req.body.specialty;
-    const result = await supportStaffInstance.createSupportStaff(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty);
+    const absence = req.body.absence;
+    const result = await supportStaffInstance.createSupportStaff(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty, absence);
 
     if (result) {
         return res.send("Support staff created!").status(200);

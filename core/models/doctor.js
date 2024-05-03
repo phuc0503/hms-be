@@ -8,8 +8,8 @@ const { toNum } = require('../public/department');
 class Doctor extends Staff {
     #department;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, department) {
-        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary);
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, department, absence) {
+        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
         this.#department = department;
     }
 
@@ -28,7 +28,8 @@ class Doctor extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
-                    department: doc.data().department
+                    department: doc.data().department,
+                    absence: doc.data().absence
                 })
             })
             return doctorsArray
@@ -55,7 +56,8 @@ class Doctor extends Staff {
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
                 salary: doc.data().salary,
-                department: doc.data().department
+                department: doc.data().department,
+                absence: doc.data().absence
             };
         } catch (error) {
             return error.message;
@@ -77,7 +79,8 @@ class Doctor extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
-                    department: doc.data().department
+                    department: doc.data().department,
+                    absence: doc.data().absence
                 })
             })
             return doctorsArray
@@ -86,7 +89,7 @@ class Doctor extends Staff {
         }
     }
 
-    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
+    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -98,6 +101,7 @@ class Doctor extends Staff {
                 salary: salary,
                 role: 'doctor',
                 department: department,
+                absence: false
             });
             return res;
         } catch (error) {
@@ -119,7 +123,8 @@ class Doctor extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    healthInsurance: doc.data().healthInsurance
+                    healthInsurance: doc.data().healthInsurance,
+                    absence: doc.data().absence
                 })
             })
             return patientsArray;

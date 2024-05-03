@@ -8,8 +8,8 @@ const { Timestamp } = require('firebase-admin/firestore');
 class Nurse extends Staff {
     // #specialty; // private
     #patientsUnder = [];
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age) {
-        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age);
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence) {
+        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence);
         // this.#specialty = specialty;
     }
 
@@ -27,7 +27,8 @@ class Nurse extends Staff {
                     age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
-                    salary: doc.data().salary
+                    salary: doc.data().salary,
+                    absence: doc.data().absence
                     // specialty: doc.data().specialty
                 })
             })
@@ -54,7 +55,8 @@ class Nurse extends Staff {
                 age: nur.data().age,
                 gender: nur.data().gender,
                 phoneNumber: nur.data().phoneNumber,
-                salary: nur.data().salary
+                salary: nur.data().salary,
+                absence: doc.data().absence
                 // specialty: nur.data().specialty
             };
         } catch (error) {
@@ -62,7 +64,7 @@ class Nurse extends Staff {
         }
     }
 
-    createNurse = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary) => {
+    createNurse = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -72,7 +74,8 @@ class Nurse extends Staff {
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: salary,
-                role: 'nurse'
+                role: 'nurse',
+                absence: false
                 // specialty: specialty
             });
 
