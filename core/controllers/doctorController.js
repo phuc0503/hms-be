@@ -43,7 +43,8 @@ const createDoctor = async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
     const department = req.body.department;
-    const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department);
+    const absence = req.body.absence;
+    const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department, absence);
 
     if (result) {
         return res.send("Doctor created!").status(200);
@@ -74,8 +75,8 @@ const updateDoctor = async (req, res) => {
     const dateOfBirth = req.body.dateOfBirth;
     const department = req.body.department;
     const salary = req.body.salary;
-
-    const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary);
+    const absence = req.body.absence;
+    const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);
