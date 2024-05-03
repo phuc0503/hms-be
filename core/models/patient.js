@@ -1,4 +1,4 @@
-const { db } = require("../config/firebase");
+const { db, admin } = require("../config/firebase");
 const { formatDate } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
 const { Timestamp } = require("firebase-admin/firestore");
@@ -41,11 +41,13 @@ class Patient {
     this.#dateOfBirth = dateOfBirth;
   }
 
-  getAllPatient = async () => {
+  getAllPatient = async (limit, page) => {
     try {
+      const offset = (page - 1) * limit;
       const patientsArray = [];
-      const patientsRef = db.collection("patients");
-      const snapshot = await patientsRef.get();
+      const patientsRef = admin.firestore().collection("patients").orderBy('firstName', 'asc');
+      const countAll = await patientsRef.count().get();
+      const snapshot = await patientsRef.limit(limit).offset(offset).get();
       snapshot.forEach((doc) => {
         patientsArray.push({
           id: doc.id,
@@ -60,7 +62,13 @@ class Patient {
           dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
       });
-      return patientsArray;
+      const data = {
+        'patients': patientsArray,
+        'current_patient': offset + patientsArray.length,
+        'total_patient': countAll.data().count,
+        'total_page': Math.ceil(countAll.data().count / limit)
+      }
+      return data;
     } catch (error) {
       return error.message;
     }
@@ -93,14 +101,22 @@ class Patient {
     }
   };
 
-  getMedicalRecord = async (patientId) => {
+  getMedicalRecords = async (patientId, limit, page) => {
     try {
+      const offset = (page - 1) * limit;
       const appointmentsArray = [];
-      const snapshot = await db
+      const patientsRef = admin
+        .firestore()
         .collection("appointments")
         .where("patientID", "==", patientId)
+        .orderBy('appointmentTime', 'asc');
+      const countAll = await patientsRef
+        .count()
         .get();
-
+      const snapshot = await patientsRef
+        .limit(limit)
+        .offset(offset)
+        .get();
       const promises = snapshot.docs.map(async (doc) => {
         const doctorData = await doctorInstance.getDoctorById(
           doc.data().doctorID
@@ -116,8 +132,13 @@ class Patient {
       });
 
       await Promise.all(promises);
-
-      return appointmentsArray;
+      const data = {
+        'appointments': appointmentsArray,
+        'current_appointment': offset + appointmentsArray.length,
+        'total_appointment': countAll.data().count,
+        'total_page': Math.ceil(countAll.data().count / limit)
+      }
+      return data;
     } catch (error) {
       return error.message;
     }
@@ -192,13 +213,13 @@ class Patient {
     }
   };
 
-  getPatientByDepartment = async (department) => {
+  getPatientByDepartment = async (department, limit, page) => {
     try {
+      const offset = (page - 1) * limit;
       const patientsArray = [];
-      const patientRef = db.collection("patients");
-      const snapshot = await patientRef
-        .where("department", "==", department)
-        .get();
+      const patientRef = admin.firestore().collection("patients").where("department", "==", department).orderBy('firstName', 'asc');
+      const countAll = await patientRef.count().get();
+      const snapshot = await patientRef.limit(limit).offset(offset).get();
       snapshot.forEach((doc) => {
         patientsArray.push({
           id: doc.id,
@@ -213,7 +234,13 @@ class Patient {
           doctorResponbility: doc.data().doctorResponbility,
         });
       });
-      return patientsArray;
+      const data = {
+        'patients': patientsArray,
+        'current_patient': offset + patientsArray.length,
+        'total_patient': countAll.data().count,
+        'total_page': Math.ceil(countAll.data().count / limit)
+      }
+      return data;
     } catch (error) {
       return error.message;
     }
@@ -231,23 +258,23 @@ class Patient {
       const data = {
         departments: [
           {
-            department: "Khoa nội",
+            name: "Khoa nội",
             total: departmentArray[0],
           },
           {
-            department: "Khoa ngoại",
+            name: "Khoa ngoại",
             total: departmentArray[1],
           },
           {
-            department: "Khoa nhi",
+            name: "Khoa nhi",
             total: departmentArray[2],
           },
           {
-            department: "Khoa sản",
+            name: "Khoa sản",
             total: departmentArray[3],
           },
           {
-            department: "Khoa mắt",
+            name: "Khoa mắt",
             total: departmentArray[4],
           },
         ],

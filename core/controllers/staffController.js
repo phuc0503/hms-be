@@ -17,8 +17,8 @@ const staffInstance = new Staff();
 
 const getAllStaff = async (req, res) => {
     try {
-        let limit = parseInt(req.query.limit) || 10;
-        let page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
 
         const staffArray = await staffInstance.getAllStaff(limit, page);
         return res.status(200).json(staffArray);

@@ -1,8 +1,6 @@
-const { json } = require('express');
 const { db, admin } = require('../config/firebase');
 const Staff = require('./staff');
-const { doc, orderBy } = require('firebase/firestore');
-const { formatDate } = require('../public/formatDate');
+const { formatDate, transformDateFormat } = require('../public/formatDate');
 const { Timestamp } = require('firebase-admin/firestore');
 const { toNum } = require('../public/department');
 class Doctor extends Staff {
@@ -17,7 +15,7 @@ class Doctor extends Staff {
         try {
             const offset = (page - 1) * limit;
             const doctorsArray = [];
-            const doctorsRef = admin.firestore().collection('staff').where('role', '==', 'doctor').orderBy('lastName', 'asc');
+            const doctorsRef = admin.firestore().collection('staff').where('role', '==', 'doctor').orderBy('firstName', 'asc');
             const countAll = await doctorsRef.count().get();
             const snapshot = await doctorsRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
@@ -76,7 +74,7 @@ class Doctor extends Staff {
         try {
             const offset = (page - 1) * limit;
             const doctorsArray = [];
-            const doctorsRef = admin.firestore().collection('staff').where('department', '==', department).orderBy('lastName', 'asc');
+            const doctorsRef = admin.firestore().collection('staff').where('department', '==', department).orderBy('firstName', 'asc');
             const countAll = await doctorsRef.count().get();
             const snapshot = await doctorsRef.limit(limit).offset(offset).get();
             snapshot.forEach(doc => {
@@ -105,13 +103,13 @@ class Doctor extends Staff {
         }
     }
 
-    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department, absence) => {
+    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
                 lastName: lastName,
                 age: age,
-                dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
+                dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: salary,
@@ -157,7 +155,7 @@ class Doctor extends Staff {
         }
     }
 
-    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary) => {
+    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence) => {
         try {
             const doctorRef = db.collection('staff').doc(doctor_id);
             const res = await doctorRef.update({
@@ -166,10 +164,11 @@ class Doctor extends Staff {
                 age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
-                dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
+                dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 role: 'doctor',
                 department: department,
-                salary: salary
+                salary: salary,
+                absence: absence
             });
             return res;
         } catch (error) {
@@ -189,7 +188,6 @@ class Doctor extends Staff {
     countDoctorByDepartment = async () => {
         try {
             const departmentArray = [0, 0, 0, 0, 0];
-            const doctorsArray = [];
             const doctorsRef = db.collection('staff');
             const snapshot = await doctorsRef.where('role', '==', 'doctor').get();
             snapshot.forEach(doc => {
@@ -197,26 +195,26 @@ class Doctor extends Staff {
                 departmentArray[department]++;
             })
             const data = {
-                "departments": [
+                departments: [
                     {
-                        "name": "Khoa nội",
-                        "total": departmentArray[0]
+                        name: "Khoa nội",
+                        total: departmentArray[0]
                     },
                     {
-                        "name": "Khoa ngoại",
-                        "total": departmentArray[1]
+                        name: "Khoa ngoại",
+                        total: departmentArray[1]
                     },
                     {
-                        "name": "Khoa nhi",
-                        "total": departmentArray[2]
+                        name: "Khoa nhi",
+                        total: departmentArray[2]
                     },
                     {
-                        "name": "Khoa sản",
-                        "total": departmentArray[3]
+                        name: "Khoa sản",
+                        total: departmentArray[3]
                     },
                     {
-                        "name": "Khoa mắt",
-                        "total": departmentArray[4]
+                        name: "Khoa mắt",
+                        total: departmentArray[4]
                     }
                 ]
             };
