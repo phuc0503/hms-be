@@ -17,12 +17,11 @@ const {
 const {
   getAllDoctor,
   getDoctorById,
-  getDoctorByDepartment,
   getDoctorPatients,
   createDoctor,
   updateDoctor,
   deleteDoctor,
-  countDoctorByDepartment,
+  countDoctorByDepartment
 } = require("../controllers/doctorController");
 
 const {
@@ -60,14 +59,7 @@ const initWebRoutes = (app) => {
   router.post("/api/v1/staff/doctors", createDoctor);
   router.put("/api/v1/staff/doctors/:doctor_id", updateDoctor);
   router.delete("/api/v1/staff/doctors/:doctor_id", deleteDoctor);
-  router.get(
-    "/api/v1/staff/doctors/department/:department",
-    getDoctorByDepartment
-  );
-  router.get(
-    "/api/v1/staff/doctors/departments/statistics",
-    countDoctorByDepartment
-  );
+  router.get("/api/v1/staff/doctors/departments/statistics", countDoctorByDepartment);
 
   //nurse
   router.get("/api/v1/staff/nurses", getAllNurse);
@@ -78,16 +70,10 @@ const initWebRoutes = (app) => {
 
   //support staff
   router.get("/api/v1/staff/supportStaff", getAllSupportStaff);
-  router.get(
-    "/api/v1/staff/supportStaff/:supportStaff_id",
-    getSupportStaffById
-  );
+  router.get("/api/v1/staff/supportStaff/:supportStaff_id", getSupportStaffById);
   router.post("/api/v1/staff/supportStaff", createSupportStaff);
   router.put("/api/v1/staff/supportStaff/:supportStaff_id", updateSupportStaff);
-  router.delete(
-    "/api/v1/staff/supportStaff/:supportStaff_id",
-    deleteSupportStaff
-  );
+  router.delete("/api/v1/staff/supportStaff/:supportStaff_id", deleteSupportStaff);
 
   //patient
   router.get("/api/v1/patients", getAllPatient);
@@ -96,14 +82,8 @@ const initWebRoutes = (app) => {
   router.post("/api/v1/patients", createPatient);
   router.put("/api/v1/patients/:patient_id", updatePatient);
   router.delete("/api/v1/patients/:patient_id", deletePatient);
-  router.get(
-    "/api/v1/staff/patients/department/:department",
-    getPatientByDepartment
-  );
-  router.get(
-    "/api/v1/staff/patients/departments/statistics",
-    countPatientrByDepartment
-  );
+  router.get("/api/v1/staff/patients/department/:department", getPatientByDepartment);
+  router.get("/api/v1/staff/patients/departments/statistics", countPatientrByDepartment);
 
   //appointment
   router.get("/api/v1/appointments", getAllAppointment);
