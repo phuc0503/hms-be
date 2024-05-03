@@ -754,6 +754,12 @@ components:
         role:
           type: string
           example: doctor
+        department:
+          type: string
+          example: Khoa Nhi
+        absence:
+          type: boolean
+          example: false
     Doctor:
       type: object
       properties:
@@ -782,9 +788,12 @@ components:
         salary:
           type: integer
           example: 15000000
-        specialty:
+        department:
           type: string
-          example: Tim mạch
+          example: Khoa nhi
+        absence:
+          type: boolean
+          example: false
     AddDoctor:
       required:
         - firstName
@@ -794,7 +803,8 @@ components:
         - gender
         - phoneNumber
         - salary
-        - specialty
+        - department
+        - absence
       type: object
       properties:
         firstName:
@@ -819,9 +829,12 @@ components:
         salary:
           type: integer
           example: 20000000
-        specialty:
+        department:
           type: string
-          example: Tim mạch
+          example: Khoa nội
+        absence:
+          type: boolean
+          example: true
     Patient:
       type: object
       properties:
@@ -983,6 +996,9 @@ components:
         salary:
           type: integer
           example: 30000000
+        absence:
+          type: boolean
+          example: false
     AddNurse:
       required:
         - firstName
@@ -992,6 +1008,7 @@ components:
         - gender
         - phoneNumber
         - salary
+        - absence
       type: object
       properties:
         firstName:
@@ -1016,6 +1033,9 @@ components:
         salary:
           type: integer
           example: 20000000
+        absence:
+          type: boolean
+          example: true
     SupportStaff:
       type: object
       properties:
@@ -1041,6 +1061,9 @@ components:
         phoneNumber:
           type: string
           example: "5601928374"
+        absence:
+          type: boolean
+          example: false
     AddSupportStaff:
       required:
         - firstName
@@ -1050,6 +1073,7 @@ components:
         - gender
         - phoneNumber
         - salary
+        - absence
       type: object
       properties:
         firstName:
@@ -1074,3 +1098,6 @@ components:
         salary:
           type: integer
           example: 294620556
+        absence:
+          type: boolean
+          example: true

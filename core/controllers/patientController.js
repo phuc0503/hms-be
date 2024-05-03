@@ -1,5 +1,5 @@
 const Patient = require("../models/patient");
-
+const { toDepartment } = require("../public/department");
 const patientInstance = new Patient();
 
 const getAllPatient = async (req, res) => {
@@ -39,6 +39,7 @@ const createPatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
+  const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
   const result = await patientInstance.createPatient(
     firstName,
@@ -48,6 +49,7 @@ const createPatient = async (req, res) => {
     gender,
     phoneNumber,
     healthInsurance,
+    department,
     doctorResponbility
   );
   if (result) {
@@ -66,18 +68,8 @@ const updatePatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
+  const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
-
-  const json = {
-    firstName: firstName,
-    lastName: lastName,
-    age: age,
-    gender: gender,
-    phoneNumber: phoneNumber,
-    dateOfBirth: dateOfBirth,
-    healthInsurance: healthInsurance,
-    doctorResponbility: doctorResponbility,
-  };
 
   const result = await patientInstance.updatePatient(
     patient_id,
@@ -88,6 +80,7 @@ const updatePatient = async (req, res) => {
     phoneNumber,
     dateOfBirth,
     healthInsurance,
+    department,
     doctorResponbility
   );
 
@@ -109,6 +102,27 @@ const deletePatient = async (req, res) => {
   }
 };
 
+const getPatientByDepartment = async (req, res) => {
+  let department = parseInt(req.params.department);
+  department = toDepartment(department);
+  const doctorArray = await patientInstance.getPatientByDepartment(department);
+  if (doctorArray) {
+    return res.status(200).json(doctorArray);
+  } else {
+    return res.send("Cannot get patient!").status(400);
+  }
+};
+
+const countPatientrByDepartment = async (req, res) => {
+  const result = await patientInstance.countPatientByDepartment();
+
+  if (result) {
+    return res.status(200).json(result);
+  } else {
+    return res.send("Cannot count patient").status(400);
+  }
+};
+
 module.exports = {
   getAllPatient,
   getPatientById,
@@ -116,4 +130,6 @@ module.exports = {
   createPatient,
   updatePatient,
   deletePatient,
+  getPatientByDepartment,
+  countPatientrByDepartment,
 };

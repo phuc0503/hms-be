@@ -10,8 +10,9 @@ class Staff {
     _phoneNumber;
     _salary;
     _age;
+    _absence;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age) {
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence) {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
@@ -20,6 +21,7 @@ class Staff {
         this._phoneNumber = phoneNumber;
         this._salary = salary;
         this._age = age;
+        this._absence = absence;
     }
 
     // getAllStaff = async (limit, after, before) => {
@@ -88,6 +90,7 @@ class Staff {
                     phoneNumber: doc.data().phoneNumber,
                     role: doc.data().role,
                     salary: doc.data().salary,
+                    absence: doc.data().absence
                 })
             })
             const data = {

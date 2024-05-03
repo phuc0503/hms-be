@@ -31,8 +31,9 @@ const createNurse = async (req, res) => {
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
+    const absence = req.body.absence;
     // const specialty = req.body.specialty;
-    const result = await nurseInstance.createNurse(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary);
+    const result = await nurseInstance.createNurse(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence);
     if (result) {
         return res.send("Nurse created!").status(200);
     } else {
@@ -50,6 +51,7 @@ const updateNurse = async (req, res) => {
     const dateOfBirth = req.body.dateOfBirth;
     // const specialty = req.body.specialty;
     const salary = req.body.salary;
+    const absence = req.body.absence;
 
     const json = {
         firstName: firstName,
@@ -58,12 +60,13 @@ const updateNurse = async (req, res) => {
         gender: gender,
         phoneNumber: phoneNumber,
         dateOfBirth: dateOfBirth,
-        salary: salary
+        salary: salary,
+        absence: absence
     }
 
     console.log(json);
 
-    const result = await nurseInstance.updateNurse(nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary);
+    const result = await nurseInstance.updateNurse(nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);

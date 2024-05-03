@@ -7,8 +7,8 @@ const { formatDate } = require('../public/formatDate');
 class SupportStaff extends Staff {
     // #specialty;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary) {
-        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary);
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) {
+        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
         // this.#specialty = specialty;
     }
 
@@ -26,7 +26,8 @@ class SupportStaff extends Staff {
                     age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
-                    salary: doc.data().salary
+                    salary: doc.data().salary,
+                    absence: doc.data().absence
                     // specialty: doc.data().specialty
                 })
             })
@@ -53,7 +54,8 @@ class SupportStaff extends Staff {
                 age: doc.data().age,
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
-                salary: doc.data().salary
+                salary: doc.data().salary,
+                absence: doc.data().absence
                 // specialty: doc.data().specialty
             };
         } catch (error) {
@@ -61,7 +63,7 @@ class SupportStaff extends Staff {
         }
     }
 
-    createSupportStaff = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary) => {
+    createSupportStaff = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -71,7 +73,8 @@ class SupportStaff extends Staff {
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: salary,
-                role: 'supportstaff'
+                role: 'supportstaff',
+                absence: false
                 // specialty: specialty,
             });
             return res;
@@ -115,7 +118,7 @@ class SupportStaff extends Staff {
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 role: 'supportstaff',
                 // specialty: specialty,
-                salary: salary
+                salary: salary,
             })
             return res;
         } catch (error) {

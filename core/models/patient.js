@@ -2,6 +2,7 @@ const { db } = require("../config/firebase");
 const { formatDate } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
 const { Timestamp } = require("firebase-admin/firestore");
+const { toNum } = require("../public/department");
 const doctorInstance = new Doctor();
 
 class Patient {
@@ -10,6 +11,7 @@ class Patient {
   #age;
   #gender;
   #healthInsurance;
+  #department;
   #doctorResponbility;
   #dateOfBirth;
   #phoneNumber;
@@ -22,6 +24,7 @@ class Patient {
     age,
     gender,
     healthInsurance,
+    department,
     doctorResponbility,
     dateOfBirth,
     phoneNumber
@@ -33,6 +36,7 @@ class Patient {
     this.#gender = gender;
     this.#phoneNumber = phoneNumber;
     this.#healthInsurance = healthInsurance;
+    this.#department = department;
     this.#doctorResponbility = doctorResponbility;
     this.#dateOfBirth = dateOfBirth;
   }
@@ -51,6 +55,7 @@ class Patient {
           gender: doc.data().gender,
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
+          department: doc.data().department,
           doctorResponbility: doc.data().doctorResponbility,
           dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
@@ -79,6 +84,7 @@ class Patient {
         gender: patientData.gender,
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
+        department: patientData.department,
         doctorResponbility: patientData.doctorResponbility,
         dateOfBirth: formatDate(patientData.dateOfBirth),
       };
@@ -125,6 +131,7 @@ class Patient {
     gender,
     phoneNumber,
     healthInsurance,
+    department,
     doctorResponbility
   ) => {
     try {
@@ -136,6 +143,7 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
+        department: department,
         doctorResponbility: doctorResponbility,
       });
       return res;
@@ -153,6 +161,7 @@ class Patient {
     phoneNumber,
     dateOfBirth,
     healthInsurance,
+    department,
     doctorResponbility
   ) => {
     try {
@@ -165,6 +174,7 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
+        department: department,
         doctorResponbility: doctorResponbility,
       });
       return res;
@@ -177,6 +187,72 @@ class Patient {
     try {
       const res = await db.collection("patients").doc(patient_id).delete();
       return res;
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  getPatientByDepartment = async (department) => {
+    try {
+      const patientsArray = [];
+      const patientRef = db.collection("patients");
+      const snapshot = await patientRef
+        .where("department", "==", department)
+        .get();
+      snapshot.forEach((doc) => {
+        patientsArray.push({
+          id: doc.id,
+          firstName: doc.data().firstName,
+          lastName: doc.data().lastName,
+          dateOfBirth: formatDate(doc.data().dateOfBirth),
+          age: doc.data().age,
+          gender: doc.data().gender,
+          phoneNumber: doc.data().phoneNumber,
+          healthInsurance: doc.data().healthInsurance,
+          department: doc.data().department,
+          doctorResponbility: doc.data().doctorResponbility,
+        });
+      });
+      return patientsArray;
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  countPatientByDepartment = async () => {
+    try {
+      const departmentArray = [0, 0, 0, 0, 0];
+      const doctorsRef = db.collection("patients");
+      const snapshot = await doctorsRef.get();
+      snapshot.forEach((doc) => {
+        let department = toNum(doc.data().department);
+        departmentArray[department]++;
+      });
+      const data = {
+        departments: [
+          {
+            department: "Khoa nội",
+            total: departmentArray[0],
+          },
+          {
+            department: "Khoa ngoại",
+            total: departmentArray[1],
+          },
+          {
+            department: "Khoa nhi",
+            total: departmentArray[2],
+          },
+          {
+            department: "Khoa sản",
+            total: departmentArray[3],
+          },
+          {
+            department: "Khoa mắt",
+            total: departmentArray[4],
+          },
+        ],
+      };
+      return data;
     } catch (error) {
       return error.message;
     }
