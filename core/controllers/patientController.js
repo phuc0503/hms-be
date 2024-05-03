@@ -39,6 +39,7 @@ const createPatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
+  const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
   const result = await patientInstance.createPatient(
     firstName,
@@ -48,6 +49,7 @@ const createPatient = async (req, res) => {
     gender,
     phoneNumber,
     healthInsurance,
+    department,
     doctorResponbility
   );
   if (result) {
@@ -66,18 +68,8 @@ const updatePatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
+  const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
-
-  const json = {
-    firstName: firstName,
-    lastName: lastName,
-    age: age,
-    gender: gender,
-    phoneNumber: phoneNumber,
-    dateOfBirth: dateOfBirth,
-    healthInsurance: healthInsurance,
-    doctorResponbility: doctorResponbility,
-  };
 
   const result = await patientInstance.updatePatient(
     patient_id,
@@ -88,10 +80,12 @@ const updatePatient = async (req, res) => {
     phoneNumber,
     dateOfBirth,
     healthInsurance,
+    department,
     doctorResponbility
   );
 
   if (result) {
+    console.log(result);
     return res.send("Update successfully").status(200);
   } else {
     return res.send("Cannot update patient!").status(400);

@@ -10,6 +10,7 @@ class Patient {
   #age;
   #gender;
   #healthInsurance;
+  #department;
   #doctorResponbility;
   #dateOfBirth;
   #phoneNumber;
@@ -22,6 +23,7 @@ class Patient {
     age,
     gender,
     healthInsurance,
+    department,
     doctorResponbility,
     dateOfBirth,
     phoneNumber
@@ -33,6 +35,7 @@ class Patient {
     this.#gender = gender;
     this.#phoneNumber = phoneNumber;
     this.#healthInsurance = healthInsurance;
+    this.#department = department;
     this.#doctorResponbility = doctorResponbility;
     this.#dateOfBirth = dateOfBirth;
   }
@@ -51,6 +54,7 @@ class Patient {
           gender: doc.data().gender,
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
+          department: doc.data().department,
           doctorResponbility: doc.data().doctorResponbility,
           dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
@@ -79,6 +83,7 @@ class Patient {
         gender: patientData.gender,
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
+        department: patientData.department,
         doctorResponbility: patientData.doctorResponbility,
         dateOfBirth: formatDate(patientData.dateOfBirth),
       };
@@ -125,6 +130,7 @@ class Patient {
     gender,
     phoneNumber,
     healthInsurance,
+    department,
     doctorResponbility
   ) => {
     try {
@@ -136,6 +142,7 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
+        department: department,
         doctorResponbility: doctorResponbility,
       });
       return res;
@@ -153,6 +160,7 @@ class Patient {
     phoneNumber,
     dateOfBirth,
     healthInsurance,
+    department,
     doctorResponbility
   ) => {
     try {
@@ -165,6 +173,7 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
+        department: department,
         doctorResponbility: doctorResponbility,
       });
       return res;
