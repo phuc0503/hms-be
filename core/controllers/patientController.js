@@ -85,7 +85,6 @@ const updatePatient = async (req, res) => {
   );
 
   if (result) {
-    console.log(result);
     return res.send("Update successfully").status(200);
   } else {
     return res.send("Cannot update patient!").status(400);
