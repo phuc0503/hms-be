@@ -1,5 +1,5 @@
 const { db, admin } = require("../config/firebase");
-const { formatDate } = require("../public/formatDate");
+const { formatDate, transformDateFormat } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
 const { Timestamp } = require("firebase-admin/firestore");
 const { toNum } = require("../public/department");
@@ -12,7 +12,7 @@ class Patient {
   #gender;
   #healthInsurance;
   #department;
-  #doctorResponbility;
+  #doctorResponsibility;
   #dateOfBirth;
   #phoneNumber;
   #firstName;
@@ -25,7 +25,7 @@ class Patient {
     gender,
     healthInsurance,
     department,
-    doctorResponbility,
+    doctorResponsibility,
     dateOfBirth,
     phoneNumber
   ) {
@@ -37,7 +37,7 @@ class Patient {
     this.#phoneNumber = phoneNumber;
     this.#healthInsurance = healthInsurance;
     this.#department = department;
-    this.#doctorResponbility = doctorResponbility;
+    this.#doctorResponsibility = doctorResponsibility;
     this.#dateOfBirth = dateOfBirth;
   }
 
@@ -45,7 +45,10 @@ class Patient {
     try {
       const offset = (page - 1) * limit;
       const patientsArray = [];
-      const patientsRef = admin.firestore().collection("patients").orderBy('firstName', 'asc');
+      const patientsRef = admin
+        .firestore()
+        .collection("patients")
+        .orderBy("firstName", "asc");
       const countAll = await patientsRef.count().get();
       const snapshot = await patientsRef.limit(limit).offset(offset).get();
       snapshot.forEach((doc) => {
@@ -58,16 +61,16 @@ class Patient {
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
           department: doc.data().department,
-          doctorResponbility: doc.data().doctorResponbility,
+          doctorResponsibility: doc.data().doctorResponsibility,
           dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
       });
       const data = {
-        'patients': patientsArray,
-        'current_patient': offset + patientsArray.length,
-        'total_patient': countAll.data().count,
-        'total_page': Math.ceil(countAll.data().count / limit)
-      }
+        patients: patientsArray,
+        current_patient: offset + patientsArray.length,
+        total_patient: countAll.data().count,
+        total_page: Math.ceil(countAll.data().count / limit),
+      };
       return data;
     } catch (error) {
       return error.message;
@@ -93,7 +96,7 @@ class Patient {
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
         department: patientData.department,
-        doctorResponbility: patientData.doctorResponbility,
+        doctorResponsibility: patientData.doctorResponsibility,
         dateOfBirth: formatDate(patientData.dateOfBirth),
       };
     } catch (error) {
@@ -109,18 +112,11 @@ class Patient {
         .firestore()
         .collection("appointments")
         .where("patientID", "==", patientId)
-        .orderBy('appointmentTime', 'asc');
-      const countAll = await patientsRef
-        .count()
-        .get();
-      const snapshot = await patientsRef
-        .limit(limit)
-        .offset(offset)
-        .get();
+        .orderBy("appointmentTime", "asc");
+      const countAll = await patientsRef.count().get();
+      const snapshot = await patientsRef.limit(limit).offset(offset).get();
       const promises = snapshot.docs.map(async (doc) => {
-        const doctorData = await doctorInstance.getById(
-          doc.data().doctorID
-        );
+        const doctorData = await doctorInstance.getById(doc.data().doctorID);
 
         appointmentsArray.push({
           appointmentId: doc.id,
@@ -133,11 +129,11 @@ class Patient {
 
       await Promise.all(promises);
       const data = {
-        'appointments': appointmentsArray,
-        'current_appointment': offset + appointmentsArray.length,
-        'total_appointment': countAll.data().count,
-        'total_page': Math.ceil(countAll.data().count / limit)
-      }
+        appointments: appointmentsArray,
+        current_appointment: offset + appointmentsArray.length,
+        total_appointment: countAll.data().count,
+        total_page: Math.ceil(countAll.data().count / limit),
+      };
       return data;
     } catch (error) {
       return error.message;
@@ -153,19 +149,21 @@ class Patient {
     phoneNumber,
     healthInsurance,
     department,
-    doctorResponbility
+    doctorResponsibility
   ) => {
     try {
       const res = await db.collection("patients").add({
         firstName: firstName,
         lastName: lastName,
         age: age,
-        dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
+        dateOfBirth: Timestamp.fromDate(
+          new Date(transformDateFormat(dateOfBirth))
+        ),
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
         department: department,
-        doctorResponbility: doctorResponbility,
+        doctorResponsibility: doctorResponsibility,
       });
       return res;
     } catch (error) {
@@ -183,7 +181,7 @@ class Patient {
     dateOfBirth,
     healthInsurance,
     department,
-    doctorResponbility
+    doctorResponsibility
   ) => {
     try {
       const patientRef = db.collection("patients").doc(patient_id);
@@ -191,12 +189,14 @@ class Patient {
         firstName: firstName,
         lastName: lastName,
         age: age,
-        dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
+        dateOfBirth: Timestamp.fromDate(
+          new Date(transformDateFormat(dateOfBirth))
+        ),
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance,
         department: department,
-        doctorResponbility: doctorResponbility,
+        doctorResponsibility: doctorResponsibility,
       });
       return res;
     } catch (error) {
@@ -217,7 +217,11 @@ class Patient {
     try {
       const offset = (page - 1) * limit;
       const patientsArray = [];
-      const patientRef = admin.firestore().collection("patients").where("department", "==", department).orderBy('firstName', 'asc');
+      const patientRef = admin
+        .firestore()
+        .collection("patients")
+        .where("department", "==", department)
+        .orderBy("firstName", "asc");
       const countAll = await patientRef.count().get();
       const snapshot = await patientRef.limit(limit).offset(offset).get();
       snapshot.forEach((doc) => {
@@ -231,15 +235,15 @@ class Patient {
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
           department: doc.data().department,
-          doctorResponbility: doc.data().doctorResponbility,
+          doctorResponsibility: doc.data().doctorResponsibility,
         });
       });
       const data = {
-        'patients': patientsArray,
-        'current_patient': offset + patientsArray.length,
-        'total_patient': countAll.data().count,
-        'total_page': Math.ceil(countAll.data().count / limit)
-      }
+        patients: patientsArray,
+        current_patient: offset + patientsArray.length,
+        total_patient: countAll.data().count,
+        total_page: Math.ceil(countAll.data().count / limit),
+      };
       return data;
     } catch (error) {
       return error.message;
