@@ -93,7 +93,7 @@ class Staff {
                 gender: gender,
                 phoneNumber: phoneNumber,
                 role: role,
-                salary: salary,
+                salary: parseInt(salary),
                 absence: false
             });
             return res;
@@ -113,8 +113,8 @@ class Staff {
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 role: role,
-                salary: salary,
-                absence: absence
+                salary: parseInt(salary),
+                absence: absence === "true"
             });
             return res;
         } catch (error) {

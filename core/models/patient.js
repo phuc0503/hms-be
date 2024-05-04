@@ -161,7 +161,7 @@ class Patient {
         ),
         gender: gender,
         phoneNumber: phoneNumber,
-        healthInsurance: healthInsurance,
+        healthInsurance: healthInsurance === "true",
         department: department,
         doctorResponsibility: doctorResponsibility,
       });
@@ -194,7 +194,7 @@ class Patient {
         ),
         gender: gender,
         phoneNumber: phoneNumber,
-        healthInsurance: healthInsurance,
+        healthInsurance: healthInsurance === "true",
         department: department,
         doctorResponsibility: doctorResponsibility,
       });
