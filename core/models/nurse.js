@@ -10,7 +10,7 @@ class Nurse extends Staff {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence);
     }
 
-    getAllNurse = async (limit, page) => {
+    getAll = async (limit, page) => {
         try {
             const offset = (page - 1) * limit;
             const nursesArray = [];
@@ -42,7 +42,7 @@ class Nurse extends Staff {
         }
     }
 
-    getNurseById = async (nurse_id) => {
+    getById = async (nurse_id) => {
         try {
             const nurseRef = db.collection("staff").doc(nurse_id);
             const nur = await nurseRef.get();
@@ -68,7 +68,7 @@ class Nurse extends Staff {
         }
     }
 
-    createNurse = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
+    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -89,7 +89,7 @@ class Nurse extends Staff {
         }
     }
 
-    updateNurse = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
+    update = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
         try {
             const nurseRef = db.collection('staff').doc(nurse_id);
             const res = await nurseRef.update({
@@ -108,7 +108,7 @@ class Nurse extends Staff {
         }
     }
 
-    deleteNurse = async (nurse_id) => {
+    delete = async (nurse_id) => {
         try {
             const res = await db.collection('staff').doc(nurse_id).delete();
             return res;

@@ -11,7 +11,7 @@ class Doctor extends Staff {
         this.#department = department;
     }
 
-    getAllDoctor = async (limit, page) => {
+    getAll = async (limit, page) => {
         try {
             const offset = (page - 1) * limit;
             const doctorsArray = [];
@@ -44,7 +44,7 @@ class Doctor extends Staff {
         }
     }
 
-    getDoctorById = async (doctor_id) => {
+    getById = async (doctor_id) => {
         try {
             const doctorRef = db.collection("staff").doc(doctor_id);
             const doc = await doctorRef.get();
@@ -70,7 +70,7 @@ class Doctor extends Staff {
         }
     }
 
-    getDoctorByDepartment = async (department, limit, page) => {
+    getByDepartment = async (department, limit, page) => {
         try {
             const offset = (page - 1) * limit;
             const doctorsArray = [];
@@ -103,7 +103,7 @@ class Doctor extends Staff {
         }
     }
 
-    createDoctor = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
+    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -123,7 +123,7 @@ class Doctor extends Staff {
         }
     }
 
-    getDoctorPatients = async (doctor_id, limit, page) => {
+    getPatientsList = async (doctor_id, limit, page) => {
         try {
             const offset = (page - 1) * limit;
             const patientsArray = [];
@@ -155,7 +155,7 @@ class Doctor extends Staff {
         }
     }
 
-    updateDoctor = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence) => {
+    update = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence) => {
         try {
             const doctorRef = db.collection('staff').doc(doctor_id);
             const res = await doctorRef.update({
@@ -176,7 +176,7 @@ class Doctor extends Staff {
         }
     }
 
-    deleteDoctor = async (doctor_id) => {
+    delete = async (doctor_id) => {
         try {
             const res = await db.collection('staff').doc(doctor_id).delete();
             return res;
@@ -185,7 +185,7 @@ class Doctor extends Staff {
         }
     }
 
-    countDoctorByDepartment = async () => {
+    countByDepartment = async () => {
         try {
             const departmentArray = [0, 0, 0, 0, 0];
             const doctorsRef = db.collection('staff');

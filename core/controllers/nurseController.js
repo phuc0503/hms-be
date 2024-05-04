@@ -5,7 +5,7 @@ const nurseInstance = new Nurse();
 const getAllNurse = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
-    const nurseArray = await nurseInstance.getAllNurse(limit, page);
+    const nurseArray = await nurseInstance.getAll(limit, page);
 
     if (nurseArray) {
         return res.status(200).json(nurseArray);
@@ -16,7 +16,7 @@ const getAllNurse = async (req, res) => {
 
 const getNurseById = async (req, res) => {
     const nurse_id = req.params.nurse_id;
-    const nurseData = await nurseInstance.getNurseById(nurse_id);
+    const nurseData = await nurseInstance.getById(nurse_id);
 
     if (nurseData) {
         return res.status(200).json(nurseData);
@@ -34,8 +34,7 @@ const createNurse = async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
     const absence = req.body.absence;
-    // const specialty = req.body.specialty;
-    const result = await nurseInstance.createNurse(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence);
+    const result = await nurseInstance.create(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence);
     if (result) {
         return res.send("Nurse created!").status(200);
     } else {
@@ -51,7 +50,6 @@ const updateNurse = async (req, res) => {
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const dateOfBirth = req.body.dateOfBirth;
-    // const specialty = req.body.specialty;
     const salary = req.body.salary;
     const absence = req.body.absence;
 
@@ -68,7 +66,7 @@ const updateNurse = async (req, res) => {
 
     console.log(json);
 
-    const result = await nurseInstance.updateNurse(nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
+    const result = await nurseInstance.update(nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);
@@ -79,7 +77,7 @@ const updateNurse = async (req, res) => {
 
 const deleteNurse = async (req, res) => {
     const nurse_id = req.params.nurse_id;
-    const result = await nurseInstance.deleteDoctor(nurse_id);
+    const result = await nurseInstance.delete(nurse_id);
 
     if (result) {
         return res.send("Delete successfully").status(200);

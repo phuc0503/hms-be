@@ -25,17 +25,24 @@ const formatDateTime = (timestamp) => {
 };
 
 const transformDateFormat = (dateString) => {
-    // Split the date string into day, month, and year components
     const [day, month, year] = dateString.split('/');
-
-    // Rearrange the components in the desired format
     const transformedDate = `${month}/${day}/${year}`;
 
     return transformedDate;
 }
 
+const transformDateTimeFormat = (dateTimeString) => {
+    const [datePart, timePart] = dateTimeString.split(" ");
+    const [day, month, year] = datePart.split("/");
+    const [hour, minute, second] = timePart.split(":");
+    const transformedDateTimeString = `${month}/${day}/${year} ${hour}:${minute}:${second}`;
+
+    return transformedDateTimeString;
+};
+
 module.exports = {
     formatDate,
     formatDateTime,
-    transformDateFormat
+    transformDateFormat,
+    transformDateTimeFormat
 };

@@ -41,7 +41,7 @@ class Patient {
     this.#dateOfBirth = dateOfBirth;
   }
 
-  getAllPatient = async (limit, page) => {
+  getAll = async (limit, page) => {
     try {
       const offset = (page - 1) * limit;
       const patientsArray = [];
@@ -74,7 +74,7 @@ class Patient {
     }
   };
 
-  getPatientById = async (patientId) => {
+  getById = async (patientId) => {
     try {
       const patientRef = db.collection("patients").doc(patientId);
       const doc = await patientRef.get();
@@ -118,7 +118,7 @@ class Patient {
         .offset(offset)
         .get();
       const promises = snapshot.docs.map(async (doc) => {
-        const doctorData = await doctorInstance.getDoctorById(
+        const doctorData = await doctorInstance.getById(
           doc.data().doctorID
         );
 
@@ -144,7 +144,7 @@ class Patient {
     }
   };
 
-  createPatient = async (
+  create = async (
     firstName,
     lastName,
     age,
@@ -173,7 +173,7 @@ class Patient {
     }
   };
 
-  updatePatient = async (
+  update = async (
     patient_id,
     firstName,
     lastName,
@@ -204,7 +204,7 @@ class Patient {
     }
   };
 
-  deletePatient = async (patient_id) => {
+  delete = async (patient_id) => {
     try {
       const res = await db.collection("patients").doc(patient_id).delete();
       return res;
@@ -213,7 +213,7 @@ class Patient {
     }
   };
 
-  getPatientByDepartment = async (department, limit, page) => {
+  getByDepartment = async (department, limit, page) => {
     try {
       const offset = (page - 1) * limit;
       const patientsArray = [];
@@ -246,7 +246,7 @@ class Patient {
     }
   };
 
-  countPatientByDepartment = async () => {
+  countByDepartment = async () => {
     try {
       const departmentArray = [0, 0, 0, 0, 0];
       const doctorsRef = db.collection("patients");

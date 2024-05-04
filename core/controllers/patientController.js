@@ -8,9 +8,9 @@ const getAllPatient = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   if (req.query.department) {
     const department = toDepartment(parseInt(req.query.department));
-    patientArray = await patientInstance.getPatientByDepartment(department, limit, page);
+    patientArray = await patientInstance.getByDepartment(department, limit, page);
   } else {
-    patientArray = await patientInstance.getAllPatient(limit, page)
+    patientArray = await patientInstance.getAll(limit, page)
   }
 
   if (patientArray) {
@@ -23,7 +23,7 @@ const getAllPatient = async (req, res) => {
 const getPatientById = async (req, res) => {
   try {
     const patient_id = req.params.patient_id;
-    const patient = await patientInstance.getPatientById(patient_id);
+    const patient = await patientInstance.getById(patient_id);
     return res.status(200).json(patient);
   } catch (error) {
     return res.send("Cannot get patient!").status(400);
@@ -52,7 +52,7 @@ const createPatient = async (req, res) => {
   const healthInsurance = req.body.healthInsurance;
   const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
-  const result = await patientInstance.createPatient(
+  const result = await patientInstance.create(
     firstName,
     lastName,
     age,
@@ -82,7 +82,7 @@ const updatePatient = async (req, res) => {
   const department = req.body.department;
   const doctorResponbility = req.body.doctorResponbility;
 
-  const result = await patientInstance.updatePatient(
+  const result = await patientInstance.update(
     patient_id,
     firstName,
     lastName,
@@ -104,7 +104,7 @@ const updatePatient = async (req, res) => {
 
 const deletePatient = async (req, res) => {
   const patient_id = req.params.patient_id;
-  const result = await patientInstance.deletePatient(patient_id);
+  const result = await patientInstance.delete(patient_id);
 
   if (result) {
     return res.send("Delete successfully").status(200);
@@ -114,7 +114,7 @@ const deletePatient = async (req, res) => {
 };
 
 const countPatientByDepartment = async (req, res) => {
-  const result = await patientInstance.countPatientByDepartment();
+  const result = await patientInstance.countByDepartment();
 
   if (result) {
     return res.status(200).json(result);

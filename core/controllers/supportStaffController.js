@@ -5,7 +5,7 @@ const supportStaffInstance = new SupportStaff();
 const getAllSupportStaff = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
-    const supportStaffArray = await supportStaffInstance.getAllSupportStaff(limit, page);
+    const supportStaffArray = await supportStaffInstance.getAll(limit, page);
 
     if (supportStaffArray) {
         return res.status(200).json(supportStaffArray);
@@ -17,7 +17,7 @@ const getAllSupportStaff = async (req, res) => {
 const getSupportStaffById = async (req, res) => {
 
     const supportStaff_id = req.params.supportStaff_id;
-    const supportStaffData = await supportStaffInstance.getSupportStaffById(supportStaff_id);
+    const supportStaffData = await supportStaffInstance.getById(supportStaff_id);
 
     if (supportStaffData) {
         return res.status(200).json(supportStaffData);
@@ -36,7 +36,7 @@ const createSupportStaff = async (req, res) => {
     const salary = req.body.salary;
     const specialty = req.body.specialty;
     const absence = req.body.absence;
-    const result = await supportStaffInstance.createSupportStaff(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty, absence);
+    const result = await supportStaffInstance.create(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty, absence);
 
     if (result) {
         return res.send("Support staff created!").status(200);
@@ -44,18 +44,6 @@ const createSupportStaff = async (req, res) => {
         return res.send("Cannot create support staff!").status(400);
     }
 }
-
-// const getDoctorPatients = async (req, res) => {
-
-//     const doctor_id = req.params.doctor_id;
-//     const patientArray = await doctorInstance.getDoctorPatients(doctor_id);
-
-//     if (patientArray) {
-//         return res.status(200).json(patientArray);
-//     } else {
-//         return res.send("Cannot get patients!").status(400);
-//     }
-// }
 
 const updateSupportStaff = async (req, res) => {
     const supportStaff_id = req.params.supportStaff_id;
@@ -68,21 +56,7 @@ const updateSupportStaff = async (req, res) => {
     const salary = req.body.salary;
     const absence = req.body.absence;
 
-    const json = {
-        id: supportStaff_id,
-        firstName: firstName,
-        lastName: lastName,
-        age: age,
-        gender: gender,
-        phoneNumber: phoneNumber,
-        dateOfBirth: dateOfBirth,
-        salary: salary,
-        absence: absence
-    }
-
-    console.log(json);
-
-    const result = await supportStaffInstance.updateSupportStaff(supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
+    const result = await supportStaffInstance.update(supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);
@@ -93,7 +67,7 @@ const updateSupportStaff = async (req, res) => {
 
 const deleteSupportStaff = async (req, res) => {
     const supportStaff_id = req.params.supportStaff_id;
-    const result = await supportStaffInstance.deleteDoctor(supportStaff_id);
+    const result = await supportStaffInstance.delete(supportStaff_id);
 
     if (result) {
         return res.send("Delete successfully").status(200);
@@ -106,7 +80,6 @@ module.exports = {
     getAllSupportStaff,
     getSupportStaffById,
     createSupportStaff,
-    // getDoctorPatients,
     updateSupportStaff,
     deleteSupportStaff
 }
