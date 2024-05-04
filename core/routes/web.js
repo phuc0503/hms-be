@@ -3,6 +3,8 @@ const router = express.Router();
 
 const { getAllStaff } = require("../controllers/staffController");
 
+const { getAllResources } = require("../controllers/resourceController");
+
 const {
     getAllPatient,
     getPatientById,
@@ -47,6 +49,22 @@ const {
     deleteAppointment,
 } = require("../controllers/appointmentController");
 
+const {
+    getAllEquipment,
+    getEquipmentById,
+    createEquipment,
+    updateEquipment,
+    deleteEquipment
+} = require('../controllers/equipmentController');
+
+const {
+    getAllDrug,
+    getDrugById,
+    createDrug,
+    updateDrug,
+    deleteDrug
+} = require('../controllers/drugController');
+
 const initWebRoutes = (app) => {
     //staff
     router.get("/api/v1/staff", getAllStaff);
@@ -89,6 +107,23 @@ const initWebRoutes = (app) => {
     router.post("/api/v1/appointments", createAppointment);
     router.put("/api/v1/appointments/:appointment_id", updateAppointment);
     router.delete("/api/v1/appointments/:appointment_id", deleteAppointment);
+
+    //resource
+    router.get("/api/v1/resources", getAllResources);
+
+    //equipment
+    router.get("/api/v1/resources/equipments", getAllEquipment);
+    router.get("/api/v1/resources/equipments/:equipment_id", getEquipmentById);
+    router.post("/api/v1/resources/equipments", createEquipment);
+    router.put("/api/v1/resources/equipments/:equipment_id", updateEquipment);
+    router.delete("/api/v1/resources/equipments/:equipment_id", deleteEquipment);
+
+    //drug
+    router.get("/api/v1/resources/drugs", getAllDrug);
+    router.post("/api/v1/resources/drugs", createDrug);
+    router.get("/api/v1/resources/drugs/:drug_id", getDrugById);
+    router.put("/api/v1/resources/drugs/:drug_id", updateDrug);
+    router.delete("/api/v1/resources/drugs/:drug_id", deleteDrug);
 
     return app.use("/", router);
 };
