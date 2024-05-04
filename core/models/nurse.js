@@ -77,7 +77,7 @@ class Nurse extends Staff {
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 gender: gender,
                 phoneNumber: phoneNumber,
-                salary: salary,
+                salary: parseInt(salary),
                 role: 'nurse',
                 absence: false
                 // specialty: specialty
@@ -89,7 +89,7 @@ class Nurse extends Staff {
         }
     }
 
-    update = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, specialty, salary) => {
+    update = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence) => {
         try {
             const nurseRef = db.collection('staff').doc(nurse_id);
             const res = await nurseRef.update({
@@ -100,7 +100,8 @@ class Nurse extends Staff {
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 role: 'nurse',
-                salary: salary
+                salary: parseInt(salary),
+                absence: absence === "true"
             })
             return res;
         } catch (error) {

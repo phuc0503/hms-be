@@ -112,7 +112,7 @@ class Doctor extends Staff {
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 gender: gender,
                 phoneNumber: phoneNumber,
-                salary: salary,
+                salary: parseInt(salary),
                 role: 'doctor',
                 department: department,
                 absence: false
@@ -167,8 +167,8 @@ class Doctor extends Staff {
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 role: 'doctor',
                 department: department,
-                salary: salary,
-                absence: absence
+                salary: parseInt(salary),
+                absence: absence === "true"
             });
             return res;
         } catch (error) {
