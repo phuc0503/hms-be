@@ -5,7 +5,7 @@ const appointmentInstance = new Appointment();
 const getAllAppointment = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
-    const appointmentArray = await appointmentInstance.getAllAppointment(limit, page);
+    const appointmentArray = await appointmentInstance.getAll(limit, page);
 
     if (appointmentArray) {
         return res.status(200).json(appointmentArray);
@@ -16,7 +16,7 @@ const getAllAppointment = async (req, res) => {
 
 const getAppointmentById = async (req, res) => {
     const appointment_id = req.params.appointment_id;
-    const appointmentData = await appointmentInstance.getAppointmentById(appointment_id);
+    const appointmentData = await appointmentInstance.getById(appointment_id);
 
     if (appointmentData) {
         return res.status(200).json(appointmentData);
@@ -31,7 +31,7 @@ const createAppointment = async (req, res) => {
     const result = req.body.result;
     const appointmentTime = req.body.appointmentTime;
     const roomID = req.body.roomID;
-    const appointment = await appointmentInstance.createAppointment(patientID, doctorID, result, appointmentTime, roomID);
+    const appointment = await appointmentInstance.create(patientID, doctorID, result, appointmentTime, roomID);
 
     if (appointment) {
         return res.send("Appointment created").status(200);
@@ -47,7 +47,7 @@ const updateAppointment = async (req, res) => {
     const result = req.body.result;
     const appointmentTime = req.body.appointmentTime;
     const roomID = req.body.roomID;
-    const appointment = await appointmentInstance.updateAppointment(appointment_id, patientID, doctorID, result, appointmentTime, roomID);
+    const appointment = await appointmentInstance.update(appointment_id, patientID, doctorID, result, appointmentTime, roomID);
 
     if (appointment) {
         return res.send("Update successfully").status(200);
@@ -58,7 +58,7 @@ const updateAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
     const appointment_id = req.params.appointment_id;
-    const result = await appointmentInstance.deleteAppointment(appointment_id);
+    const result = await appointmentInstance.delete(appointment_id);
 
     if (result) {
         return res.send("Delete succesfully").status(200);

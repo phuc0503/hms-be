@@ -8,9 +8,9 @@ const getAllDoctor = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     if (req.query.department) {
         const department = toDepartment(parseInt(req.query.department));
-        doctorArray = await doctorInstance.getDoctorByDepartment(department, limit, page);
+        doctorArray = await doctorInstance.getByDepartment(department, limit, page);
     } else {
-        doctorArray = await doctorInstance.getAllDoctor(limit, page);
+        doctorArray = await doctorInstance.getAll(limit, page);
     }
     if (doctorArray) {
         return res.status(200).json(doctorArray);
@@ -21,7 +21,7 @@ const getAllDoctor = async (req, res) => {
 
 const getDoctorById = async (req, res) => {
     const doctor_id = req.params.doctor_id;
-    const doctorData = await doctorInstance.getDoctorById(doctor_id);
+    const doctorData = await doctorInstance.getById(doctor_id);
 
     if (doctorData) {
         return res.status(200).json(doctorData);
@@ -39,7 +39,7 @@ const createDoctor = async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
     const department = req.body.department;
-    const result = await doctorInstance.createDoctor(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department);
+    const result = await doctorInstance.create(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department);
 
     if (result) {
         return res.send("Doctor created!").status(200);
@@ -52,7 +52,8 @@ const getDoctorPatients = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const doctor_id = req.params.doctor_id;
-    const patientArray = await doctorInstance.getDoctorPatients(doctor_id, limit, page);
+    const patientArray = await doctorInstance.getPatientsList
+        (doctor_id, limit, page);
 
     if (patientArray) {
         return res.status(200).json(patientArray);
@@ -72,7 +73,7 @@ const updateDoctor = async (req, res) => {
     const department = req.body.department;
     const salary = req.body.salary;
     const absence = req.body.absence;
-    const result = await doctorInstance.updateDoctor(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence);
+    const result = await doctorInstance.update(doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);
@@ -83,7 +84,7 @@ const updateDoctor = async (req, res) => {
 
 const deleteDoctor = async (req, res) => {
     const doctor_id = req.params.doctor_id;
-    const result = await doctorInstance.deleteDoctor(doctor_id);
+    const result = await doctorInstance.delete(doctor_id);
 
     if (result) {
         return res.send("Delete successfully").status(200);
@@ -93,7 +94,7 @@ const deleteDoctor = async (req, res) => {
 }
 
 const countDoctorByDepartment = async (req, res) => {
-    const result = await doctorInstance.countDoctorByDepartment();
+    const result = await doctorInstance.countByDepartment();
 
     if (result) {
         return res.status(200).json(result);

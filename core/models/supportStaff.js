@@ -9,7 +9,7 @@ class SupportStaff extends Staff {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
     }
 
-    getAllSupportStaff = async (limit, page) => {
+    getAll = async (limit, page) => {
         try {
             const offset = (page - 1) * limit;
             const supportStaffArray = [];
@@ -41,7 +41,7 @@ class SupportStaff extends Staff {
         }
     }
 
-    getSupportStaffById = async (supportStaff_id) => {
+    getById = async (supportStaff_id) => {
         try {
             const supportStaffRef = db.collection("staff").doc(supportStaff_id);
             const sup = await supportStaffRef.get();
@@ -66,7 +66,7 @@ class SupportStaff extends Staff {
         }
     }
 
-    createSupportStaff = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
+    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
@@ -85,7 +85,7 @@ class SupportStaff extends Staff {
         }
     }
 
-    updateSupportStaff = async (supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence) => {
+    update = async (supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence) => {
         try {
             const supportStaffRef = db.collection('staff').doc(supportStaff_id);
             const res = await supportStaffRef.update({
@@ -105,7 +105,7 @@ class SupportStaff extends Staff {
         }
     }
 
-    deleteSupportStaff = async (supportStaff_id) => {
+    delete = async (supportStaff_id) => {
         try {
             const res = await db.collection('staff').doc(supportStaff_id).delete();
             return res;

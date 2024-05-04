@@ -1,5 +1,5 @@
 const { db, admin } = require("../config/firebase");
-const { formatDate, formatDateTime } = require('../public/formatDate');
+const { formatDateTime, transformDateTimeFormat } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 class Appointment {
   #id;
@@ -18,7 +18,7 @@ class Appointment {
     this.#roomID = roomID;
   }
 
-  getAllAppointment = async (limit, page) => {
+  getAll = async (limit, page) => {
     try {
       const offset = (page - 1) * limit;
       const appointmentsArray = [];
@@ -48,7 +48,7 @@ class Appointment {
     }
   };
 
-  getAppointmentById = async (appointmentId) => {
+  getById = async (appointmentId) => {
     try {
       const appointmentRef = db.collection('appointments').doc(appointmentId);
       const doc = await appointmentRef.get();
@@ -70,10 +70,10 @@ class Appointment {
     }
   };
 
-  createAppointment = async (patientID, doctorID, result, appointmentTime, roomID) => {
+  create = async (patientID, doctorID, result, appointmentTime, roomID) => {
     try {
       const res = await db.collection('appointments').add({
-        appointmentTime: Timestamp.fromDate(new Date(appointmentTime)),
+        appointmentTime: Timestamp.fromDate(new Date(transformDateTimeFormat(appointmentTime))),
         doctorID: doctorID,
         patientID: patientID,
         result: result,
@@ -88,11 +88,11 @@ class Appointment {
     }
   }
 
-  updateAppointment = async (appointment_id, patientID, doctorID, result, appointmentTime, roomID) => {
+  update = async (appointment_id, patientID, doctorID, result, appointmentTime, roomID) => {
     try {
       const appointmentRef = db.collection('appointments').doc(appointment_id);
       const res = await appointmentRef.update({
-        appointmentTime: Timestamp.fromDate(new Date(appointmentTime)),
+        appointmentTime: Timestamp.fromDate(new Date(transformDateTimeFormat(appointmentTime))),
         doctorID: doctorID,
         patientID: patientID,
         result: result,
@@ -104,7 +104,7 @@ class Appointment {
     }
   }
 
-  deleteAppointment = async (appointment_id) => {
+  delete = async (appointment_id) => {
     try {
       const res = await db.collection('appointments').doc(appointment_id).delete();
       return res;
