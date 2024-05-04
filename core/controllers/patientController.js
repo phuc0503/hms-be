@@ -8,9 +8,13 @@ const getAllPatient = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   if (req.query.department) {
     const department = toDepartment(parseInt(req.query.department));
-    patientArray = await patientInstance.getByDepartment(department, limit, page);
+    patientArray = await patientInstance.getByDepartment(
+      department,
+      limit,
+      page
+    );
   } else {
-    patientArray = await patientInstance.getAll(limit, page)
+    patientArray = await patientInstance.getAll(limit, page);
   }
 
   if (patientArray) {
@@ -35,7 +39,11 @@ const getMedicalRecords = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const patient_id = req.params.patient_id;
-    const patient = await patientInstance.getMedicalRecords(patient_id, limit, page);
+    const patient = await patientInstance.getMedicalRecords(
+      patient_id,
+      limit,
+      page
+    );
     return res.status(200).json(patient);
   } catch (error) {
     return res.send("Cannot get patient!").status(400);
@@ -51,7 +59,7 @@ const createPatient = async (req, res) => {
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
   const department = req.body.department;
-  const doctorResponbility = req.body.doctorResponbility;
+  const doctorResponsibility = req.body.doctorResponsibility;
   const result = await patientInstance.create(
     firstName,
     lastName,
@@ -61,9 +69,10 @@ const createPatient = async (req, res) => {
     phoneNumber,
     healthInsurance,
     department,
-    doctorResponbility
+    doctorResponsibility
   );
   if (result) {
+    console.log(result);
     return res.send("Patient created!").status(200);
   } else {
     return res.send("Cannot create patient!").status(400);
@@ -80,7 +89,7 @@ const updatePatient = async (req, res) => {
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
   const department = req.body.department;
-  const doctorResponbility = req.body.doctorResponbility;
+  const doctorResponsibility = req.body.doctorResponsibility;
 
   const result = await patientInstance.update(
     patient_id,
@@ -92,10 +101,11 @@ const updatePatient = async (req, res) => {
     dateOfBirth,
     healthInsurance,
     department,
-    doctorResponbility
+    doctorResponsibility
   );
 
   if (result) {
+    console.log(result);
     return res.send("Update successfully").status(200);
   } else {
     return res.send("Cannot update patient!").status(400);
