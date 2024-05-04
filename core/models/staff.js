@@ -24,13 +24,13 @@ class Staff {
         this._absence = absence;
     }
 
-    getAll = async (limit, page) => {
+    getAll = async (pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const staffsArray = [];
             const staffsRef = admin.firestore().collection('staff').orderBy('firstName', 'asc');
             const countAll = await staffsRef.count().get();
-            const snapshot = await staffsRef.limit(limit).offset(offset).get();
+            const snapshot = await staffsRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 staffsArray.push({
                     id: doc.id,
@@ -47,9 +47,9 @@ class Staff {
             })
             const data = {
                 'staff': staffsArray,
-                'current_staff': offset + staffsArray.length,
-                'total_staff': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data;
         } catch (error) {

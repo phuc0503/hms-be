@@ -9,13 +9,13 @@ class SupportStaff extends Staff {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
     }
 
-    getAll = async (limit, page) => {
+    getAll = async (pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const supportStaffArray = [];
             const supportStaffRef = admin.firestore().collection('staff').where('role', '==', 'support staff').orderBy('firstName', 'asc');
             const countAll = await supportStaffRef.count().get();
-            const snapshot = await supportStaffRef.limit(limit).offset(offset).get();
+            const snapshot = await supportStaffRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 supportStaffArray.push({
                     id: doc.id,
@@ -31,9 +31,9 @@ class SupportStaff extends Staff {
             })
             const data = {
                 'supportStaff': supportStaffArray,
-                'current_supportStaff': offset + supportStaffArray.length,
-                'total_supportStaff': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data;
         } catch (error) {

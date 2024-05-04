@@ -3,9 +3,9 @@ const SupportStaff = require('../models/supportStaff');
 const supportStaffInstance = new SupportStaff();
 
 const getAllSupportStaff = async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const supportStaffArray = await supportStaffInstance.getAll(limit, page);
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
+    const supportStaffArray = await supportStaffInstance.getAll(pageSize, currentPage);
 
     if (supportStaffArray) {
         return res.status(200).json(supportStaffArray);

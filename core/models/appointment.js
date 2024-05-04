@@ -18,13 +18,13 @@ class Appointment {
     this.#roomID = roomID;
   }
 
-  getAll = async (limit, page) => {
+  getAll = async (pageSize, currentPage) => {
     try {
-      const offset = (page - 1) * limit;
+      const offset = (currentPage - 1) * pageSize;
       const appointmentsArray = [];
       const appointmentsRef = admin.firestore().collection('appointments').orderBy("appointmentTime", "asc");
       const countAll = await appointmentsRef.count().get();
-      const appointmentsSnapshot = await appointmentsRef.limit(limit).offset(offset).get();
+      const appointmentsSnapshot = await appointmentsRef.limit(pageSize).offset(offset).get();
 
       appointmentsSnapshot.forEach(doc => {
         appointmentsArray.push({
@@ -38,9 +38,9 @@ class Appointment {
       })
       const data = {
         'appointment': appointmentsArray,
-        'current_appointment': offset + appointmentsArray.length,
-        'total_appointment': countAll.data().count,
-        'total_page': Math.ceil(countAll.data().count / limit)
+        'pageSize': pageSize,
+        'currentPage': currentPage,
+        'totalPage': Math.ceil(countAll.data().count / pageSize)
       }
       return data;
     } catch (err) {

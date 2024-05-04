@@ -4,13 +4,13 @@ const doctorInstance = new Doctor();
 
 const getAllDoctor = async (req, res) => {
     let doctorArray;
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
     if (req.query.department) {
         const department = toDepartment(parseInt(req.query.department));
-        doctorArray = await doctorInstance.getByDepartment(department, limit, page);
+        doctorArray = await doctorInstance.getByDepartment(department, pageSize, currentPage);
     } else {
-        doctorArray = await doctorInstance.getAll(limit, page);
+        doctorArray = await doctorInstance.getAll(pageSize, currentPage);
     }
     if (doctorArray) {
         return res.status(200).json(doctorArray);
@@ -49,11 +49,11 @@ const createDoctor = async (req, res) => {
 }
 
 const getDoctorPatients = async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
     const doctor_id = req.params.doctor_id;
     const patientArray = await doctorInstance.getPatientsList
-        (doctor_id, limit, page);
+        (doctor_id, pageSize, currentPage);
 
     if (patientArray) {
         return res.status(200).json(patientArray);

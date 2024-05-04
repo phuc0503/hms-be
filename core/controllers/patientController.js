@@ -4,17 +4,17 @@ const patientInstance = new Patient();
 
 const getAllPatient = async (req, res) => {
   let patientArray;
-  const limit = parseInt(req.query.limit) || 10;
-  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
+  const currentPage = parseInt(req.query.currentPage) || 1;
   if (req.query.department) {
     const department = toDepartment(parseInt(req.query.department));
     patientArray = await patientInstance.getByDepartment(
       department,
-      limit,
-      page
+      pageSize,
+      currentPage
     );
   } else {
-    patientArray = await patientInstance.getAll(limit, page);
+    patientArray = await patientInstance.getAll(pageSize, currentPage);
   }
 
   if (patientArray) {
@@ -36,13 +36,13 @@ const getPatientById = async (req, res) => {
 
 const getMedicalRecords = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
     const patient_id = req.params.patient_id;
     const patient = await patientInstance.getMedicalRecords(
       patient_id,
-      limit,
-      page
+      pageSize,
+      currentPage
     );
     return res.status(200).json(patient);
   } catch (error) {

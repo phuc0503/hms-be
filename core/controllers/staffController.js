@@ -4,10 +4,10 @@ const staffInstance = new Staff();
 
 const getAllStaff = async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit) || 10;
-        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 10;
+        const currentPage = parseInt(req.query.currentPage) || 1;
 
-        const staffArray = await staffInstance.getAll(limit, page);
+        const staffArray = await staffInstance.getAll(pageSize, currentPage);
         return res.status(200).json(staffArray);
     } catch (error) {
         return res.send("Cannot get staff!").status(400);

@@ -11,13 +11,13 @@ class Doctor extends Staff {
         this.#department = department;
     }
 
-    getAll = async (limit, page) => {
+    getAll = async (pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const doctorsArray = [];
             const doctorsRef = admin.firestore().collection('staff').where('role', '==', 'doctor').orderBy('firstName', 'asc');
             const countAll = await doctorsRef.count().get();
-            const snapshot = await doctorsRef.limit(limit).offset(offset).get();
+            const snapshot = await doctorsRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 doctorsArray.push({
                     id: doc.id,
@@ -34,9 +34,9 @@ class Doctor extends Staff {
             })
             const data = {
                 'doctors': doctorsArray,
-                'current_doctor': offset + doctorsArray.length,
-                'total_doctor': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data;
         } catch (error) {
@@ -70,13 +70,13 @@ class Doctor extends Staff {
         }
     }
 
-    getByDepartment = async (department, limit, page) => {
+    getByDepartment = async (department, pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const doctorsArray = [];
             const doctorsRef = admin.firestore().collection('staff').where('department', '==', department).orderBy('firstName', 'asc');
             const countAll = await doctorsRef.count().get();
-            const snapshot = await doctorsRef.limit(limit).offset(offset).get();
+            const snapshot = await doctorsRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 doctorsArray.push({
                     id: doc.id,
@@ -93,9 +93,9 @@ class Doctor extends Staff {
             })
             const data = {
                 'doctors': doctorsArray,
-                'current_doctor': offset + doctorsArray.length,
-                'total_doctor': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data;
         } catch (error) {
@@ -123,13 +123,13 @@ class Doctor extends Staff {
         }
     }
 
-    getPatientsList = async (doctor_id, limit, page) => {
+    getPatientsList = async (doctor_id, pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const patientsArray = [];
-            const patientsRef = admin.firestore().collection('patients').where('doctorResponbility', '==', doctor_id).orderBy('firstName', 'asc');
+            const patientsRef = admin.firestore().collection('patients').where('doctorResponsibility', '==', doctor_id).orderBy('firstName', 'asc');
             const countAll = await patientsRef.count().get();
-            const snapshot = await patientsRef.limit(limit).offset(offset).get();
+            const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 patientsArray.push({
                     id: doc.id,
@@ -145,9 +145,9 @@ class Doctor extends Staff {
             })
             const data = {
                 'patients': patientsArray,
-                'current_patient': offset + patientsArray.length,
-                'total_patient': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data;
         } catch (error) {

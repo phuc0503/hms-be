@@ -41,16 +41,16 @@ class Patient {
     this.#dateOfBirth = dateOfBirth;
   }
 
-  getAll = async (limit, page) => {
+  getAll = async (pageSize, currentPage) => {
     try {
-      const offset = (page - 1) * limit;
+      const offset = (currentPage - 1) * pageSize;
       const patientsArray = [];
       const patientsRef = admin
         .firestore()
         .collection("patients")
         .orderBy("firstName", "asc");
       const countAll = await patientsRef.count().get();
-      const snapshot = await patientsRef.limit(limit).offset(offset).get();
+      const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
       snapshot.forEach((doc) => {
         patientsArray.push({
           id: doc.id,
@@ -67,9 +67,9 @@ class Patient {
       });
       const data = {
         patients: patientsArray,
-        current_patient: offset + patientsArray.length,
-        total_patient: countAll.data().count,
-        total_page: Math.ceil(countAll.data().count / limit),
+        pageSize: pageSize,
+        currentPage: currentPage,
+        totalPage: Math.ceil(countAll.data().count / pageSize),
       };
       return data;
     } catch (error) {
@@ -104,9 +104,9 @@ class Patient {
     }
   };
 
-  getMedicalRecords = async (patientId, limit, page) => {
+  getMedicalRecords = async (patientId, pageSize, currentPage) => {
     try {
-      const offset = (page - 1) * limit;
+      const offset = (currentPage - 1) * pageSize;
       const appointmentsArray = [];
       const patientsRef = admin
         .firestore()
@@ -114,7 +114,7 @@ class Patient {
         .where("patientID", "==", patientId)
         .orderBy("appointmentTime", "asc");
       const countAll = await patientsRef.count().get();
-      const snapshot = await patientsRef.limit(limit).offset(offset).get();
+      const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
       const promises = snapshot.docs.map(async (doc) => {
         const doctorData = await doctorInstance.getById(doc.data().doctorID);
 
@@ -130,9 +130,9 @@ class Patient {
       await Promise.all(promises);
       const data = {
         appointments: appointmentsArray,
-        current_appointment: offset + appointmentsArray.length,
-        total_appointment: countAll.data().count,
-        total_page: Math.ceil(countAll.data().count / limit),
+        pageSize: pageSize,
+        currentPage: currentPage,
+        totalPage: Math.ceil(countAll.data().count / pageSize),
       };
       return data;
     } catch (error) {
@@ -213,9 +213,9 @@ class Patient {
     }
   };
 
-  getByDepartment = async (department, limit, page) => {
+  getByDepartment = async (department, pageSize, currentPage) => {
     try {
-      const offset = (page - 1) * limit;
+      const offset = (currentPage - 1) * pageSize;
       const patientsArray = [];
       const patientRef = admin
         .firestore()
@@ -223,7 +223,7 @@ class Patient {
         .where("department", "==", department)
         .orderBy("firstName", "asc");
       const countAll = await patientRef.count().get();
-      const snapshot = await patientRef.limit(limit).offset(offset).get();
+      const snapshot = await patientRef.limit(pageSize).offset(offset).get();
       snapshot.forEach((doc) => {
         patientsArray.push({
           id: doc.id,
@@ -240,9 +240,9 @@ class Patient {
       });
       const data = {
         patients: patientsArray,
-        current_patient: offset + patientsArray.length,
-        total_patient: countAll.data().count,
-        total_page: Math.ceil(countAll.data().count / limit),
+        pageSize: pageSize,
+        currentPage: currentPage,
+        totalPage: Math.ceil(countAll.data().count / pageSize),
       };
       return data;
     } catch (error) {
