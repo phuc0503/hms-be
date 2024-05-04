@@ -3,9 +3,9 @@ const Nurse = require('../models/nurse');
 const nurseInstance = new Nurse();
 
 const getAllNurse = async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const nurseArray = await nurseInstance.getAll(limit, page);
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
+    const nurseArray = await nurseInstance.getAll(pageSize, currentPage);
 
     if (nurseArray) {
         return res.status(200).json(nurseArray);

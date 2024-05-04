@@ -3,9 +3,9 @@ const Appointment = require('../models/appointment');
 const appointmentInstance = new Appointment();
 
 const getAllAppointment = async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const appointmentArray = await appointmentInstance.getAll(limit, page);
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const currentPage = parseInt(req.query.currentPage) || 1;
+    const appointmentArray = await appointmentInstance.getAll(pageSize, currentPage);
 
     if (appointmentArray) {
         return res.status(200).json(appointmentArray);

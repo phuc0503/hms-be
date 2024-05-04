@@ -10,13 +10,13 @@ class Nurse extends Staff {
         super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence);
     }
 
-    getAll = async (limit, page) => {
+    getAll = async (pageSize, currentPage) => {
         try {
-            const offset = (page - 1) * limit;
+            const offset = (currentPage - 1) * pageSize;
             const nursesArray = [];
             const nursesRef = admin.firestore().collection('staff').where('role', '==', 'nurse').orderBy('lastName', 'asc');
             const countAll = await nursesRef.count().get();
-            const snapshot = await nursesRef.limit(limit).offset(offset).get();
+            const snapshot = await nursesRef.limit(pageSize).offset(offset).get();
             snapshot.forEach(doc => {
                 nursesArray.push({
                     id: doc.id,
@@ -32,9 +32,9 @@ class Nurse extends Staff {
             })
             const data = {
                 'nurses': nursesArray,
-                'current_nurse': offset + nursesArray.length,
-                'total_nurse': countAll.data().count,
-                'total_page': Math.ceil(countAll.data().count / limit)
+                'pageSize': pageSize,
+                'currentPage': currentPage,
+                'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
             return data
         } catch (error) {
