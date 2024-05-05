@@ -209,7 +209,7 @@ class Patient {
         ),
         gender: gender,
         phoneNumber: phoneNumber,
-        healthInsurance: healthInsurance === "true",
+        healthInsurance: healthInsurance,
       });
       return {
         success: true,
