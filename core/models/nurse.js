@@ -1,23 +1,45 @@
-const { db, admin } = require('../config/firebase');
-const Staff = require('./staff');
-const { doc } = require('firebase/firestore');
-const { formatDate } = require('../public/formatDate');
-const { Timestamp } = require('firebase-admin/firestore');
+const { db, admin } = require("../config/firebase");
+const Staff = require("./staff");
+const { doc } = require("firebase/firestore");
+const { formatDate } = require("../public/formatDate");
+const { Timestamp } = require("firebase-admin/firestore");
 
 class Nurse extends Staff {
     #patientsUnder = [];
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) {
-        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
+    constructor(
+        id,
+        firstName,
+        lastName,
+        dateOfBirth,
+        gender,
+        phoneNumber,
+        salary,
+        absence
+    ) {
+        super(
+            id,
+            firstName,
+            lastName,
+            dateOfBirth,
+            gender,
+            phoneNumber,
+            salary,
+            absence
+        );
     }
 
     getAll = async (pageSize, currentPage) => {
         try {
             const offset = (currentPage - 1) * pageSize;
             const nursesArray = [];
-            const nursesRef = admin.firestore().collection('staff').where('role', '==', 'nurse').orderBy('lastName', 'asc');
+            const nursesRef = admin
+                .firestore()
+                .collection("staff")
+                .where("role", "==", "nurse")
+                .orderBy("lastName", "asc");
             const countAll = await nursesRef.count().get();
             const snapshot = await nursesRef.limit(pageSize).offset(offset).get();
-            snapshot.forEach(doc => {
+            snapshot.forEach((doc) => {
                 nursesArray.push({
                     id: doc.id,
                     firstName: doc.data().firstName,
@@ -26,27 +48,27 @@ class Nurse extends Staff {
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
-                    absence: doc.data().absence
-                })
-            })
+                    absence: doc.data().absence,
+                });
+            });
             const data = {
-                'nurses': nursesArray,
-                'pageSize': pageSize,
-                'currentPage': currentPage,
-                'totalPage': Math.ceil(countAll.data().count / pageSize),
-                'totalRow': countAll.data().count
-            }
+                nurses: nursesArray,
+                pageSize: pageSize,
+                currentPage: currentPage,
+                totalPage: Math.ceil(countAll.data().count / pageSize),
+                totalRow: countAll.data().count,
+            };
             return {
                 success: true,
-                message: data
-            }
+                message: data,
+            };
         } catch (error) {
             return {
                 success: false,
-                message: error.message
-            }
+                message: error.message,
+            };
         }
-    }
+    };
 
     getById = async (nurse_id) => {
         try {
@@ -56,7 +78,7 @@ class Nurse extends Staff {
             if (!nur.exists) {
                 return {
                     success: false,
-                    message: "Maybe wrong id"
+                    message: "Maybe wrong id",
                 };
             }
 
@@ -130,21 +152,22 @@ class Nurse extends Staff {
             };
         }
     }
+};
 
-    delete = async (nurse_id) => {
-        try {
-            const res = await db.collection('staff').doc(nurse_id).delete();
-            return {
-                success: true,
-                message: res
-            };
-        } catch (error) {
-            return {
-                success: false,
-                message: error.message
-            };
-        }
+delete = async (nurse_id) => {
+    try {
+        const res = await db.collection("staff").doc(nurse_id).delete();
+        return {
+            success: true,
+            message: res,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
     }
+};
 }
 
 module.exports = Nurse;

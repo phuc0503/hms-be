@@ -274,15 +274,38 @@ paths:
           required: false
           schema:
             type: string
-        - name: department
+        - name: sortBy
           in: query
           description: |-
-            Chuyên khoa cần xem.
-            - 0: Khoa nội 
-            - 1: Khoa ngoại 
-            - 2: Khoa nhi   
-            - 3: Khoa sản   
-            - 4: Khoa mắt
+            Tên trường muốn sắp xếp theo. *Mặc định là name*
+          required: false
+          schema:
+            type: string
+        - name: sortOrder
+          in: query
+          description: |-
+            Thứ tự muốn sắp xếp ("asc" hoặc "desc"). *Mặc định là asc*
+          required: false
+          schema:
+            type: string
+        - name: gender
+          in: query
+          description: |-
+            Giới tính của bệnh nhân muốn lọc("male" hoặc "female"). *Nếu để trống sẽ không lọc*
+          required: false
+          schema:
+            type: string
+        - name: healthInsurance
+          in: query
+          description: |-
+            Bảo hiểm của bệnh nhân muốn lọc("true" hoặc "false"). *Nếu để trống sẽ không lọc*
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: |-
+            Lọc tất cả bệnh nhận có họ tên chứa name. *Nếu để trống sẽ không lọc*
           required: false
           schema:
             type: string
