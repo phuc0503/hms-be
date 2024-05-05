@@ -1,7 +1,7 @@
 const { db, admin } = require("../config/firebase");
 const { formatDate, transformDateFormat } = require("../public/formatDate");
 const Doctor = require("../models/doctor");
-const { Timestamp } = require("firebase-admin/firestore");
+const { Timestamp, Filter } = require("firebase-admin/firestore");
 const { toNum } = require("../public/department");
 const doctorInstance = new Doctor();
 
@@ -32,7 +32,7 @@ class Patient {
     this.#dateOfBirth = dateOfBirth;
   }
 
-  getAll = async (pageSize, currentPage, sortBy, sortOrder, filterBy, filterProperty) => {
+  getAll = async (pageSize, currentPage, sortBy, sortOrder, gender, healthInsurance, name) => {
     try {
       const offset = (currentPage - 1) * pageSize;
       const patientsArray = [];
@@ -43,30 +43,39 @@ class Patient {
       if (sortBy == 'name') {
         patientsRef = patientsRef.orderBy('firstName', sortOrder).orderBy('lastName', sortOrder);
       }
-
-      if (!(filterBy === null) && !(filterProperty === null)) {
-        patientsRef = patientsRef.where(filterBy, '==', filterProperty);
+      if (!(gender === null)) {
+        patientsRef = patientsRef.where('gender', '==', gender);
+      }
+      if (!(healthInsurance === null)) {
+        patientsRef = patientsRef.where('healthInsurance', '==', healthInsurance === 'true');
       }
 
-      const countAll = await patientsRef.count().get();
-      const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
+      const snapshot = await patientsRef.get();
       snapshot.forEach((doc) => {
-        patientsArray.push({
-          id: doc.id,
-          firstName: doc.data().firstName,
-          lastName: doc.data().lastName,
-          gender: doc.data().gender,
-          phoneNumber: doc.data().phoneNumber,
-          healthInsurance: doc.data().healthInsurance,
-          dateOfBirth: formatDate(doc.data().dateOfBirth),
-        });
+        const fullName = doc.data().lastName + " " + doc.data().firstName;
+        if (!name || fullName.toLowerCase().includes(name.toLowerCase())) {
+          patientsArray.push({
+            id: doc.id,
+            firstName: doc.data().firstName,
+            lastName: doc.data().lastName,
+            gender: doc.data().gender,
+            phoneNumber: doc.data().phoneNumber,
+            healthInsurance: doc.data().healthInsurance,
+            dateOfBirth: formatDate(doc.data().dateOfBirth),
+          });
+        }
       });
+
+      const totalRow = patientsArray.length;
+      const totalPage = Math.ceil(totalRow / pageSize);
+      const paginatedPatients = patientsArray.slice(offset, offset + pageSize);
+
       const data = {
-        patients: patientsArray,
+        patients: paginatedPatients,
         pageSize: pageSize,
         currentPage: currentPage,
-        totalPage: Math.ceil(countAll.data().count / pageSize),
-        totalRow: countAll.data().count
+        totalPage: totalPage,
+        totalRow: totalRow
       };
       return {
         success: true,
