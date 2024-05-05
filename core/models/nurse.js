@@ -64,11 +64,11 @@ class Nurse extends Staff {
                 id: nur.id,
                 firstName: nur.data().firstName,
                 lastName: nur.data().lastName,
-                dateOfBirth: formatDate(doc.data().dateOfBirth),
+                dateOfBirth: formatDate(nur.data().dateOfBirth),
                 gender: nur.data().gender,
                 phoneNumber: nur.data().phoneNumber,
                 salary: nur.data().salary,
-                absence: doc.data().absence
+                absence: nur.data().absence
             };
             return {
                 success: true,
