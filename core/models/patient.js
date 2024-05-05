@@ -8,7 +8,6 @@ const doctorInstance = new Doctor();
 class Patient {
   #id;
   #lastName;
-  #age;
   #gender;
   #healthInsurance;
   #department;
@@ -21,7 +20,6 @@ class Patient {
     id,
     firstName,
     lastName,
-    age,
     gender,
     healthInsurance,
     department,
@@ -32,7 +30,6 @@ class Patient {
     this.#id = id;
     this.#firstName = firstName;
     this.#lastName = lastName;
-    this.#age = age;
     this.#gender = gender;
     this.#phoneNumber = phoneNumber;
     this.#healthInsurance = healthInsurance;
@@ -56,7 +53,6 @@ class Patient {
           id: doc.id,
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
-          age: doc.data().age,
           gender: doc.data().gender,
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
@@ -71,9 +67,15 @@ class Patient {
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
       };
-      return data;
+      return {
+        success: true,
+        message: data
+      }
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      }
     }
   };
 
@@ -83,15 +85,17 @@ class Patient {
       const doc = await patientRef.get();
 
       if (!doc.exists) {
-        return "Patient not found";
+        return {
+          success: false,
+          message: "Maybe wrong id"
+        };
       }
 
       const patientData = doc.data();
-      return {
+      const data = {
         id: doc.id,
         firstName: patientData.firstName,
         lastName: patientData.lastName,
-        age: patientData.age,
         gender: patientData.gender,
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
@@ -99,8 +103,15 @@ class Patient {
         doctorResponsibility: patientData.doctorResponsibility,
         dateOfBirth: formatDate(patientData.dateOfBirth),
       };
+      return {
+        success: true,
+        message: data
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   };
 
@@ -134,16 +145,21 @@ class Patient {
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
       };
-      return data;
+      return {
+        success: true,
+        message: data
+      }
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      }
     }
   };
 
   create = async (
     firstName,
     lastName,
-    age,
     dateOfBirth,
     gender,
     phoneNumber,
@@ -155,7 +171,6 @@ class Patient {
       const res = await db.collection("patients").add({
         firstName: firstName,
         lastName: lastName,
-        age: age,
         dateOfBirth: Timestamp.fromDate(
           new Date(transformDateFormat(dateOfBirth))
         ),
@@ -165,9 +180,15 @@ class Patient {
         department: department,
         doctorResponsibility: doctorResponsibility,
       });
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      }
     }
   };
 
@@ -175,7 +196,6 @@ class Patient {
     patient_id,
     firstName,
     lastName,
-    age,
     gender,
     phoneNumber,
     dateOfBirth,
@@ -188,7 +208,6 @@ class Patient {
       const res = await patientRef.update({
         firstName: firstName,
         lastName: lastName,
-        age: age,
         dateOfBirth: Timestamp.fromDate(
           new Date(transformDateFormat(dateOfBirth))
         ),
@@ -198,18 +217,30 @@ class Patient {
         department: department,
         doctorResponsibility: doctorResponsibility,
       });
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   };
 
   delete = async (patient_id) => {
     try {
       const res = await db.collection("patients").doc(patient_id).delete();
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   };
 
@@ -230,7 +261,6 @@ class Patient {
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
           dateOfBirth: formatDate(doc.data().dateOfBirth),
-          age: doc.data().age,
           gender: doc.data().gender,
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
@@ -244,9 +274,15 @@ class Patient {
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
       };
-      return data;
+      return {
+        success: true,
+        message: data
+      }
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      }
     }
   };
 
@@ -283,9 +319,15 @@ class Patient {
           },
         ],
       };
-      return data;
+      return {
+        success: true,
+        message: data
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   };
 }

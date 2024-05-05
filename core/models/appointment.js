@@ -37,14 +37,20 @@ class Appointment {
         })
       })
       const data = {
-        'appointment': appointmentsArray,
+        'appointments': appointmentsArray,
         'pageSize': pageSize,
         'currentPage': currentPage,
         'totalPage': Math.ceil(countAll.data().count / pageSize)
       }
-      return data;
-    } catch (err) {
-      return err.message;
+      return {
+        success: true,
+        message: data
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message
+      }
     }
   };
 
@@ -54,10 +60,13 @@ class Appointment {
       const doc = await appointmentRef.get();
 
       if (!doc.exists) {
-        return "Appointment not found";
+        return {
+          success: false,
+          message: "Maybe wrong id"
+        };
       }
 
-      return {
+      const data = {
         id: doc.id,
         appointmentTime: formatDateTime(doc.data().appointmentTime),
         doctorID: doc.data().doctorID,
@@ -65,8 +74,16 @@ class Appointment {
         result: doc.data().result,
         roomID: doc.data().roomID
       };
+
+      return {
+        success: true,
+        message: data
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   };
 
@@ -80,11 +97,17 @@ class Appointment {
         roomID: roomID
       });
       await db.collection('patients').doc(patientID).update({
-        doctorResponbility: doctorID
+        doctorResponsibility: doctorID
       });
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      }
     }
   }
 
@@ -98,18 +121,30 @@ class Appointment {
         result: result,
         roomID: roomID
       });
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   }
 
   delete = async (appointment_id) => {
     try {
       const res = await db.collection('appointments').doc(appointment_id).delete();
-      return res;
+      return {
+        success: true,
+        message: res
+      };
     } catch (error) {
-      return error.message;
+      return {
+        success: false,
+        message: error.message
+      };
     }
   }
 }

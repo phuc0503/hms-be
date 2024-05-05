@@ -6,8 +6,8 @@ const { Timestamp } = require('firebase-admin/firestore');
 
 class Nurse extends Staff {
     #patientsUnder = [];
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence) {
-        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence);
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) {
+        super(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence);
     }
 
     getAll = async (pageSize, currentPage) => {
@@ -23,7 +23,6 @@ class Nurse extends Staff {
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
@@ -36,9 +35,15 @@ class Nurse extends Staff {
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
-            return data
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
@@ -48,54 +53,64 @@ class Nurse extends Staff {
             const nur = await nurseRef.get();
 
             if (!nur.exists) {
-                return "Nurse not found";
+                return {
+                    success: false,
+                    message: "Maybe wrong id"
+                };
             }
 
-            return {
+            const data = {
                 id: nur.id,
                 firstName: nur.data().firstName,
                 lastName: nur.data().lastName,
                 dateOfBirth: formatDate(doc.data().dateOfBirth),
-                age: nur.data().age,
                 gender: nur.data().gender,
                 phoneNumber: nur.data().phoneNumber,
                 salary: nur.data().salary,
                 absence: doc.data().absence
-                // specialty: nur.data().specialty
             };
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
-    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
+    create = async (firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
                 gender: gender,
                 phoneNumber: phoneNumber,
                 salary: parseInt(salary),
                 role: 'nurse',
                 absence: false
-                // specialty: specialty
             });
-
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
-    update = async (nurse_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence) => {
+    update = async (nurse_id, firstName, lastName, gender, phoneNumber, dateOfBirth, salary, absence) => {
         try {
             const nurseRef = db.collection('staff').doc(nurse_id);
             const res = await nurseRef.update({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(dateOfBirth)),
@@ -103,18 +118,30 @@ class Nurse extends Staff {
                 salary: parseInt(salary),
                 absence: absence === "true"
             })
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 
     delete = async (nurse_id) => {
         try {
             const res = await db.collection('staff').doc(nurse_id).delete();
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 }

@@ -33,7 +33,7 @@ class Equipment extends Resource {
             })
 
             const data = {
-                'equipments': equipmentsArray,
+                'equipment': equipmentsArray,
                 'pageSize': pageSize,
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)

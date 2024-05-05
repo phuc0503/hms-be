@@ -29,14 +29,13 @@ const getSupportStaffById = async (req, res) => {
 const createSupportStaff = async (req, res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
-    const age = req.body.age;
     const dateOfBirth = req.body.dateOfBirth;
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const salary = req.body.salary;
     const specialty = req.body.specialty;
     const absence = req.body.absence;
-    const result = await supportStaffInstance.create(firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, specialty, absence);
+    const result = await supportStaffInstance.create(firstName, lastName, dateOfBirth, gender, phoneNumber, salary, specialty, absence);
 
     if (result) {
         return res.send("Support staff created!").status(200);
@@ -49,14 +48,13 @@ const updateSupportStaff = async (req, res) => {
     const supportStaff_id = req.params.supportStaff_id;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
-    const age = req.body.age;
     const gender = req.body.gender;
     const phoneNumber = req.body.phoneNumber;
     const dateOfBirth = req.body.dateOfBirth;
     const salary = req.body.salary;
     const absence = req.body.absence;
 
-    const result = await supportStaffInstance.update(supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence);
+    const result = await supportStaffInstance.update(supportStaff_id, firstName, lastName, gender, phoneNumber, dateOfBirth, salary, absence);
 
     if (result) {
         return res.send("Update successfully").status(200);

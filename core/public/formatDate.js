@@ -1,3 +1,5 @@
+const { Timestamp } = require('firebase-admin/firestore');
+
 const formatDate = (timestamp) => {
     const date = timestamp.toDate();
     const day = date.getDate();
@@ -40,9 +42,23 @@ const transformDateTimeFormat = (dateTimeString) => {
     return transformedDateTimeString;
 };
 
+const dateToFirebaseTimestamp = (dateString) => {
+    // Split the date string into day, month, and year
+    const [day, month, year] = dateString.split("/");
+
+    // Create a JavaScript Date object using the parsed components
+    const date = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript Date
+
+    // Convert the JavaScript Date object to a Firebase timestamp
+    const timestamp = Timestamp.fromDate(date);
+
+    return timestamp;
+};
+
 module.exports = {
     formatDate,
     formatDateTime,
     transformDateFormat,
-    transformDateTimeFormat
+    transformDateTimeFormat,
+    dateToFirebaseTimestamp
 };

@@ -5,7 +5,6 @@ info:
     Tài liệu API của Hệ thống quản lý bệnh viện (Hospital Management System)
   version: 1.0.0
 servers:
-  - url: https://petstore3.swagger.io/api/v3
   - url: http://localhost:8080/api/v1
 tags:
   - name: staff
@@ -20,10 +19,14 @@ tags:
     description: Các API liên quan đến bệnh nhân
   - name: appointments
     description: Các API liên quan đến đơn bệnh
+  - name: resources
+    description: Các API liên quan đến vật tư
   - name: equipment
     description: Các API liên quan đến thiết bị
   - name: drugs
     description: Các API liên quan đến thuốc
+  - name: maintenance schedule
+    description: Các API liên quan đền lịch bảo dưỡng thiết bị
 paths:
   /staff:
     get:
@@ -32,6 +35,19 @@ paths:
       summary: Xem thông tin nhân viên
       description: Xem thông tin tất cả các nhân viên trong bệnh viện
       operationId: getStaff
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: successful operation
@@ -48,6 +64,31 @@ paths:
       summary: Xem thông tin bác sĩ
       description: Xem thông tin tất cả các bác sĩ trong bệnh viện
       operationId: getDoctors
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          description: |-
+            Chuyên khoa cần xem.
+            - 0: Khoa nội 
+            - 1: Khoa ngoại 
+            - 2: Khoa nhi   
+            - 3: Khoa sản   
+            - 4: Khoa mắt
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: successful operation
@@ -103,10 +144,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Doctor"
+                $ref: "#/components/schemas/OneDoctor"
             application/xml:
               schema:
-                $ref: "#/components/schemas/Doctor"
+                $ref: "#/components/schemas/OneDoctor"
         "400":
           description: Invalid doctor_id supplied
         "404":
@@ -172,15 +213,47 @@ paths:
       parameters:
         - name: doctor_id
           in: path
-          description: "Id của bác sĩ cần cập nhật thông tin. Dùng cgRXxtrmo545vI5YbAZH để test"
+          description: "Id của bác sĩ cần xem danh sách bệnh nhân. Dùng cgRXxtrmo545vI5YbAZH để test"
           required: true
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
           schema:
             type: string
       responses:
         "200":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
         "400":
           description: Invalid doctor_id
+  /staff/doctors/departments/statistics:
+    get:
+      tags:
+        - doctors
+      summary: Thống kê bác sĩ theo từng khoa
+      description: Thống kê số lượng bác sĩ theo từng khoa
+      operationId: countDoctorByDepartment
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountByDepartment"
+        "404":
+          description: Doctor not found
   /patients:
     get:
       tags:
@@ -188,6 +261,31 @@ paths:
       summary: Xem thông tin của bệnh nhân
       description: Xem thông tin tất cả các bệnh nhân
       operationId: getPatients
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          description: |-
+            Chuyên khoa cần xem.
+            - 0: Khoa nội 
+            - 1: Khoa ngoại 
+            - 2: Khoa nhi   
+            - 3: Khoa sản   
+            - 4: Khoa mắt
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: successful operation
@@ -243,10 +341,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Patient"
+                $ref: "#/components/schemas/OnePatient"
             application/xml:
               schema:
-                $ref: "#/components/schemas/Patient"
+                $ref: "#/components/schemas/OnePatient"
         "400":
           description: Invalid patient_id supplied
         "404":
@@ -316,6 +414,18 @@ paths:
           required: true
           schema:
             type: string
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: successful operation
@@ -330,6 +440,22 @@ paths:
           description: Invalid patient_id supplied
         "404":
           description: Patient not found
+  /patients/departments/statistics:
+    get:
+      tags:
+        - patients
+      summary: Thống kê bệnh nhân theo từng khoa
+      description: Thống kê số lượng bệnh nhân theo từng khoa
+      operationId: countPatientByDepartment
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountByDepartment"
+        "404":
+          description: Patient not found
   /appointments:
     get:
       tags:
@@ -337,6 +463,19 @@ paths:
       summary: Xem danh sách các đơn bệnh
       description: Xem danh sách tất cả các đơn bệnh trong bệnh viện
       operationId: getAppointments
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -392,7 +531,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Appointment"
+                $ref: "#/components/schemas/OneAppointment"
         "404":
           description: Appointments not found
     put:
@@ -451,6 +590,19 @@ paths:
       summary: Xem thông tin y tá
       description: Xem thông tin của các y tá trong bệnh viện
       operationId: getNurse
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -506,10 +658,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Nurse"
+                $ref: "#/components/schemas/OneNurse"
             application/xml:
               schema:
-                $ref: "#/components/schemas/Nurse"
+                $ref: "#/components/schemas/OneNurse"
         "400":
           description: Invalid nurse_id supplied
         "404":
@@ -565,44 +717,6 @@ paths:
           description: Successful operation
         "400":
           description: Invalid nurse_id
-  # /pet/{petId}/uploadImage:
-  #   post:
-  #     tags:
-  #       - pet
-  #     summary: uploads an image
-  #     description: ""
-  #     operationId: uploadFile
-  #     parameters:
-  #       - name: petId
-  #         in: path
-  #         description: ID of pet to update
-  #         required: true
-  #         schema:
-  #           type: integer
-  #           format: int64
-  #       - name: additionalMetadata
-  #         in: query
-  #         description: Additional Metadata
-  #         required: false
-  #         schema:
-  #           type: string
-  #     requestBody:
-  #       content:
-  #         application/octet-stream:
-  #           schema:
-  #             type: string
-  #             format: binary
-  #     responses:
-  #       "200":
-  #         description: successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/ApiResponse"
-  #     security:
-  #       - petstore_auth:
-  #           - write:pets
-  #           - read:pets
   /staff/supportStaff:
     get:
       tags:
@@ -610,6 +724,19 @@ paths:
       summary: Xem thông tin nhân viên hỗ trợ
       description: Xem thông tin tất cả nhân viên hỗ trợ trong bệnh viện
       operationId: getSupportStaff
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: successful operation
@@ -665,10 +792,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupportStaff"
+                $ref: "#/components/schemas/OneSupportStaff"
             application/xml:
               schema:
-                $ref: "#/components/schemas/SupportStaff"
+                $ref: "#/components/schemas/OneSupportStaff"
         "400":
           description: Invalid supportStaff_id supplied
         "404":
@@ -724,43 +851,521 @@ paths:
           description: Successful operation
         "400":
           description: Invalid supportStaff_id supplied
+  /resources:
+    get:
+      tags:
+        - resources
+      summary: Xem danh sách vật tư
+      description: Xem danh sách các vật tư bao gồm thuốc và thiết bị
+      operationId: getResources
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        "400":
+          description: Resource not found
+  /resources/equipment:
+    get:
+      tags:
+        - equipment
+      summary: Xem danh sách thiết bị
+      description: Xem danh sách các thiết bị
+      operationId: getResources
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+        "400":
+          description: Resource not found
+    post:
+      tags:
+        - equipment
+      summary: Thêm thiết bị mới
+      description: Thêm thiết bị mới
+      operationId: addEquipment
+      requestBody:
+        description: Thêm thiết bị mới vào cơ sở dữ liệu
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /resources/equipment/{equipment_id}:
+    get:
+      tags:
+        - equipment
+      summary: Xem thông tin thiết bị theo id
+      description: Xem thông tin của 1 thiết bị
+      operationId: getEquipmentById
+      parameters:
+        - name: equipment_id
+          in: path
+          description: id của thiết bị cần xem chi tiết. Dùng **48qRYzcF9fR5IIGv2m5N** để test
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OneEquipment"
+        "400":
+          description: Resource not found
+    put:
+      tags:
+        - equipment
+      summary: Cập nhật thông tin thiết bị
+      description: Cập nhật thông tin của thiết bị
+      operationId: updateEquipment
+      parameters:
+        - name: equipment_id
+          in: path
+          description: id của thiết bị cần cập nhật
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cập nhật thông tin thiết bị
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddEquipment"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+    delete:
+      tags:
+        - equipment
+      summary: Xoá thiết bị
+      description: Xoá thiết bị
+      operationId: deleteEquipment
+      parameters:
+        - name: equipment_id
+          in: path
+          description: id của thiết bị cần xoá
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /resources/drugs:
+    get:
+      tags:
+        - drugs
+      summary: Xem danh sách thuốc
+      description: Xem danh sách thuốc
+      operationId: getDrug
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Drug"
+        "400":
+          description: Resource not found
+    post:
+      tags:
+        - drugs
+      summary: Thêm loại thuốc mới
+      description: Thêm loại thuốc mới
+      operationId: addDrug
+      requestBody:
+        description: Thêm loại thuốc mới vào cơ sở dữ liệu
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /resources/drugs/{drug_id}:
+    get:
+      tags:
+        - drugs
+      summary: Xem thông tin loại thuốc theo id
+      description: Xem thông tin chi tiết 1 loại thuốc
+      operationId: getDrugById
+      parameters:
+        - name: drug_id
+          in: path
+          description: id của loại thuốc cần xem chi tiết. Dùng **uMLa6jKMuNB9OuRsRT4I** để test
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OneDrug"
+        "400":
+          description: Resource not found
+    put:
+      tags:
+        - drugs
+      summary: Cập nhật thông tin thuốc
+      description: Cập nhật thông tin thuốc
+      operationId: updateEDrug
+      parameters:
+        - name: drug_id
+          in: path
+          description: id của loại thuốc cần cập nhật
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cập nhật thông tin thuốc
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddDrug"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+    delete:
+      tags:
+        - drugs
+      summary: Xoá thuốc
+      description: Xoá thuốc
+      operationId: deleteDrug
+      parameters:
+        - name: drug_id
+          in: path
+          description: id của loại thuốc cần xoá
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /maintenance:
+    get:
+      tags:
+        - maintenance schedule
+      summary: Xem lịch bảo dưỡng thiết bị
+      description: Xem lịch bảo dưỡng thiết bị
+      operationId: getMaintenanceSchedule
+      parameters:
+        - name: pageSize
+          in: query
+          description: Số lượng phần tử trong 1 trang. *Mặc định là 10*
+          required: false
+          schema:
+            type: string
+        - name: currentPage
+          in: query
+          description: Trang hiện tại. *Mặc định là 1*
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceSchedule"
+        "400":
+          description: Resource not found
+    post:
+      tags:
+        - maintenance schedule
+      summary: Thêm lịch bảo dưỡng mới
+      description: Thêm lịch bảo dưỡng mới
+      operationId: AddMaintenanceSchedule
+      requestBody:
+        description: Thêm lịch bảo dưỡng mới vào cơ sở dữ liệu
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+  /maintenance/{maintenance_id}:
+    get:
+      tags:
+        - maintenance schedule
+      summary: Xem thông tin lịch bảo dưỡng theo id
+      description: Xem thông tin chi tiết 1 lịch bảo dưỡng
+      operationId: getMaintenanceScheduleById
+      parameters:
+        - name: maintenance_id
+          in: path
+          description: id của lịch bảo dưỡng cần xem chi tiết. Dùng **m1bqcaCCNU4U74EIgi8y** để test
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OneMaintenanceSchedule"
+        "400":
+          description: Maintenance schedule not found
+    put:
+      tags:
+        - maintenance schedule
+      summary: Cập nhật thông tin lịch bảo dưỡng
+      description: Cập nhật thông tin lịch bảo dưỡng
+      operationId: updateMaintenanceSchedule
+      parameters:
+        - name: maintenance_id
+          in: path
+          description: id của lịch bảo dưỡng cần cập nhật. Dùng **m1bqcaCCNU4U74EIgi8y** để test
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cập nhật thông tin lịch bảo dưỡng
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddMaintenanceSchedule"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+    delete:
+      tags:
+        - maintenance schedule
+      summary: Xoá lịch bảo dưỡng
+      description: Xoá lịch bảo dưỡng
+      operationId: deleteMaintenanceSchedule
+      parameters:
+        - name: maintenance_id
+          in: path
+          description: id của lịch bảo dưỡng cần xoá
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
 components:
   schemas:
     Staff:
       type: object
       properties:
-        id:
-          type: string
-          example: HNC4vvn6DLES09emJQBl
-        firstName:
-          type: string
-          example: Phuc
-        lastName:
-          type: string
-          example: Le
-        age:
+        staff:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: HNC4vvn6DLES09emJQBl
+              firstName:
+                type: string
+                example: Phuc
+              lastName:
+                type: string
+                example: Le
+              dateOfBirth:
+                type: string
+                format: date
+                example: 05/03/2002
+              gender:
+                type: string
+                example: male
+              phoneNumber:
+                type: string
+                example: 0123456789
+              role:
+                type: string
+                example: doctor
+              department:
+                type: string
+                example: Khoa Nhi
+              absence:
+                type: boolean
+                example: false
+        pageSize:
           type: integer
-          example: 30
-        dateOfBirth:
-          type: string
-          format: date
-          example: 05/03/2002
-        gender:
-          type: string
-          example: male
-        phoneNumber:
-          type: string
-          example: 0123456789
-        role:
-          type: string
-          example: doctor
-        department:
-          type: string
-          example: Khoa Nhi
-        absence:
-          type: boolean
-          example: false
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
     Doctor:
+      type: object
+      properties:
+        doctors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: cgRXxtrmo545vI5YbAZH
+              firstName:
+                type: string
+                example: Phuc
+              lastName:
+                type: string
+                example: Le
+              dateOfBirth:
+                type: string
+                format: date
+                example: 05/03/2002
+              gender:
+                type: string
+                example: male
+              phoneNumber:
+                type: string
+                example: "0123456789"
+              salary:
+                type: integer
+                example: 15000000
+              department:
+                type: string
+                example: Khoa nhi
+              absence:
+                type: boolean
+                example: false
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneDoctor:
       type: object
       properties:
         id:
@@ -776,9 +1381,6 @@ components:
           type: string
           format: date
           example: 05/03/2002
-        age:
-          type: integer
-          example: 22
         gender:
           type: string
           example: male
@@ -799,7 +1401,6 @@ components:
         - firstName
         - lastName
         - dateOfBirth
-        - age
         - gender
         - phoneNumber
         - salary
@@ -817,9 +1418,6 @@ components:
           type: string
           format: date
           example: 12/31/1994
-        age:
-          type: integer
-          example: 30
         gender:
           type: string
           example: male
@@ -838,6 +1436,48 @@ components:
     Patient:
       type: object
       properties:
+        patients:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 0n1HhIX3QI8GmJi8qfwK
+              firstName:
+                type: string
+                example: Thinh
+              lastName:
+                type: string
+                example: Nguyen Thi
+              gender:
+                type: string
+                example: male
+              phoneNumber:
+                type: string
+                example: "6410983572"
+              healthInsurance:
+                type: string
+                example: "true"
+              doctorResponbility:
+                type: string
+                example: "cgRXxtrmo545vI5YbAZH"
+              dateOfBirth:
+                type: string
+                format: date
+                example: 18/04/2008
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OnePatient:
+      type: object
+      properties:
         id:
           type: string
           example: 0n1HhIX3QI8GmJi8qfwK
@@ -847,9 +1487,6 @@ components:
         lastName:
           type: string
           example: Nguyen Thi
-        age:
-          type: integer
-          example: 25
         gender:
           type: string
           example: male
@@ -871,7 +1508,6 @@ components:
         - firstName
         - lastName
         - dateOfBirth
-        - age
         - gender
         - phoneNumber
         - healthInsurance
@@ -888,9 +1524,6 @@ components:
           type: string
           format: date
           example: 17/5/2002
-        age:
-          type: integer
-          example: 22
         gender:
           type: string
           example: male
@@ -898,30 +1531,80 @@ components:
           type: string
           example: "0949777565"
         healthInsurance:
-          type: integer
-          example: 20000000
-        doctorResponbility:
+          type: boolean
+          example: true
+        doctorResponsibility:
           type: string
           example: HNC4vvn6DLES09emJQBl
     MedicalRecord:
       type: object
       properties:
-        id:
-          type: string
-          example: E9GsO1NBqpYw0LC0o1gM
-        appointmentTime:
-          type: string
-          example: 20/06/2024
-        doctor:
-          type: string
-          example: Chung Thinh
-        result:
-          type: string
-          example: Sốt, nhức đầu
-        roomID:
-          type: string
-          example: 401
+        appointments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: E9GsO1NBqpYw0LC0o1gM
+              appointmentTime:
+                type: string
+                example: 20/06/2024
+              doctor:
+                type: string
+                example: Chung Thinh
+              result:
+                type: string
+                example: Sốt, nhức đầu
+              roomID:
+                type: string
+                example: 401
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
     Appointment:
+      type: object
+      properties:
+        appointments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 4LfDAQ91Cw86uB0s92ko
+              appointmentTime:
+                type: string
+                format: date-time
+                example: June 12, 2024 at 11:51:32 AM
+              doctorID:
+                type: string
+                example: JidK3G5TMD9sANQdnnIW
+              patientID:
+                type: string
+                example: OqY0WecTEX0ti2TxNIGF
+              result:
+                type: string
+                example: Đau dạy dày
+              roomID:
+                type: string
+                example: 301
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneAppointment:
       type: object
       properties:
         id:
@@ -971,6 +1654,48 @@ components:
     Nurse:
       type: object
       properties:
+        nurses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: Y6Z3vWVhIJhJSiM7od4R
+              firstName:
+                type: string
+                example: Phuc
+              lastName:
+                type: string
+                example: Vien
+              dateOfBirth:
+                type: string
+                format: date
+                example: 12/01/2002
+              gender:
+                type: string
+                example: female
+              phoneNumber:
+                type: string
+                example: "9870123456"
+              salary:
+                type: integer
+                example: 30000000
+              absence:
+                type: boolean
+                example: false
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneNurse:
+      type: object
+      properties:
         id:
           type: string
           example: Y6Z3vWVhIJhJSiM7od4R
@@ -984,9 +1709,6 @@ components:
           type: string
           format: date
           example: 12/01/2002
-        age:
-          type: integer
-          example: 25
         gender:
           type: string
           example: female
@@ -1004,7 +1726,6 @@ components:
         - firstName
         - lastName
         - dateOfBirth
-        - age
         - gender
         - phoneNumber
         - salary
@@ -1021,9 +1742,6 @@ components:
           type: string
           format: date
           example: 12/01/1998
-        age:
-          type: integer
-          example: 30
         gender:
           type: string
           example: male
@@ -1039,6 +1757,45 @@ components:
     SupportStaff:
       type: object
       properties:
+        supportStaff:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: T2g3cyzImX69qpWh5nuN
+              firstName:
+                type: string
+                example: Trump
+              lastName:
+                type: string
+                example: Donald
+              dateOfBirth:
+                type: string
+                format: date
+                example: 12/06/2002
+              gender:
+                type: string
+                example: male
+              phoneNumber:
+                type: string
+                example: "5601928374"
+              absence:
+                type: boolean
+                example: false
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneSupportStaff:
+      type: object
+      properties:
         id:
           type: string
           example: T2g3cyzImX69qpWh5nuN
@@ -1052,9 +1809,6 @@ components:
           type: string
           format: date
           example: 12/06/2002
-        age:
-          type: integer
-          example: 28
         gender:
           type: string
           example: male
@@ -1069,7 +1823,6 @@ components:
         - firstName
         - lastName
         - dateOfBirth
-        - age
         - gender
         - phoneNumber
         - salary
@@ -1086,9 +1839,6 @@ components:
           type: string
           format: date
           example: 12/31/1685
-        age:
-          type: integer
-          example: 31
         gender:
           type: string
           example: male
@@ -1101,3 +1851,260 @@ components:
         absence:
           type: boolean
           example: true
+    Resource:
+      type: object
+      properties:
+        resources:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 48qRYzcF9fR5IIGv2m5N
+              name:
+                type: string
+                example: Máy thở oxi
+              cost:
+                type: integer
+                example: 7000000
+              type:
+                type: string
+                example: equipment
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    Equipment:
+      properties:
+        equipment:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 48qRYzcF9fR5IIGv2m5N
+              name:
+                type: string
+                example: Máy thở oxi
+              cost:
+                type: integer
+                example: 7000000
+              type:
+                type: string
+                example: equipment
+              availability:
+                type: boolean
+                example: false
+              condition:
+                type: string
+                example: Trung bình
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneEquipment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 48qRYzcF9fR5IIGv2m5N
+        name:
+          type: string
+          example: Máy thở oxi
+        cost:
+          type: integer
+          example: 7000000
+        type:
+          type: string
+          example: equipment
+        availability:
+          type: boolean
+          example: false
+        condition:
+          type: string
+          example: Trung bình
+    AddEquipment:
+      required:
+        - name
+        - cost
+        - availability
+        - condition
+      type: object
+      properties:
+        name:
+          type: string
+          example: Máy đo nhịp tim
+        cost:
+          type: integer
+          example: 3000000
+        availability:
+          type: boolean
+          example: true
+        condition:
+          type: string
+          example: Tốt
+    Drug:
+      properties:
+        drugs:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: uMLa6jKMuNB9OuRsRT4I
+              name:
+                type: string
+                example: Aspirin
+              cost:
+                type: integer
+                example: 5000000
+              type:
+                type: string
+                example: drug
+              expiryDate:
+                type: string
+                format: date
+                example: 21/12/2024
+              quantity:
+                type: integer
+                example: 600
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneDrug:
+      type: object
+      properties:
+        id:
+          type: string
+          example: uMLa6jKMuNB9OuRsRT4I
+        name:
+          type: string
+          example: Aspirin
+        cost:
+          type: integer
+          example: 5000000
+        type:
+          type: string
+          example: drug
+        expiryDate:
+          type: string
+          format: date
+          example: 21/12/2024
+        quantity:
+          type: integer
+          example: 600
+    AddDrug:
+      required:
+        - name
+        - cost
+        - expiryDate
+        - quantity
+      type: object
+      properties:
+        name:
+          type: string
+          example: Aspirin
+        cost:
+          type: integer
+          example: 5000000
+        expiryDate:
+          type: boolean
+          format: date
+          example: 21/12/2026
+        quantity:
+          type: integer
+          example: 600
+    MaintenanceSchedule:
+      properties:
+        maintenanceSchedule:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: m1bqcaCCNU4U74EIgi8y
+              equipmentID:
+                type: string
+                example: 48qRYzcF9fR5IIGv2m5N
+              maintenanceDate:
+                type: string
+                format: date
+                example: 03/01/2024
+        pageSize:
+          type: integer
+          example: 10
+        currentPage:
+          type: integer
+          example: 1
+        totalPage:
+          type: integer
+          example: 1
+    OneMaintenanceSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+          example: m1bqcaCCNU4U74EIgi8y
+        equipmentID:
+          type: string
+          example: 48qRYzcF9fR5IIGv2m5N
+        maintenanceDate:
+          type: string
+          format: date
+          example: 03/01/2024
+    AddMaintenanceSchedule:
+      required:
+        - equipmentID
+        - maintenanceDate
+      type: object
+      properties:
+        equipmentID:
+          type: string
+          example: 48qRYzcF9fR5IIGv2m5N
+        maintenanceDate:
+          type: string
+          format: date
+          example: 20/11/2025
+    CountByDepartment:
+      type: object
+      properties:
+        departments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              total:
+                type: integer
+          example:
+            - name: Khoa nội
+              total: 1
+            - name: Khoa ngoại
+              total: 1
+            - name: Khoa nhi
+              total: 1
+            - name: Khoa sản
+              total: 1
+            - name: Khoa mắt
+              total: 1
