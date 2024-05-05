@@ -1622,7 +1622,10 @@ components:
               appointmentTime:
                 type: string
                 format: date-time
-                example: June 12, 2024 at 11:51:32 AM
+                example: June 12, 2024 11:51:32
+              department:
+                type: string
+                example: Khoa ngoại
               doctorID:
                 type: string
                 example: JidK3G5TMD9sANQdnnIW
@@ -1656,7 +1659,10 @@ components:
         appointmentTime:
           type: string
           format: date-time
-          example: June 12, 2024 at 11:51:32 AM
+          example: June 12, 2024 11:51:32
+        department:
+          type: string
+          example: Khoa ngoại
         doctorID:
           type: string
           example: JidK3G5TMD9sANQdnnIW
@@ -1672,6 +1678,7 @@ components:
     AddAppointment:
       required:
         - appointmentTime
+        - department
         - doctorID
         - patientID
         - result
@@ -1682,6 +1689,9 @@ components:
           type: string
           format: date-time
           example: June 20, 2024 11:51:32
+        department:
+          type: string
+          example: Khoa ngoại
         doctorID:
           type: string
           example: JidK3G5TMD9sANQdnnIW
