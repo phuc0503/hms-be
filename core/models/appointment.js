@@ -1,6 +1,8 @@
 const { db, admin } = require("../config/firebase");
 const { formatDateTime, transformDateTimeFormat } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
+const Doctor = require("../models/doctor");
+const doctorInstance = new Doctor();
 class Appointment {
   #id;
   #appointmentTime;
@@ -40,7 +42,8 @@ class Appointment {
         'appointments': appointmentsArray,
         'pageSize': pageSize,
         'currentPage': currentPage,
-        'totalPage': Math.ceil(countAll.data().count / pageSize)
+        'totalPage': Math.ceil(countAll.data().count / pageSize),
+        'totalRow': countAll.data().count
       }
       return {
         success: true,
@@ -96,7 +99,10 @@ class Appointment {
         result: result,
         roomID: roomID
       });
+      const doctor = await doctorInstance.getById(doctorID);
+
       await db.collection('patients').doc(patientID).update({
+        department: doctor.message.department,
         doctorResponsibility: doctorID
       });
       return {

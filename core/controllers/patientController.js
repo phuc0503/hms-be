@@ -59,8 +59,6 @@ const createPatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
-  const department = req.body.department;
-  const doctorResponsibility = req.body.doctorResponsibility;
   const result = await patientInstance.create(
     firstName,
     lastName,
@@ -68,8 +66,6 @@ const createPatient = async (req, res) => {
     gender,
     phoneNumber,
     healthInsurance,
-    department,
-    doctorResponsibility
   );
   if (result.success === true) {
     return res.status(200).send("Create successfully");
