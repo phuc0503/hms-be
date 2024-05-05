@@ -476,6 +476,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: department
+          in: query
+          description: |-
+            Chuyên khoa cần xem.
+            - 0: Khoa nội 
+            - 1: Khoa ngoại 
+            - 2: Khoa nhi   
+            - 3: Khoa sản   
+            - 4: Khoa mắt
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -583,6 +595,22 @@ paths:
           description: Successful operation
         "400":
           description: Invalid doctor_id
+  /appointments/departments/statistics:
+    get:
+      tags:
+        - appointments
+      summary: Thống kê đơn bệnh theo từng khoa
+      description: Thống kê số lượng đơn bệnh theo từng khoa
+      operationId: countAppointmentByDepartment
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountByDepartment"
+        "404":
+          description: Appointment not found
   /staff/nurse:
     get:
       tags:
@@ -1320,6 +1348,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     Doctor:
       type: object
       properties:
@@ -1363,6 +1394,9 @@ components:
           type: integer
           example: 1
         totalPage:
+          type: integer
+          example: 1
+        totalRow:
           type: integer
           example: 1
     OneDoctor:
@@ -1475,6 +1509,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     OnePatient:
       type: object
       properties:
@@ -1568,6 +1605,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     Appointment:
       type: object
       properties:
@@ -1602,6 +1642,9 @@ components:
           type: integer
           example: 1
         totalPage:
+          type: integer
+          example: 1
+        totalRow:
           type: integer
           example: 1
     OneAppointment:
@@ -1691,6 +1734,9 @@ components:
           type: integer
           example: 1
         totalPage:
+          type: integer
+          example: 1
+        totalRow:
           type: integer
           example: 1
     OneNurse:
@@ -1793,6 +1839,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     OneSupportStaff:
       type: object
       properties:
@@ -1880,6 +1929,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     Equipment:
       properties:
         equipment:
@@ -1912,6 +1964,9 @@ components:
           type: integer
           example: 1
         totalPage:
+          type: integer
+          example: 1
+        totalRow:
           type: integer
           example: 1
     OneEquipment:
@@ -1990,6 +2045,9 @@ components:
         totalPage:
           type: integer
           example: 1
+        totalRow:
+          type: integer
+          example: 1
     OneDrug:
       type: object
       properties:
@@ -2057,6 +2115,9 @@ components:
           type: integer
           example: 1
         totalPage:
+          type: integer
+          example: 1
+        totalRow:
           type: integer
           example: 1
     OneMaintenanceSchedule:
