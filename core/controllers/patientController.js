@@ -7,9 +7,10 @@ const getAllPatient = async (req, res) => {
   const currentPage = parseInt(req.query.currentPage) || 1;
   const sortBy = req.query.sortBy || 'name';
   const sortOrder = req.query.sortOrder || 'asc';
-  const filterBy = req.query.filterBy || null;
-  const filterProperty = req.query.filterProperty || null;
-  const patientArray = await patientInstance.getAll(pageSize, currentPage, sortBy, sortOrder, filterBy, filterProperty);
+  const gender = req.query.gender || null;
+  const healthInsurance = req.query.healthInsurance || null;
+  const name = req.query.name || null;
+  const patientArray = await patientInstance.getAll(pageSize, currentPage, sortBy, sortOrder, gender, healthInsurance, name);
 
   if (patientArray.success === true) {
     return res.status(200).json(patientArray.message);
