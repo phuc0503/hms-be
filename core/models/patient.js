@@ -10,8 +10,6 @@ class Patient {
   #lastName;
   #gender;
   #healthInsurance;
-  #department;
-  #doctorResponsibility;
   #dateOfBirth;
   #phoneNumber;
   #firstName;
@@ -22,8 +20,6 @@ class Patient {
     lastName,
     gender,
     healthInsurance,
-    department,
-    doctorResponsibility,
     dateOfBirth,
     phoneNumber
   ) {
@@ -33,8 +29,6 @@ class Patient {
     this.#gender = gender;
     this.#phoneNumber = phoneNumber;
     this.#healthInsurance = healthInsurance;
-    this.#department = department;
-    this.#doctorResponsibility = doctorResponsibility;
     this.#dateOfBirth = dateOfBirth;
   }
 
@@ -56,8 +50,6 @@ class Patient {
           gender: doc.data().gender,
           phoneNumber: doc.data().phoneNumber,
           healthInsurance: doc.data().healthInsurance,
-          department: doc.data().department,
-          doctorResponsibility: doc.data().doctorResponsibility,
           dateOfBirth: formatDate(doc.data().dateOfBirth),
         });
       });
@@ -100,8 +92,6 @@ class Patient {
         gender: patientData.gender,
         phoneNumber: patientData.phoneNumber,
         healthInsurance: patientData.healthInsurance,
-        department: patientData.department,
-        doctorResponsibility: patientData.doctorResponsibility,
         dateOfBirth: formatDate(patientData.dateOfBirth),
       };
       return {
@@ -124,7 +114,7 @@ class Patient {
 
       if (!patient.exists) {
         return {
-          succes: false,
+          success: false,
           message: "Maybe wrong id"
         }
       }
@@ -142,6 +132,7 @@ class Patient {
         appointmentsArray.push({
           appointmentId: doc.id,
           appointmentTime: formatDate(doc.data().appointmentTime),
+          department: doc.data().department,
           doctor: doctorData.message.lastName + " " + doctorData.message.firstName,
           result: doc.data().result,
           roomID: doc.data().roomID,
@@ -186,8 +177,6 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance === "true",
-        department: "",
-        doctorResponsibility: "",
       });
       return {
         success: true,
@@ -209,8 +198,6 @@ class Patient {
     phoneNumber,
     dateOfBirth,
     healthInsurance,
-    department,
-    doctorResponsibility
   ) => {
     try {
       const patientRef = db.collection("patients").doc(patient_id);
@@ -223,8 +210,6 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance === "true",
-        department: department,
-        doctorResponsibility: doctorResponsibility,
       });
       return {
         success: true,
@@ -293,51 +278,6 @@ class Patient {
         success: false,
         message: error.message
       }
-    }
-  };
-
-  countByDepartment = async () => {
-    try {
-      const departmentArray = [0, 0, 0, 0, 0];
-      const doctorsRef = db.collection("patients");
-      const snapshot = await doctorsRef.get();
-      snapshot.forEach((doc) => {
-        let department = toNum(doc.data().department);
-        departmentArray[department]++;
-      });
-      const data = {
-        departments: [
-          {
-            name: "Khoa nội",
-            total: departmentArray[0],
-          },
-          {
-            name: "Khoa ngoại",
-            total: departmentArray[1],
-          },
-          {
-            name: "Khoa nhi",
-            total: departmentArray[2],
-          },
-          {
-            name: "Khoa sản",
-            total: departmentArray[3],
-          },
-          {
-            name: "Khoa mắt",
-            total: departmentArray[4],
-          },
-        ],
-      };
-      return {
-        success: true,
-        message: data
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.message
-      };
     }
   };
 }
