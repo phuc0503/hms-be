@@ -25,7 +25,7 @@ class Appointment {
     try {
       const offset = (currentPage - 1) * pageSize;
       const appointmentsArray = [];
-      const appointmentsRef = admin.firestore().collection('appointments').orderBy("appointmentTime", "asc");
+      const appointmentsRef = admin.firestore().collection('appointments').orderBy("appointmentTime", "desc");
       const countAll = await appointmentsRef.count().get();
       const appointmentsSnapshot = await appointmentsRef.limit(pageSize).offset(offset).get();
 

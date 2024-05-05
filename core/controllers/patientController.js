@@ -3,19 +3,12 @@ const { toDepartment } = require("../public/department");
 const patientInstance = new Patient();
 
 const getAllPatient = async (req, res) => {
-  let patientArray;
   const pageSize = parseInt(req.query.pageSize) || 10;
   const currentPage = parseInt(req.query.currentPage) || 1;
-  if (req.query.department) {
-    const department = toDepartment(parseInt(req.query.department));
-    patientArray = await patientInstance.getByDepartment(
-      department,
-      pageSize,
-      currentPage
-    );
-  } else {
-    patientArray = await patientInstance.getAll(pageSize, currentPage);
-  }
+  const sortBy = req.query.sortBy || 'firstName';
+  const sortOrder = req.query.sortOrder || 'asc';
+
+  const patientArray = await patientInstance.getAll(pageSize, currentPage, sortBy, sortOrder);
 
   if (patientArray.success === true) {
     return res.status(200).json(patientArray.message);
