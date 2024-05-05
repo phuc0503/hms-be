@@ -29,7 +29,7 @@ const createEquipment = async (req, res) => {
     const cost = parseInt(req.body.cost);
     const type = req.body.type == 'equipment' ? req.body.type : 'equipment';
     const availability = req.body.availability === 'true';
-    const condition = req.body.condition;
+    const condition = parseInt(req.body.condition);
     const result = await equipmentInstance.create(name, cost, type, availability, condition);
 
     if (result.success === true) {
@@ -45,7 +45,7 @@ const updateEquipment = async (req, res) => {
     const cost = parseInt(req.body.cost);
     const type = req.body.type == 'equipment' ? req.body.type : 'equipment';
     const availability = req.body.availability === 'true';
-    const condition = req.body.condition;
+    const condition = parseInt(req.body.condition);
     const result = await equipmentInstance.update(equipment_id, name, cost, type, availability, condition);
 
     if (result.success === true) {
