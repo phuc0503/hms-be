@@ -66,6 +66,7 @@ class Patient {
         pageSize: pageSize,
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
+        totalRow: countAll.data().count
       };
       return {
         success: true,
@@ -119,6 +120,15 @@ class Patient {
     try {
       const offset = (currentPage - 1) * pageSize;
       const appointmentsArray = [];
+      const patient = await db.collection('patients').doc(patientId).get();
+
+      if (!patient.exists) {
+        return {
+          succes: false,
+          message: "Maybe wrong id"
+        }
+      }
+
       const patientsRef = admin
         .firestore()
         .collection("appointments")
@@ -144,6 +154,7 @@ class Patient {
         pageSize: pageSize,
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
+        totalRow: countAll.data().count
       };
       return {
         success: true,
@@ -164,8 +175,6 @@ class Patient {
     gender,
     phoneNumber,
     healthInsurance,
-    department,
-    doctorResponsibility
   ) => {
     try {
       const res = await db.collection("patients").add({
@@ -177,8 +186,8 @@ class Patient {
         gender: gender,
         phoneNumber: phoneNumber,
         healthInsurance: healthInsurance === "true",
-        department: department,
-        doctorResponsibility: doctorResponsibility,
+        department: "",
+        doctorResponsibility: "",
       });
       return {
         success: true,
@@ -273,6 +282,7 @@ class Patient {
         pageSize: pageSize,
         currentPage: currentPage,
         totalPage: Math.ceil(countAll.data().count / pageSize),
+        totalRow: countAll.data().count
       };
       return {
         success: true,

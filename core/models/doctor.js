@@ -35,7 +35,8 @@ class Doctor extends Staff {
                 'doctors': doctorsArray,
                 'pageSize': pageSize,
                 'currentPage': currentPage,
-                'totalPage': Math.ceil(countAll.data().count / pageSize)
+                'totalPage': Math.ceil(countAll.data().count / pageSize),
+                'totalRow': countAll.data().count
             }
             return {
                 success: true,
@@ -108,7 +109,8 @@ class Doctor extends Staff {
                 'doctors': doctorsArray,
                 'pageSize': pageSize,
                 'currentPage': currentPage,
-                'totalPage': Math.ceil(countAll.data().count / pageSize)
+                'totalPage': Math.ceil(countAll.data().count / pageSize),
+                'totalRow': countAll.data().count
             }
             return {
                 success: true,
@@ -170,7 +172,8 @@ class Doctor extends Staff {
                 'patients': patientsArray,
                 'pageSize': pageSize,
                 'currentPage': currentPage,
-                'totalPage': Math.ceil(countAll.data().count / pageSize)
+                'totalPage': Math.ceil(countAll.data().count / pageSize),
+                'totalRow': countAll.data().count
             }
             return {
                 success: true,

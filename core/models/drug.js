@@ -36,7 +36,8 @@ class Drug extends Resource {
                 'drugs': drugsArray,
                 'pageSize': pageSize,
                 'currentPage': currentPage,
-                'totalPage': Math.ceil(countAll.data().count / pageSize)
+                'totalPage': Math.ceil(countAll.data().count / pageSize),
+                'totalRow': countAll.data().count
             }
 
             return {
