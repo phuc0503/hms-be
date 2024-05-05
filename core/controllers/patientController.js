@@ -55,7 +55,6 @@ const getMedicalRecords = async (req, res) => {
 const createPatient = async (req, res) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
-  const age = req.body.age;
   const dateOfBirth = req.body.dateOfBirth;
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
@@ -65,7 +64,6 @@ const createPatient = async (req, res) => {
   const result = await patientInstance.create(
     firstName,
     lastName,
-    age,
     dateOfBirth,
     gender,
     phoneNumber,
@@ -84,7 +82,6 @@ const updatePatient = async (req, res) => {
   const patient_id = req.params.patient_id;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
-  const age = req.body.age;
   const dateOfBirth = req.body.dateOfBirth;
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
@@ -96,7 +93,6 @@ const updatePatient = async (req, res) => {
     patient_id,
     firstName,
     lastName,
-    age,
     gender,
     phoneNumber,
     dateOfBirth,

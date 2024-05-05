@@ -132,7 +132,7 @@ class Patient {
         appointmentsArray.push({
           appointmentId: doc.id,
           appointmentTime: formatDate(doc.data().appointmentTime),
-          doctor: doctorData.lastName + " " + doctorData.firstName,
+          doctor: doctorData.message.lastName + " " + doctorData.message.firstName,
           result: doc.data().result,
           roomID: doc.data().roomID,
         });
