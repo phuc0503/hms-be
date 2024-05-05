@@ -33,11 +33,12 @@ const getAppointmentById = async (req, res) => {
 
 const createAppointment = async (req, res) => {
     const patientID = req.body.patientID;
+    const department = req.body.department;
     const doctorID = req.body.doctorID;
     const result = req.body.result;
     const appointmentTime = req.body.appointmentTime;
     const roomID = req.body.roomID;
-    const appointment = await appointmentInstance.create(patientID, doctorID, result, appointmentTime, roomID);
+    const appointment = await appointmentInstance.create(patientID, department, doctorID, result, appointmentTime, roomID);
 
     if (appointment.success === true) {
         return res.status(200).send("Create successfully");
@@ -49,11 +50,12 @@ const createAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
     const appointment_id = req.params.appointment_id;
     const patientID = req.body.patientID;
+    const department = req.body.department;
     const doctorID = req.body.doctorID;
     const result = req.body.result;
     const appointmentTime = req.body.appointmentTime;
     const roomID = req.body.roomID;
-    const appointment = await appointmentInstance.update(appointment_id, patientID, doctorID, result, appointmentTime, roomID);
+    const appointment = await appointmentInstance.update(appointment_id, patientID, department, doctorID, result, appointmentTime, roomID);
 
     if (appointment.success === true) {
         return res.status(200).send("Update successfully");

@@ -107,6 +107,33 @@ class MaintenanceSchedule {
     update = async (maintenance_id, equipmentID, maintenanceDate) => {
         try {
             const maintenanceRef = db.collection('maintenance schedule').doc(maintenance_id);
+
+            const doc = await maintenanceRef.get();
+
+            if (!doc.exists) {
+                return {
+                    success: false,
+                    message: "Maybe wrong id"
+                };
+            }
+
+            const checkEquipmentId = await db.collection('resources').doc(equipmentID).get();
+
+            if (!checkEquipmentId.exists) {
+                return {
+                    succes: false,
+                    message: "Equipment not exist"
+                };
+            }
+
+            const check = await db.collection('maintenance schedule').where('equipmentID', '==', equipmentID).where('maintenanceDate', '==', dateToFirebaseTimestamp(maintenanceDate)).limit(1).get();
+            if (check.size) {
+                return {
+                    success: false,
+                    message: 'Maintenance date for this equipment already exist'
+                };
+            }
+
             const res = await maintenanceRef.update({
                 equipmentID: equipmentID,
                 maintenanceDate: Timestamp.fromDate(new Date(transformDateFormat(maintenanceDate)))

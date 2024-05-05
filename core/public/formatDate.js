@@ -43,13 +43,18 @@ const transformDateTimeFormat = (dateTimeString) => {
 };
 
 const dateToFirebaseTimestamp = (dateString) => {
-    // Split the date string into day, month, and year
     const [day, month, year] = dateString.split("/");
+    const date = new Date(year, month - 1, day);
+    const timestamp = Timestamp.fromDate(date);
 
-    // Create a JavaScript Date object using the parsed components
-    const date = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript Date
+    return timestamp;
+};
 
-    // Convert the JavaScript Date object to a Firebase timestamp
+const dateTimeToFirebaseTimestamp = (dateTimeString) => {
+    const [datePart, timePart] = dateTimeString.split(" ");
+    const [day, month, year] = datePart.split("/");
+    const [hour, minute, second] = timePart.split(":");
+    const date = new Date(year, month - 1, day, hour, minute, second);
     const timestamp = Timestamp.fromDate(date);
 
     return timestamp;
@@ -60,5 +65,6 @@ module.exports = {
     formatDateTime,
     transformDateFormat,
     transformDateTimeFormat,
-    dateToFirebaseTimestamp
+    dateToFirebaseTimestamp,
+    dateTimeToFirebaseTimestamp
 };

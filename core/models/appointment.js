@@ -1,5 +1,5 @@
 const { db, admin } = require("../config/firebase");
-const { formatDateTime, transformDateTimeFormat } = require('../public/formatDate');
+const { formatDateTime, transformDateTimeFormat, dateTimeToFirebaseTimestamp } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 const Doctor = require("../models/doctor");
 const { toNum } = require('../public/department');
@@ -74,6 +74,7 @@ class Appointment {
       const data = {
         id: doc.id,
         appointmentTime: formatDateTime(doc.data().appointmentTime),
+        department: doc.data().department,
         doctorID: doc.data().doctorID,
         patientID: doc.data().patientID,
         result: doc.data().result,
@@ -129,21 +130,53 @@ class Appointment {
     }
   }
 
-  create = async (patientID, doctorID, result, appointmentTime, roomID) => {
+  create = async (patientID, department, doctorID, result, appointmentTime, roomID) => {
     try {
+      const checkPatientId = await db.collection('patients').doc(patientID).get();
+      const checkDoctorId = await db.collection('staff').doc(doctorID).get();
+      if (!checkPatientId.exists && !checkDoctorId.exists) {
+        return {
+          success: false,
+          message: 'Patient and doctor not exist'
+        }
+      } else if (!checkPatientId.exists) {
+        return {
+          success: false,
+          message: 'Patient not exist'
+        }
+      } else if (!checkDoctorId.exists) {
+        return {
+          success: false,
+          message: 'Doctor not exist'
+        }
+      } else if (checkDoctorId.data().department != department) {
+        return {
+          success: false,
+          message: 'This doctor is not belong to ' + department
+        }
+      }
+
+      const checkExist = await db.collection('appointments').where('patientID', '==', patientID).where('appointmentTime', '==', dateTimeToFirebaseTimestamp(appointmentTime)).where('doctorID', '==', doctorID).limit(1).get();
+      if (checkExist.size) {
+        return {
+          success: false,
+          message: 'This appointment already exist'
+        };
+      }
       const res = await db.collection('appointments').add({
         appointmentTime: Timestamp.fromDate(new Date(transformDateTimeFormat(appointmentTime))),
+        department: department,
         doctorID: doctorID,
         patientID: patientID,
         result: result,
         roomID: roomID
       });
-      const doctor = await doctorInstance.getById(doctorID);
+      // const doctor = await doctorInstance.getById(doctorID);
 
-      await db.collection('patients').doc(patientID).update({
-        department: doctor.message.department,
-        doctorResponsibility: doctorID
-      });
+      // await db.collection('patients').doc(patientID).update({
+      //   department: doctor.message.department,
+      //   doctorResponsibility: doctorID
+      // });
       return {
         success: true,
         message: res
@@ -156,11 +189,51 @@ class Appointment {
     }
   }
 
-  update = async (appointment_id, patientID, doctorID, result, appointmentTime, roomID) => {
+  update = async (appointment_id, patientID, department, doctorID, result, appointmentTime, roomID) => {
     try {
       const appointmentRef = db.collection('appointments').doc(appointment_id);
+
+      const doc = await appointmentRef.get();
+
+      if (doc.exists) {
+        return {
+          success: false,
+          message: "Maybe wrong id"
+        };
+      }
+      const checkPatientId = await db.collection('patients').doc(patientID).get();
+      const checkDoctorId = await db.collection('staff').doc(doctorID).get();
+      if (!checkPatientId.exists && !checkDoctorId.exists) {
+        return {
+          success: false,
+          message: 'Patient and doctor not exist'
+        }
+      } else if (!checkPatientId.exists) {
+        return {
+          success: false,
+          message: 'Patient not exist'
+        }
+      } else if (!checkDoctorId.exists) {
+        return {
+          success: false,
+          message: 'Doctor not exist'
+        }
+      } else if (checkDoctorId.data().department != department) {
+        return {
+          success: false,
+          message: 'This doctor is not belong to ' + department
+        }
+      }
+      const check = await db.collection('appointments').where('patientID', '==', patientID).where('appointmentTime', '==', dateTimeToFirebaseTimestamp(appointmentTime)).where('doctorID', '==', doctorID).limit(1).get();
+      if (check.size) {
+        return {
+          success: false,
+          message: 'This appointment already exist'
+        };
+      }
       const res = await appointmentRef.update({
         appointmentTime: Timestamp.fromDate(new Date(transformDateTimeFormat(appointmentTime))),
+        department: department,
         doctorID: doctorID,
         patientID: patientID,
         result: result,
