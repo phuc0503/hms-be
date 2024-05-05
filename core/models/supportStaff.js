@@ -60,14 +60,14 @@ class SupportStaff extends Staff {
             }
 
             const data = {
-                id: doc.id,
-                firstName: doc.data().firstName,
-                lastName: doc.data().lastName,
-                dateOfBirth: formatDate(doc.data().dateOfBirth),
-                gender: doc.data().gender,
-                phoneNumber: doc.data().phoneNumber,
-                salary: doc.data().salary,
-                absence: doc.data().absence
+                id: sup.id,
+                firstName: sup.data().firstName,
+                lastName: sup.data().lastName,
+                dateOfBirth: formatDate(sup.data().dateOfBirth),
+                gender: sup.data().gender,
+                phoneNumber: sup.data().phoneNumber,
+                salary: sup.data().salary,
+                absence: sup.data().absence
             };
             return {
                 success: true,
