@@ -32,14 +32,15 @@ class Patient {
     this.#dateOfBirth = dateOfBirth;
   }
 
-  getAll = async (pageSize, currentPage) => {
+  getAll = async (pageSize, currentPage, sortBy, sortOrder) => {
     try {
+      sortBy = sortBy == 'name' ? 'firstName' : sortBy;
       const offset = (currentPage - 1) * pageSize;
       const patientsArray = [];
       const patientsRef = admin
         .firestore()
         .collection("patients")
-        .orderBy("firstName", "asc");
+        .orderBy(sortBy, sortOrder);
       const countAll = await patientsRef.count().get();
       const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
       snapshot.forEach((doc) => {
@@ -123,7 +124,7 @@ class Patient {
         .firestore()
         .collection("appointments")
         .where("patientID", "==", patientId)
-        .orderBy("appointmentTime", "asc");
+        .orderBy("appointmentTime", "desc");
       const countAll = await patientsRef.count().get();
       const snapshot = await patientsRef.limit(pageSize).offset(offset).get();
       const promises = snapshot.docs.map(async (doc) => {

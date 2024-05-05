@@ -1548,7 +1548,6 @@ components:
         - gender
         - phoneNumber
         - healthInsurance
-        - doctorResponbility
       type: object
       properties:
         firstName:
@@ -1570,9 +1569,6 @@ components:
         healthInsurance:
           type: boolean
           example: true
-        doctorResponsibility:
-          type: string
-          example: HNC4vvn6DLES09emJQBl
     MedicalRecord:
       type: object
       properties:
