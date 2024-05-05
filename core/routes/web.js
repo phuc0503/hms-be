@@ -65,6 +65,14 @@ const {
     deleteDrug
 } = require('../controllers/drugController');
 
+const {
+    getAllMaintenanceSchedule,
+    getMaintenanceScheduleById,
+    createMaintenanceSchedule,
+    updateMaintenanceSchedule,
+    deleteMaintenanceSchedule
+} = require('../controllers/maintenanceScheduleController');
+
 const initWebRoutes = (app) => {
     //staff
     router.get("/api/v1/staff", getAllStaff);
@@ -112,11 +120,11 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/resources", getAllResources);
 
     //equipment
-    router.get("/api/v1/resources/equipments", getAllEquipment);
-    router.get("/api/v1/resources/equipments/:equipment_id", getEquipmentById);
-    router.post("/api/v1/resources/equipments", createEquipment);
-    router.put("/api/v1/resources/equipments/:equipment_id", updateEquipment);
-    router.delete("/api/v1/resources/equipments/:equipment_id", deleteEquipment);
+    router.get("/api/v1/resources/equipment", getAllEquipment);
+    router.get("/api/v1/resources/equipment/:equipment_id", getEquipmentById);
+    router.post("/api/v1/resources/equipment", createEquipment);
+    router.put("/api/v1/resources/equipment/:equipment_id", updateEquipment);
+    router.delete("/api/v1/resources/equipment/:equipment_id", deleteEquipment);
 
     //drug
     router.get("/api/v1/resources/drugs", getAllDrug);
@@ -124,6 +132,13 @@ const initWebRoutes = (app) => {
     router.get("/api/v1/resources/drugs/:drug_id", getDrugById);
     router.put("/api/v1/resources/drugs/:drug_id", updateDrug);
     router.delete("/api/v1/resources/drugs/:drug_id", deleteDrug);
+
+    //maintenance schedule
+    router.get("/api/v1/maintenance", getAllMaintenanceSchedule);
+    router.post("/api/v1/maintenance", createMaintenanceSchedule);
+    router.get("/api/v1/maintenance/:maintenance_id", getMaintenanceScheduleById);
+    router.put("/api/v1/maintenance/:maintenance_id", updateMaintenanceSchedule);
+    router.delete("/api/v1/maintenance/:maintenance_id", deleteMaintenanceSchedule);
 
     return app.use("/", router);
 };

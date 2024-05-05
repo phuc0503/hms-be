@@ -5,23 +5,23 @@ const appointmentInstance = new Appointment();
 const getAllAppointment = async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const currentPage = parseInt(req.query.currentPage) || 1;
-    const appointmentArray = await appointmentInstance.getAll(pageSize, currentPage);
+    const appointments = await appointmentInstance.getAll(pageSize, currentPage);
 
-    if (appointmentArray) {
-        return res.status(200).json(appointmentArray);
+    if (appointments.success === true) {
+        return res.status(200).json(appointments.message);
     } else {
-        return res.send("Cannot get appointment!").status(400);
+        return res.status(400).send("Cannot get appointment! ERROR: " + appointments.message);
     }
 }
 
 const getAppointmentById = async (req, res) => {
     const appointment_id = req.params.appointment_id;
-    const appointmentData = await appointmentInstance.getById(appointment_id);
+    const appointment = await appointmentInstance.getById(appointment_id);
 
-    if (appointmentData) {
-        return res.status(200).json(appointmentData);
+    if (appointment.success === true) {
+        return res.status(200).json(appointment.message);
     } else {
-        return res.send("Cannot get appointment!").status(400);
+        return res.status(400).send("Cannot get appointment! ERROR: " + appointment.message);
     }
 }
 
@@ -33,10 +33,10 @@ const createAppointment = async (req, res) => {
     const roomID = req.body.roomID;
     const appointment = await appointmentInstance.create(patientID, doctorID, result, appointmentTime, roomID);
 
-    if (appointment) {
-        return res.send("Appointment created").status(200);
+    if (appointment.success === true) {
+        return res.status(200).send("Create successfully");
     } else {
-        return res.send("Cannot create appointment").status(400);
+        return res.status(400).send("Cannot create appointment. ERROR: " + appointment.message);
     }
 }
 
@@ -49,10 +49,10 @@ const updateAppointment = async (req, res) => {
     const roomID = req.body.roomID;
     const appointment = await appointmentInstance.update(appointment_id, patientID, doctorID, result, appointmentTime, roomID);
 
-    if (appointment) {
-        return res.send("Update successfully").status(200);
+    if (appointment.success === true) {
+        return res.status(200).send("Update successfully");
     } else {
-        return res.send("Cannot update appointment!").status(400);
+        return res.status(400).send("Cannot update appointment. ERROR: " + appointment.message);
     }
 }
 
@@ -60,10 +60,10 @@ const deleteAppointment = async (req, res) => {
     const appointment_id = req.params.appointment_id;
     const result = await appointmentInstance.delete(appointment_id);
 
-    if (result) {
-        return res.send("Delete succesfully").status(200);
+    if (result.success === true) {
+        return res.status(200).send("Delete successfully");
     } else {
-        return res.send("Cannot delete appointment!").status(400);
+        return res.status(400).send("Cannot delete appointment. ERROR: " + result.message);
     }
 }
 

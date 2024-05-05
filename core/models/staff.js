@@ -9,10 +9,9 @@ class Staff {
     _gender;
     _phoneNumber;
     _salary;
-    _age;
     _absence;
 
-    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, age, absence) {
+    constructor(id, firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
@@ -20,7 +19,6 @@ class Staff {
         this._gender = gender;
         this._phoneNumber = phoneNumber;
         this._salary = salary;
-        this._age = age;
         this._absence = absence;
     }
 
@@ -37,7 +35,6 @@ class Staff {
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     role: doc.data().role,
@@ -71,7 +68,6 @@ class Staff {
                 firstName: doc.data().firstName,
                 lastName: doc.data().lastName,
                 dateOfBirth: formatDate(doc.data().dateOfBirth),
-                age: doc.data().age,
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
                 role: doc.data().role,
@@ -83,12 +79,11 @@ class Staff {
         }
     }
 
-    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, role, salary) => {
+    create = async (firstName, lastName, dateOfBirth, gender, phoneNumber, role, salary) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 gender: gender,
                 phoneNumber: phoneNumber,
@@ -102,13 +97,12 @@ class Staff {
         }
     }
 
-    update = async (id, firstName, lastName, age, dateOfBirth, gender, phoneNumber, role, salary, absence) => {
+    update = async (id, firstName, lastName, dateOfBirth, gender, phoneNumber, role, salary, absence) => {
         try {
             const staffRef = db.collection('staff').doc(id);
             const res = await staffRef.update({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),

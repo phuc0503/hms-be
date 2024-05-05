@@ -22,7 +22,6 @@ class SupportStaff extends Staff {
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
@@ -35,9 +34,15 @@ class SupportStaff extends Staff {
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
-            return data;
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
@@ -47,61 +52,80 @@ class SupportStaff extends Staff {
             const sup = await supportStaffRef.get();
 
             if (!sup.exists) {
-                return "Support staff not found";
+                return {
+                    success: false,
+                    message: "Maybe wrong id"
+                };
             }
 
-            return {
+            const data = {
                 id: doc.id,
                 firstName: doc.data().firstName,
                 lastName: doc.data().lastName,
                 dateOfBirth: formatDate(doc.data().dateOfBirth),
-                age: doc.data().age,
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
                 salary: doc.data().salary,
                 absence: doc.data().absence
             };
+            return {
+                success: true,
+                message: data
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 
-    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, absence) => {
+    create = async (firstName, lastName, dateOfBirth, gender, phoneNumber, salary, absence) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 gender: gender,
                 phoneNumber: phoneNumber,
-                salary: salary,
+                salary: parseInt(salary),
                 role: 'support staff',
                 absence: false
             });
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
-    update = async (supportStaff_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, salary, absence) => {
+    update = async (supportStaff_id, firstName, lastName, gender, phoneNumber, dateOfBirth, salary, absence) => {
         try {
             const supportStaffRef = db.collection('staff').doc(supportStaff_id);
             const res = await supportStaffRef.update({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 role: 'support staff',
-                salary: salary,
-                absence: absence
+                salary: parseInt(salary),
+                absence: absence === "true"
             })
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 

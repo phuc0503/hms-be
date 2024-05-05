@@ -24,7 +24,6 @@ class Doctor extends Staff {
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
@@ -38,9 +37,15 @@ class Doctor extends Staff {
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
-            return data;
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
@@ -50,23 +55,32 @@ class Doctor extends Staff {
             const doc = await doctorRef.get();
 
             if (!doc.exists) {
-                return "Doctor not found";
+                return {
+                    success: false,
+                    message: "Maybe wrong id"
+                };
             }
 
-            return {
+            const data = {
                 id: doc.id,
                 firstName: doc.data().firstName,
                 lastName: doc.data().lastName,
                 dateOfBirth: formatDate(doc.data().dateOfBirth),
-                age: doc.data().age,
                 gender: doc.data().gender,
                 phoneNumber: doc.data().phoneNumber,
                 salary: doc.data().salary,
                 department: doc.data().department,
                 absence: doc.data().absence
             };
+            return {
+                success: true,
+                message: data
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 
@@ -83,7 +97,6 @@ class Doctor extends Staff {
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     salary: doc.data().salary,
@@ -97,18 +110,23 @@ class Doctor extends Staff {
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
-            return data;
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
-    create = async (firstName, lastName, age, dateOfBirth, gender, phoneNumber, salary, department) => {
+    create = async (firstName, lastName, dateOfBirth, gender, phoneNumber, salary, department) => {
         try {
             const res = await db.collection('staff').add({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
                 gender: gender,
                 phoneNumber: phoneNumber,
@@ -117,9 +135,15 @@ class Doctor extends Staff {
                 department: department,
                 absence: false
             });
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
@@ -135,7 +159,6 @@ class Doctor extends Staff {
                     id: doc.id,
                     firstName: doc.data().firstName,
                     lastName: doc.data().lastName,
-                    age: doc.data().age,
                     gender: doc.data().gender,
                     phoneNumber: doc.data().phoneNumber,
                     dateOfBirth: formatDate(doc.data().dateOfBirth),
@@ -149,19 +172,24 @@ class Doctor extends Staff {
                 'currentPage': currentPage,
                 'totalPage': Math.ceil(countAll.data().count / pageSize)
             }
-            return data;
+            return {
+                success: true,
+                message: data
+            }
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            }
         }
     }
 
-    update = async (doctor_id, firstName, lastName, age, gender, phoneNumber, dateOfBirth, department, salary, absence) => {
+    update = async (doctor_id, firstName, lastName, gender, phoneNumber, dateOfBirth, department, salary, absence) => {
         try {
             const doctorRef = db.collection('staff').doc(doctor_id);
             const res = await doctorRef.update({
                 firstName: firstName,
                 lastName: lastName,
-                age: age,
                 gender: gender,
                 phoneNumber: phoneNumber,
                 dateOfBirth: Timestamp.fromDate(new Date(transformDateFormat(dateOfBirth))),
@@ -170,18 +198,30 @@ class Doctor extends Staff {
                 salary: parseInt(salary),
                 absence: absence === "true"
             });
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 
     delete = async (doctor_id) => {
         try {
             const res = await db.collection('staff').doc(doctor_id).delete();
-            return res;
+            return {
+                success: true,
+                message: res
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 
@@ -218,9 +258,15 @@ class Doctor extends Staff {
                     }
                 ]
             };
-            return data;
+            return {
+                success: true,
+                message: data
+            };
         } catch (error) {
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     }
 }
