@@ -1,11 +1,17 @@
 const Appointment = require('../models/appointment');
-
+const { toDepartment } = require('../public/department');
 const appointmentInstance = new Appointment();
 
 const getAllAppointment = async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const currentPage = parseInt(req.query.currentPage) || 1;
-    const appointments = await appointmentInstance.getAll(pageSize, currentPage);
+    let appointments;
+    if (req.query.department) {
+        const department = toDepartment(parseInt(req.query.department));
+        appointments = await appointmentInstance.getByDepartment(department, pageSize, currentPage);
+    } else {
+        appointments = await appointmentInstance.getAll(pageSize, currentPage);
+    }
 
     if (appointments.success === true) {
         return res.status(200).json(appointments.message);
@@ -67,10 +73,21 @@ const deleteAppointment = async (req, res) => {
     }
 }
 
+const countAppointmentByDepartment = async (req, res) => {
+    const result = await appointmentInstance.countByDepartment();
+
+    if (result.success === true) {
+        return res.status(200).json(result.message);
+    } else {
+        return res.status(400).send("Cannot count appointment. ERROR: " + result.message);
+    }
+}
+
 module.exports = {
     getAllAppointment,
     getAppointmentById,
     createAppointment,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    countAppointmentByDepartment
 }

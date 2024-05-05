@@ -47,6 +47,7 @@ const {
     createAppointment,
     updateAppointment,
     deleteAppointment,
+    countAppointmentByDepartment
 } = require("../controllers/appointmentController");
 
 const {
@@ -72,6 +73,7 @@ const {
     updateMaintenanceSchedule,
     deleteMaintenanceSchedule
 } = require('../controllers/maintenanceScheduleController');
+const { count } = require("firebase/firestore");
 
 const initWebRoutes = (app) => {
     //staff
@@ -115,6 +117,7 @@ const initWebRoutes = (app) => {
     router.post("/api/v1/appointments", createAppointment);
     router.put("/api/v1/appointments/:appointment_id", updateAppointment);
     router.delete("/api/v1/appointments/:appointment_id", deleteAppointment);
+    router.get("/api/v1/appointments/departments/statistics", countAppointmentByDepartment);
 
     //resource
     router.get("/api/v1/resources", getAllResources);

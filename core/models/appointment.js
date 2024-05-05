@@ -2,6 +2,7 @@ const { db, admin } = require("../config/firebase");
 const { formatDateTime, transformDateTimeFormat } = require('../public/formatDate');
 const { Timestamp } = require("firebase-admin/firestore");
 const Doctor = require("../models/doctor");
+const { toNum } = require('../public/department');
 const doctorInstance = new Doctor();
 class Appointment {
   #id;
@@ -32,6 +33,7 @@ class Appointment {
         appointmentsArray.push({
           id: doc.id,
           appointmentTime: formatDateTime(doc.data().appointmentTime),
+          department: doc.data().department,
           doctorID: doc.data().doctorID,
           patientID: doc.data().patientID,
           result: doc.data().result,
@@ -90,6 +92,43 @@ class Appointment {
     }
   };
 
+  getByDepartment = async (department, pageSize, currentPage) => {
+    try {
+      const offset = (currentPage - 1) * pageSize;
+      const appointmentsArray = [];
+      const appointmentRef = admin.firestore().collection('appointments').where('department', '==', department).orderBy("appointmentTime", "asc");
+      const countAll = await appointmentRef.count().get();
+      const snapshot = await appointmentRef.limit(pageSize).offset(offset).get();
+      snapshot.forEach(doc => {
+        appointmentsArray.push({
+          id: doc.id,
+          appointmentTime: formatDateTime(doc.data().appointmentTime),
+          department: doc.data().department,
+          doctorID: doc.data().doctorID,
+          patientID: doc.data().patientID,
+          result: doc.data().result,
+          roomID: doc.data().roomID
+        })
+      })
+      const data = {
+        'appointments': appointmentsArray,
+        'pageSize': pageSize,
+        'currentPage': currentPage,
+        'totalPage': Math.ceil(countAll.data().count / pageSize),
+        'totalRow': countAll.data().count
+      }
+      return {
+        success: true,
+        message: data
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message
+      }
+    }
+  }
+
   create = async (patientID, doctorID, result, appointmentTime, roomID) => {
     try {
       const res = await db.collection('appointments').add({
@@ -145,6 +184,51 @@ class Appointment {
       return {
         success: true,
         message: res
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message
+      };
+    }
+  }
+
+  countByDepartment = async () => {
+    try {
+      const departmentArray = [0, 0, 0, 0, 0];
+      const appointmentRef = db.collection('appointments');
+      const snapshot = await appointmentRef.get();
+      snapshot.forEach(doc => {
+        let department = toNum(doc.data().department);
+        departmentArray[department]++;
+      })
+      const data = {
+        departments: [
+          {
+            name: "Khoa nội",
+            total: departmentArray[0]
+          },
+          {
+            name: "Khoa ngoại",
+            total: departmentArray[1]
+          },
+          {
+            name: "Khoa nhi",
+            total: departmentArray[2]
+          },
+          {
+            name: "Khoa sản",
+            total: departmentArray[3]
+          },
+          {
+            name: "Khoa mắt",
+            total: departmentArray[4]
+          }
+        ]
+      };
+      return {
+        success: true,
+        message: data
       };
     } catch (error) {
       return {
