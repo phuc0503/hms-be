@@ -152,22 +152,21 @@ class Nurse extends Staff {
             };
         }
     }
-};
 
-delete = async (nurse_id) => {
-    try {
-        const res = await db.collection("staff").doc(nurse_id).delete();
-        return {
-            success: true,
-            message: res,
-        };
-    } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
+    delete = async (nurse_id) => {
+        try {
+            const res = await db.collection("staff").doc(nurse_id).delete();
+            return {
+                success: true,
+                message: res,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message,
+            };
+        }
+    };
 };
-}
 
 module.exports = Nurse;
