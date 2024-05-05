@@ -11,8 +11,7 @@ const {
     getMedicalRecords,
     createPatient,
     updatePatient,
-    deletePatient,
-    countPatientByDepartment,
+    deletePatient
 } = require("../controllers/patientController");
 
 const {
@@ -109,7 +108,6 @@ const initWebRoutes = (app) => {
     router.post("/api/v1/patients", createPatient);
     router.put("/api/v1/patients/:patient_id", updatePatient);
     router.delete("/api/v1/patients/:patient_id", deletePatient);
-    router.get("/api/v1/patients/departments/statistics", countPatientByDepartment);
 
     //appointment
     router.get("/api/v1/appointments", getAllAppointment);

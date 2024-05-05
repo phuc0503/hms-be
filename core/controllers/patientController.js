@@ -82,8 +82,6 @@ const updatePatient = async (req, res) => {
   const gender = req.body.gender;
   const phoneNumber = req.body.phoneNumber;
   const healthInsurance = req.body.healthInsurance;
-  const department = req.body.department;
-  const doctorResponsibility = req.body.doctorResponsibility;
 
   const result = await patientInstance.update(
     patient_id,
@@ -92,9 +90,7 @@ const updatePatient = async (req, res) => {
     gender,
     phoneNumber,
     dateOfBirth,
-    healthInsurance,
-    department,
-    doctorResponsibility
+    healthInsurance
   );
 
   if (result.success === true) {
@@ -115,22 +111,11 @@ const deletePatient = async (req, res) => {
   }
 };
 
-const countPatientByDepartment = async (req, res) => {
-  const result = await patientInstance.countByDepartment();
-
-  if (result.success === true) {
-    return res.status(200).json(result.message);
-  } else {
-    return res.status(400).send("Cannot count patient. ERROR: " + result.message);
-  }
-};
-
 module.exports = {
   getAllPatient,
   getPatientById,
   getMedicalRecords,
   createPatient,
   updatePatient,
-  deletePatient,
-  countPatientByDepartment,
+  deletePatient
 };
