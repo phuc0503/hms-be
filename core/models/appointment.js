@@ -195,7 +195,7 @@ class Appointment {
 
       const doc = await appointmentRef.get();
 
-      if (doc.exists) {
+      if (!doc.exists) {
         return {
           success: false,
           message: "Maybe wrong id"
@@ -224,13 +224,7 @@ class Appointment {
           message: 'This doctor is not belong to ' + department
         }
       }
-      const check = await db.collection('appointments').where('patientID', '==', patientID).where('appointmentTime', '==', dateTimeToFirebaseTimestamp(appointmentTime)).where('doctorID', '==', doctorID).limit(1).get();
-      if (check.size) {
-        return {
-          success: false,
-          message: 'This appointment already exist'
-        };
-      }
+
       const res = await appointmentRef.update({
         appointmentTime: Timestamp.fromDate(new Date(transformDateTimeFormat(appointmentTime))),
         department: department,
